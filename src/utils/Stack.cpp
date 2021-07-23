@@ -1,7 +1,5 @@
 #include "Stack.h"
 
-#include <vector>
-
 Stack::Stack(const int range, int stack_end) : m_range(range)
 {
     m_stack = new int[m_range];
