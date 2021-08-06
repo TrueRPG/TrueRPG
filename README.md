@@ -30,3 +30,7 @@ git clone --recurse-submodules https://github.com/rpgdeveloper707/TrueRPG
 - [ ] Оружие.
 - [ ] Враги.
 - [ ] ...
+
+### Трейлер
+У Рпгшечки появился динамичный [Трейлер](https://www.youtube.com/watch?v=dQw4w9WgXcQ)! 
+Критика приветствуется!
