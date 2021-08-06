@@ -27,10 +27,10 @@ Game::Game()
     m_pallet.setCellOrigin({16.f, 16.f});
     m_pallet.setCellScale({2.f, 2.f});
 
-    m_pallet.addTile(IntRect(64, 4256 - 64, 32, 32));
     m_pallet.addTile(IntRect(192, 4256 - 32, 32, 32));
     m_pallet.addTile(IntRect(96, 4256 - 32, 32, 32));
     m_pallet.addTile(IntRect(160, 4256 - 32, 32, 32));
+    m_pallet.addTile(IntRect(64, 4256 - 64, 32, 32));
 
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();

@@ -42,7 +42,7 @@ const glm::vec2& TilePallet::getCellOrigin() const
 
 void TilePallet::addTile(const IntRect& rect)
 {
-    m_tiles.emplace_back(Tile(m_tiles.size() + 1, {0, 0, 0, 0}, rect, false));
+    m_tiles.emplace_back(Tile(m_tiles.size(), {0, 0, 0, 0}, rect, false));
 }
 
 const Tile& TilePallet::getTile(u32 id) const
