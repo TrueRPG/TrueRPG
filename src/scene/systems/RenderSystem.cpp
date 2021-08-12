@@ -56,13 +56,14 @@ void RenderSystem::draw()
         m_batch.setProjectionMatrix(cameraComponent->getProjectionMatrix());
         m_batch.begin();
 
+        // TODO: добавить отсечение невидимых тайлов.
         // Рендеринг карты тайлов
         {
             auto view = m_registry.view<TileMapComponent>();
             for (auto entity : view)
             {
                 auto &tilemapComponent = view.get<TileMapComponent>(entity);
-                for (auto &chunkPair : tilemapComponent.chunks)
+                for (auto &chunkPair : tilemapComponent.m_chunks)
                 {
                     auto &chunk = chunkPair.second;
                     for (size_t y = 0; y < CHUNK_SIZE; y++)
@@ -79,8 +80,8 @@ void RenderSystem::draw()
                             int realY = chunk.getPosition().y * CHUNK_SIZE + y;
 
                             tSprite.setPosition({
-                                                        realX * tSprite.getGlobalBounds().getWidth(),
-                                                        realY * tSprite.getGlobalBounds().getHeight()
+                                                    realX * tSprite.getGlobalBounds().getWidth(),
+                                                    realY * tSprite.getGlobalBounds().getHeight()
                                                 });
 
                             m_batch.draw(tSprite);

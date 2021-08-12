@@ -4,67 +4,46 @@
 #include <unordered_map>
 #include <glm/vec2.hpp>
 #include "../../utils/Types.h"
-#include "../../utils/Coordinate.h"
 #include "../resources/Chunk.h"
 #include "../resources/TilePallet.h"
 
 struct ChunkHash
 {
     // http://www.beosil.com/download/CollisionDetectionHashing_VMV03.pdf
-    std::size_t operator()(const glm::ivec2 position) const
+    std::size_t operator()(const glm::ivec3 position) const
     {
-        return (position.x * 56554) ^ (position.y * 211287);
+        return (position.x * 56554) ^ (position.y * 211287) ^ (position.z * 565114);
     }
 };
 
-using ChunkHashMap = std::unordered_map<glm::ivec2, Chunk, ChunkHash>;
+using ChunkHashMap = std::unordered_map<glm::ivec3, Chunk, ChunkHash>;
 
-struct TileMapComponent
+class TileMapComponent
 {
-    ChunkHashMap chunks;
-    IntRect bounds;
-    IntRect globalBounds;
+private:
+    ChunkHashMap m_chunks;
+    IntRect m_bounds;
     
     const TilePallet* tilePallet;
 
-    TileMapComponent(const IntRect& startBounds) : bounds(startBounds), globalBounds(bounds * CHUNK_SIZE)
-    {
-        for (int x = bounds.getLeft(); x < bounds.getWidth(); x++)
-        {
-            for (int y = bounds.getBottom(); y < bounds.getHeight(); y++)
-            {
-                chunks[glm::ivec2(x, y)] = Chunk({x, y});
-            }
-        }
-    }
+public:
+    TileMapComponent(const IntRect& startBounds);
 
-    void setTilePallet(TilePallet* pallet)
-    {
-        tilePallet = pallet;
-    }
+    void setTilePallet(TilePallet* pallet);
 
-    const TilePallet* getPallet() const
-    {
-        return tilePallet;
-    }
+    const TilePallet* getPallet() const;
 
-    bool hasTile(const glm::ivec2& tilePosition) const
-    {
-        return chunks.at(utils::toChunkPos(tilePosition))
-            .hasTile(utils::toLocalTilePos(tilePosition));
-    }
+    const IntRect& getBounds() const;
 
-    u8 getTile(const glm::ivec2& tilePosition) const
-    {
-        return chunks.at(utils::toChunkPos(tilePosition))
-            .getTile(utils::toLocalTilePos(tilePosition));
-    }
+    const IntRect getGlobalBounds() const;
 
-    void setTile(const glm::ivec2& position, const Tile& tile)
-    {
-        chunks.at(utils::toChunkPos(position))
-            .setTile(utils::toLocalTilePos(position), tile);
-    }
+    bool hasTile(const glm::ivec3& tilePosition) const;
+
+    u8 getTile(const glm::ivec3& tilePosition) const;
+
+    void setTile(const glm::ivec3& position, const Tile& tile);
+
+    friend class RenderSystem;
 };
 
 

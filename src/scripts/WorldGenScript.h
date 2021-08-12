@@ -49,9 +49,11 @@ public:
 private:
     void generateWorld()
     {
-        for (int x = m_map->globalBounds.getLeft(); x < m_map->globalBounds.getWidth(); x++)
+        auto& globalBounds = m_map->getGlobalBounds();
+
+        for (int x = globalBounds.getLeft(); x < globalBounds.getWidth(); x++)
         {
-            for (int y = m_map->globalBounds.getBottom(); y < m_map->globalBounds.getHeight(); y++)
+            for (int y = globalBounds.getBottom(); y < globalBounds.getHeight(); y++)
             {
                 double value = m_simplexNoise->getNoise(x, y);
                 u8 id = 0;
@@ -68,7 +70,7 @@ private:
                     id = 3;
                 }
 
-                m_map->setTile({x, y}, m_map->getPallet()->getTile(id));
+                m_map->setTile({x, y, 0}, m_map->getPallet()->getTile(id));
             }
         }
     }

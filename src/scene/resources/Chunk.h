@@ -16,11 +16,11 @@ class Chunk
 {
 private:
     TileArray m_tiles;
-    glm::ivec2 m_pos;
+    glm::ivec3 m_pos;
     int m_size;
 public:
     Chunk();
-    Chunk(const glm::ivec2& pos);
+    Chunk(const glm::ivec3& pos);
     ~Chunk() = default;
     
     /**
@@ -34,7 +34,7 @@ public:
      * 
      * @return позицию в карте тайлов
     */
-    const glm::ivec2& getPosition() const;
+    const glm::ivec3& getPosition() const;
     
     bool hasTile(const glm::ivec2 tilePos) const;
     
