@@ -90,7 +90,7 @@ public:
         Window &window = Window::getInstance();
         float radius = std::max(window.getWidth(), window.getHeight()) / 2;
         float scale = std::max(m_worldTransform->scale.x, m_worldTransform->scale.y);
-        m_worldMap->renderRadius = radius / (scale * m_worldMap->tileSize) + 2;
+        m_worldMap->renderRadius = radius / (scale * m_worldMap->tileSize) + 3;
     }
 };
 
