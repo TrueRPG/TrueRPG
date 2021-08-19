@@ -105,6 +105,31 @@ void SpriteBatch::end()
     delete[] ids;
 }
 
+// This function makes our rect a bit smaller.
+// It helps to prevent strange artifacts with textures.
+static FloatRect prepareRect(IntRect rect)
+{
+    float offset = 0.5f;
+
+    auto left = (float) rect.getLeft();
+    auto bottom = (float) rect.getBottom();
+    auto width = (float) rect.getWidth();
+    auto height = (float) rect.getHeight();
+
+    left += glm::sign(width) * offset;
+    bottom += glm::sign(height) * offset;
+
+    width = glm::sign(width) * (std::abs(width) - 2 * offset);
+    height = glm::sign(height) * (std::abs(height) - 2 * offset);
+
+    return {left, bottom, width, height};
+}
+
+static glm::vec2 toTexCoords(Texture& texture, float x, float y)
+{
+    return {(float) x / texture.getWidth(), (float) y / texture.getHeight()};
+}
+
 void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
 {
     // Actually we draw nothing here. In this method we just collect the sprites to draw them later
@@ -157,15 +182,14 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
     }
     auto &set = resultSet->second;
 
-    // We need this offset to prevent strange artifacts with textures
-    float texOffset = 0.1f;
+    FloatRect r = prepareRect(rect);
 
     set.insert(
             {
                     {
                             glm::vec3(quadPos, 0.f), // bottom left
                             sprite.getColor(),
-                            glm::vec2(rect.getLeft(), rect.getBottom()), texId
+                            toTexCoords(texture, r.getLeft(), r.getBottom()), texId
                     }, order
             });
     set.insert(
@@ -173,7 +197,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
                     {
                             glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // bottom right
                             sprite.getColor(),
-                            glm::vec2(rect.getLeft() + rect.getWidth() - texOffset, rect.getBottom()),
+                            toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom()),
                             texId
                     }, order
             });
@@ -182,8 +206,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
                     {
                             glm::vec3(quadPos + glm::vec2(w, h), 0.f), // top right
                             sprite.getColor(),
-                            glm::vec2(rect.getLeft() + rect.getWidth() - texOffset,
-                                      rect.getBottom() + rect.getHeight() - texOffset),
+                            toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom() + r.getHeight()),
                             texId
                     }, order
             });
@@ -192,7 +215,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
                     {
                             glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // top left
                             sprite.getColor(),
-                            glm::vec2(rect.getLeft(), rect.getBottom() + rect.getHeight() - texOffset),
+                            toTexCoords(texture, r.getLeft(), r.getBottom() + r.getHeight()),
                             texId
                     }, order
             });
