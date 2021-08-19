@@ -42,7 +42,7 @@ Font::Font(const std::string &path, int size)
     // Так как мы узнали ширину и высоту, то можем заранее создать текстуру для всех глифов
     unsigned int textureId;
     glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_RECTANGLE, textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     glTextureParameteri(textureId, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -61,8 +61,8 @@ void RenderSystem::draw()
                 auto &worldMapComponent = view.get<WorldMapComponent>(entity);
                 auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
-                int currentX = (int) std::round(cameraTransform.position.x / ((float) worldMapComponent.tileSize * transformComponent.scale.x));
-                int currentY = (int) std::round(cameraTransform.position.y / ((float) worldMapComponent.tileSize * transformComponent.scale.y));
+                int currentX = (int) std::floor(cameraTransform.position.x / ((float) worldMapComponent.tileSize * transformComponent.scale.x));
+                int currentY = (int) std::floor(cameraTransform.position.y / ((float) worldMapComponent.tileSize * transformComponent.scale.y));
 
                 for (int y = currentY + worldMapComponent.renderRadius - 1; y >= currentY - worldMapComponent.renderRadius + 1; y--)
                 {
