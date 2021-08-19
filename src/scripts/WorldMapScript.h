@@ -13,25 +13,28 @@ class WorldMapGenerator : public IWorldMapGenerator
 {
     OpenSimplexNoise m_simplexNoise;
 
-    Texture m_texture;
+    Texture& m_texture;
 
     Tile sandTile{&m_texture, IntRect(192, 4256 - 32, 32, 32)};
     Tile grassTile{&m_texture, IntRect(96, 4256 - 32, 32, 32)};
     Tile dirtTile{&m_texture, IntRect(160, 4256 - 32, 32, 32)};
-    Tile treeTile{
-            &m_texture, IntRect(160 - 96, 4256 - 96, 64, 64),
-            1, glm::vec2(16, -8)
+
+    Object treeObject{
+            &m_texture, IntRect(160 - 96, 4256 - 96, 64, 64), glm::vec2(16, -8), 20
+    };
+    Object bushObject{
+            &m_texture, IntRect(160 - 96 - 32, 4256 - 96 - 96, 32, 32), glm::vec2(0.f), 4
     };
 
     Entity m_player;
 
 public:
-    WorldMapGenerator(Texture texture, Entity player)
+    WorldMapGenerator(Texture& texture, Entity player)
             : m_simplexNoise(DEBUG_SEED), m_texture(texture), m_player(player) {}
 
-    std::vector<Tile> generate(int x, int y) override
+    std::vector<Tile> generateTiles(int x, int y) override
     {
-        auto& transform = m_player.getComponent<TransformComponent>();
+        auto &transform = m_player.getComponent<TransformComponent>();
 
         double value = m_simplexNoise.getNoise(x, y);
 
@@ -41,23 +44,27 @@ public:
         }
         if (value > -0.2f)
         {
-            std::vector grass = {grassTile};
-
-            // Strange condition to make the forest more rare
-            if (value > -0.15f && ((int) (value * 10000) % 5) == 2)
-            {
-                Tile currentTree = treeTile;
-                // We need -16 offset to make the layer change more accurate
-                // This offset depends on the texture we are using
-                if ((transform.position.y - 16) / 64 > y)
-                {
-                    currentTree.layer = 3;
-                }
-                grass.push_back(currentTree);
-            }
-            return grass;
+            return {grassTile};
         }
         return {sandTile};
+    }
+
+    std::vector<Object> generateObjects(int x, int y) override
+    {
+        double value = m_simplexNoise.getNoise(x, y);
+
+        if (value > -0.15f && value < 0.3f)
+        {
+            if (((int) (value * 10000) % 5) == 2)
+            {
+                return {treeObject};
+            }
+            else if (((int) (value * 10000) % 12) == 3)
+            {
+                return {bushObject};
+            }
+        }
+        return {};
     }
 };
 
@@ -68,7 +75,7 @@ private:
     TransformComponent *m_worldTransform{};
     WorldMapGenerator m_worldMapGenerator;
 public:
-    WorldMapScript(Texture texture, Entity player)
+    WorldMapScript(Texture& texture, Entity player)
             : m_worldMapGenerator(texture, player) {}
 
     void onCreate() override

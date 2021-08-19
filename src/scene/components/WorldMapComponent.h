@@ -9,11 +9,18 @@
 
 struct Tile
 {
-    Texture *texture;
+    Texture *texture{};
+    IntRect textureRect{0, 0, 0, 0};
+};
+
+struct Object
+{
+    Texture *texture{};
     IntRect textureRect{0, 0, 0, 0};
 
-    int layer{0};
-    glm::vec2 origin;
+    glm::vec2 origin{};
+
+    int orderPivot{0};
 };
 
 class IWorldMapGenerator
@@ -21,7 +28,9 @@ class IWorldMapGenerator
 public:
     virtual ~IWorldMapGenerator() = default;
 
-    virtual std::vector<Tile> generate(int x, int y) = 0;
+    virtual std::vector<Tile> generateTiles(int x, int y) = 0;
+
+    virtual std::vector<Object> generateObjects(int x, int y) = 0;
 };
 
 struct WorldMapComponent
@@ -31,6 +40,9 @@ struct WorldMapComponent
     IWorldMapGenerator *generator;
 
     int renderRadius{12};
+
+    int tileLayer{0};
+    int objectLayer{1};
 };
 
 #endif //RPG_WORLDMAPCOMPONENT_H

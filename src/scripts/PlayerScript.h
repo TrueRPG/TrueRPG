@@ -7,7 +7,7 @@
 
 class PlayerScript : public Script
 {
-    float m_speed{2.f};
+    float m_speed{1.3f};
 
     Entity m_spriteEntity{};
     Entity m_stepsEntity{};
@@ -82,6 +82,9 @@ public:
         {
             m_frame = 0;
         }
+
+        // TODO: Create a component for auto ordering
+        renderer.order = -transform.position.y * 2;
 
         if (movement == glm::ivec2(0.f))
         {
