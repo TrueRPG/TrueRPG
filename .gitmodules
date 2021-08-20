@@ -7,6 +7,4 @@
 [submodule "libs/freetype"]
 	path = libs/freetype
 	url = https://github.com/freetype/freetype
-[submodule "libs/luaJIT"]
-	path = libs/luaJIT
-	url = https://github.com/LuaJIT/LuaJIT.git
+
