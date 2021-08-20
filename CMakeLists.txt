@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(RPG VERSION 0.0.5 LANGUAGES C CXX)
+project(TrueRPG VERSION 0.0.5 LANGUAGES C CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -23,30 +23,34 @@ add_subdirectory(libs/sol2)
 
 set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio sol2_single)
 
+if(NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(FATAL_ERROR "${PROJECT_NAME} only supports x64 platforms")
+endif()
+
+message("X64 platform")
+
 # LuaJIT 2.0.5
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message("X64 platform")
-    if(UNIX AND NOT APPLE)
-        message("Linux")
-        set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/linux/libluajit.a)
-    elseif(WIN32)
-        if(MSVC)
-            message("MSVC")
-            set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/msvc/lua51.lib)
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    "${PROJECT_SOURCE_DIR}/libs/luaJIT/msvc/lua51.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-        else()
-            message("Probably MinGW")
-            set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/mingw/lua51.dll)
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    "${PROJECT_SOURCE_DIR}/libs/luaJIT/mingw/lua51.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-        endif()
+if(UNIX AND NOT APPLE)
+    message("Linux")
+    set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/linux/libluajit.a)
+elseif(WIN32)
+    if(MSVC)
+        message("MSVC")
+        set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/msvc/lua51.lib)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${PROJECT_SOURCE_DIR}/libs/luaJIT/msvc/lua51.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+    elseif(MINGW)
+        message("MinGW")
+        set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/mingw/lua51.dll)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${PROJECT_SOURCE_DIR}/libs/luaJIT/mingw/lua51.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
     else()
-        message(FATAL_ERROR "Unsupported platform")
+        message(FATAL_ERROR "Unsupported compiler")
     endif()
 else()
-    message(FATAL_ERROR "Unsupported platform")
+    message(FATAL_ERROR "Unsupported OS")
 endif()
+
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} ${LUA_JIT})
 
