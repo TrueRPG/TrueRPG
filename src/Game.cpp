@@ -14,6 +14,9 @@
 #include "scripts/WorldMapScript.h"
 #include "scene/components/AudioListenerComponent.h"
 #include "scripts/PumpkinScript.h"
+#include "scene/components/RectColliderComponent.h"
+#include "scene/components/RigidbodyComponent.h"
+#include "scene/components/AutoOrderComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -67,6 +70,7 @@ Game::Game()
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
     heroRenderer.textureRect = IntRect(32, 96, 32, 32);
     heroRenderer.layer = 1;
+    spriteEntity.addComponent<AutoOrderComponent>();
 
     auto &heroTransform = spriteEntity.getComponent<TransformComponent>();
     heroTransform.scale = glm::vec2(2.f, 2.f);
@@ -76,6 +80,11 @@ Game::Game()
     auto &stepsComponent = stepsSoundEntity.addComponent<AudioSourceComponent>(m_steps);
     stepsComponent.volume = 0.25f;
     stepsComponent.loop = true;
+
+    auto &playerCollider = m_playerEntity.addComponent<RectColliderComponent>();
+    playerCollider.offset = glm::vec2(-16, 0);
+    playerCollider.size = glm::vec2(32, 32);
+    m_playerEntity.addComponent<RigidbodyComponent>();
 
     // Крепим к игроку спрайт, звук, текст и камеру
     Hierarchy::addChild(m_playerEntity, spriteEntity);
@@ -114,6 +123,26 @@ Game::Game()
     Hierarchy::addChild(pumpkinEntity, pumpkinTextEntity);
 
     pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
+
+    // Barrels
+    {
+        Entity barrels[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            barrels[i] = m_scene.createEntity("barrel" + std::to_string(i));
+            auto &barrelRenderer = barrels[i].addComponent<SpriteRendererComponent>(m_baseTexture);
+            barrelRenderer.textureRect = IntRect(96, 736, 32, 32);
+            barrelRenderer.layer = 1;
+
+            auto &barrelTransform = barrels[i].getComponent<TransformComponent>();
+            barrelTransform.position = glm::vec2(128.f + i * 64.f, 384.f );
+            barrelTransform.scale = glm::vec2(2.f, 2.f);
+
+            barrels[i].addComponent<RectColliderComponent>().size = glm::vec2(64, 32);
+            auto &order = barrels[i].addComponent<AutoOrderComponent>();
+        }
+    }
 }
 
 void Game::update(float deltaTime)

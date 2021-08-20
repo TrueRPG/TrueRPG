@@ -10,6 +10,7 @@
 #include "../components/HierarchyComponent.h"
 #include "../utils/Hierarchy.h"
 #include "../components/WorldMapComponent.h"
+#include "../components/AutoOrderComponent.h"
 
 // всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
 void resizeCallback(Window *window, int width, int height)
@@ -89,8 +90,7 @@ void RenderSystem::draw()
                             objectSprite.setOrigin(object.origin);
                             objectSprite.setScale(transformComponent.scale);
 
-                            m_batch.draw(objectSprite, worldMapComponent.objectLayer,
-                                         (-(int) objectSprite.getPosition().y - object.orderPivot) * (int) transformComponent.scale.y);
+                            m_batch.draw(objectSprite, worldMapComponent.objectLayer,-(int) objectSprite.getPosition().y - object.orderPivot);
                         }
                     }
                 }
@@ -113,7 +113,14 @@ void RenderSystem::draw()
                 sprite.setOrigin(transformComponent.origin);
                 sprite.setScale(transformComponent.scale);
 
-                m_batch.draw(sprite, spriteComponent.layer, spriteComponent.order);
+                int order = spriteComponent.order;
+                if (m_registry.all_of<AutoOrderComponent>(entity))
+                {
+                    auto &orderComponent = m_registry.get<AutoOrderComponent>(entity);
+                    order = -(int) transformComponent.position.y - orderComponent.orderPivot;
+                }
+
+                m_batch.draw(sprite, spriteComponent.layer, order);
             }
         }
 
