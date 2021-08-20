@@ -24,7 +24,7 @@ git clone --recurse-submodules https://github.com/rpgdeveloper707/TrueRPG
 - [x] Новая генерация мира.
 - [x] Заменить кастомную математику на glm.
 - [x] Добавить ECS.
-- [ ] Collision detection.
+- [x] Collision detection.
 - [ ] Новая система анимации.
 - [x] Звук.
 - [ ] Генерация данжей.
