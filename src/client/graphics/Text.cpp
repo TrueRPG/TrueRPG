@@ -7,7 +7,7 @@ Text::Text(Font &font, std::string text)
     initSprites();
 }
 
-void Text::draw(SpriteBatch &batch, int layer)
+void Text::draw(SpriteBatch &batch, int layer, int order)
 {
     for (auto sprite : m_sprites)
     {
@@ -15,7 +15,7 @@ void Text::draw(SpriteBatch &batch, int layer)
         sprite.setPosition(m_position + (sprite.getPosition() + glm::vec2(0.f, m_height) - m_origin) * m_scale);
         sprite.setScale(m_scale);
         sprite.setColor(m_color);
-        batch.draw(sprite, layer);
+        batch.draw(sprite, layer, order);
     }
 }
 

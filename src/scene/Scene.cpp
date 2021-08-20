@@ -6,7 +6,8 @@
 
 Scene::Scene()
         : m_luaScriptSystem(m_registry),
-		  m_scriptSystem(m_registry, this),
+          m_scriptSystem(m_registry),
+          m_physicsSystem(m_registry),
           m_renderSystem(m_registry),
           m_audioSystem(m_registry) {}
 
@@ -31,6 +32,7 @@ void Scene::update(float deltaTime)
 {
 	m_luaScriptSystem.update(deltaTime);
     m_scriptSystem.update(deltaTime);
+    m_physicsSystem.update(deltaTime);
     m_renderSystem.draw();
     m_audioSystem.update();
 }

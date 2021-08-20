@@ -9,7 +9,7 @@ class ScriptSystem
 {
     entt::registry &m_registry;
 public:
-    ScriptSystem(entt::registry &registry, Scene *scene);
+    ScriptSystem(entt::registry &registry);
 
     void update(float deltaTime);
 

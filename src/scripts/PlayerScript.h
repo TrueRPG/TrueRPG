@@ -4,10 +4,11 @@
 #include <vector>
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
+#include "../scene/components/RigidbodyComponent.h"
 
 class PlayerScript : public Script
 {
-    float m_speed{2.f};
+    float m_speed{1.3f};
 
     Entity m_spriteEntity{};
     Entity m_stepsEntity{};
@@ -28,7 +29,6 @@ public:
     void onUpdate(float deltaTime) override
     {
         Window &window = Window::getInstance();
-        float dt = deltaTime * 200;
 
         // Пока поместил выход из игры сюда
         if (window.getKey(GLFW_KEY_ESCAPE))
@@ -36,7 +36,7 @@ public:
             window.close();
         }
 
-        auto &transform = getComponent<TransformComponent>();
+        auto &rigidbody = getComponent<RigidbodyComponent>();
         auto &stepsSound = m_stepsEntity.getComponent<AudioSourceComponent>();
 
         updateInput();
@@ -65,18 +65,18 @@ public:
             m_currentAnimation = 1;
         }
 
-        transform.position += glm::vec2(movement) * dt * m_speed;
+        rigidbody.velocity = glm::vec2(movement) * m_speed * 200.f;
 
         // Шаманю с анимацией
         auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
 
-        if (m_animationDelay > 30.0f)
+        if (m_animationDelay > 30.f)
         {
             renderer.textureRect = IntRect(m_frame * 32, m_currentAnimation * 32, 32, 32);
             m_frame++;
             m_animationDelay = 0.f;
         }
-        m_animationDelay += dt;
+        m_animationDelay += deltaTime * 200.f;
 
         if (m_frame > 2)
         {

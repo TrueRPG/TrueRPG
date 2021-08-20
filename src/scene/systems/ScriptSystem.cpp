@@ -2,7 +2,7 @@
 
 #include "../components/NativeScriptComponent.h"
 
-ScriptSystem::ScriptSystem(entt::registry &registry, Scene *scene)
+ScriptSystem::ScriptSystem(entt::registry &registry)
         : m_registry(registry) {}
 
 void ScriptSystem::update(float deltaTime)

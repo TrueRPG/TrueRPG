@@ -10,6 +10,7 @@
 #include "../components/HierarchyComponent.h"
 #include "../utils/Hierarchy.h"
 #include "../components/WorldMapComponent.h"
+#include "../components/AutoOrderComponent.h"
 
 // всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
 void resizeCallback(Window *window, int width, int height)
@@ -61,23 +62,35 @@ void RenderSystem::draw()
                 auto &worldMapComponent = view.get<WorldMapComponent>(entity);
                 auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
-                int currentX = (int) std::round(cameraTransform.position.x / ((float) worldMapComponent.tileSize * transformComponent.scale.x));
-                int currentY = (int) std::round(cameraTransform.position.y / ((float) worldMapComponent.tileSize * transformComponent.scale.y));
+                int currentX = (int) std::floor(cameraTransform.position.x / ((float) worldMapComponent.tileSize * transformComponent.scale.x));
+                int currentY = (int) std::floor(cameraTransform.position.y / ((float) worldMapComponent.tileSize * transformComponent.scale.y));
 
                 for (int y = currentY + worldMapComponent.renderRadius - 1; y >= currentY - worldMapComponent.renderRadius + 1; y--)
                 {
                     for (int x = currentX - worldMapComponent.renderRadius + 1; x < currentX + worldMapComponent.renderRadius; x++)
                     {
-                        std::vector<Tile> tiles = worldMapComponent.generator->generate(x, y);
+                        // Generate tiles
+                        std::vector<Tile> tiles = worldMapComponent.generator->generateTiles(x, y);
                         for (const auto &tile : tiles)
                         {
                             Sprite tileSprite(*tile.texture);
                             tileSprite.setTextureRect(tile.textureRect);
-                            tileSprite.setPosition((glm::vec2(x, y) - transformComponent.origin) * (float) worldMapComponent.tileSize * transformComponent.scale);
-                            tileSprite.setOrigin(tile.origin);
+                            tileSprite.setPosition(glm::vec2(x, y) * (float) worldMapComponent.tileSize * transformComponent.scale);
                             tileSprite.setScale(transformComponent.scale);
 
-                            m_batch.draw(tileSprite, tile.layer);
+                            m_batch.draw(tileSprite, worldMapComponent.tileLayer);
+                        }
+                        // Generate objects
+                        std::vector<Object> objects = worldMapComponent.generator->generateObjects(x, y);
+                        for (const auto &object : objects)
+                        {
+                            Sprite objectSprite(*object.texture);
+                            objectSprite.setTextureRect(object.textureRect);
+                            objectSprite.setPosition(glm::vec2(x, y) * (float) worldMapComponent.tileSize * transformComponent.scale);
+                            objectSprite.setOrigin(object.origin);
+                            objectSprite.setScale(transformComponent.scale);
+
+                            m_batch.draw(objectSprite, worldMapComponent.objectLayer,-(int) objectSprite.getPosition().y - object.orderPivot);
                         }
                     }
                 }
@@ -100,7 +113,14 @@ void RenderSystem::draw()
                 sprite.setOrigin(transformComponent.origin);
                 sprite.setScale(transformComponent.scale);
 
-                m_batch.draw(sprite, spriteComponent.layer);
+                int order = spriteComponent.order;
+                if (m_registry.all_of<AutoOrderComponent>(entity))
+                {
+                    auto &orderComponent = m_registry.get<AutoOrderComponent>(entity);
+                    order = -(int) transformComponent.position.y - orderComponent.orderPivot;
+                }
+
+                m_batch.draw(sprite, spriteComponent.layer, order);
             }
         }
 
@@ -137,7 +157,7 @@ void RenderSystem::draw()
                 text.setOrigin(textOrigin);
                 text.setScale(transformComponent.scale);
 
-                text.draw(m_batch, textComponent.layer);
+                text.draw(m_batch, textComponent.layer, textComponent.order);
             }
         }
         m_batch.end();

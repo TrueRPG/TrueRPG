@@ -1,7 +1,0 @@
-#ifndef WORLDCONST_H
-#define WORLDCONST_H
-
-#define CHUNK_SIZE (5)
-#define CHUNK_VOLUME (CHUNK_SIZE * CHUNK_SIZE)
-
-#endif
