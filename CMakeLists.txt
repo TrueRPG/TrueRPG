@@ -21,7 +21,19 @@ add_subdirectory(libs/freetype)
 add_subdirectory(libs/miniaudio)
 add_subdirectory(libs/sol2)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio sol2_single ${CMAKE_CURRENT_SOURCE_DIR}/libs/luaJIT/src/libluajit.a)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio sol2_single)
+
+if(UNIX AND NOT APPLE)
+    message(STATUS "Its linux")
+    set(PROJECT_LIBS ${PROJECT_LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/libs/luaJIT/linux/x64/libluajit.a)
+elseif(MINGW)
+    message(STATUS "Its MinGW")
+    set(PROJECT_LIBS ${PROJECT_LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/libs/luaJIT/mingw64/lua51.dll)
+elseif(WIN32)
+    message(STATUS "Its Windows")
+    set(PROJECT_LIBS ${PROJECT_LIBS} ${CMAKE_CURRENT_SOURCE_DIR}/libs/luaJIT/windows/x86/lua51.dll)
+endif()
+
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
 
