@@ -7,7 +7,7 @@
 #include "../client/graphics/Rect.h"
 #include "../utils/OpenSimplexNoise.h"
 
-#define DEBUG_SEED INT_MAX
+#define DEBUG_SEED 2
 
 class WorldMapGenerator : public IWorldMapGenerator
 {
@@ -15,15 +15,16 @@ class WorldMapGenerator : public IWorldMapGenerator
 
     Texture& m_texture;
 
-    Tile sandTile{&m_texture, IntRect(192, 4256 - 32, 32, 32)};
-    Tile grassTile{&m_texture, IntRect(96, 4256 - 32, 32, 32)};
-    Tile dirtTile{&m_texture, IntRect(160, 4256 - 32, 32, 32)};
+    Tile sandTile{&m_texture, IntRect(192, 4224, 32, 32)};
+    Tile grassTile{&m_texture, IntRect(96, 4224, 32, 32)};
+    Tile dirtTile{&m_texture, IntRect(160, 4224, 32, 32)};
+    Tile mushroomTile{&m_texture, IntRect(0, 4000, 32, 32)};
 
     Object treeObject{
-            &m_texture, IntRect(160 - 96, 4256 - 96, 64, 64), glm::vec2(16, -8), 20
+            &m_texture, IntRect(64, 4160, 64, 64), glm::vec2(16, -8), 20
     };
     Object bushObject{
-            &m_texture, IntRect(160 - 96 - 32, 4256 - 96 - 96, 32, 32), glm::vec2(0.f), 4
+            &m_texture, IntRect(32, 4064, 32, 32), glm::vec2(0.f), 4
     };
 
     Entity m_player;
@@ -44,22 +45,26 @@ public:
         }
         if (value > -0.2f)
         {
+            if ((int) (value * 10000) % 83 == 1)
+            {
+                return {grassTile, mushroomTile};
+            }
             return {grassTile};
         }
         return {sandTile};
     }
 
-    std::vector<Object> generateObjects(int x, int y) override
+    std::vector<Object> generateObjects(int x, int y, std::vector<Tile> tiles) override
     {
         double value = m_simplexNoise.getNoise(x, y);
 
-        if (value > -0.15f && value < 0.3f)
+        if (value > -0.15f && value < 0.3f && tiles.size() == 1)
         {
-            if (((int) (value * 10000) % 5) == 2)
+            if ((int) (value * 10000) % 11 == 1)
             {
                 return {treeObject};
             }
-            else if (((int) (value * 10000) % 12) == 3)
+            else if ((int) (value * 10000) % 31 == 1)
             {
                 return {bushObject};
             }

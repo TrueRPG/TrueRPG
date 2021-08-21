@@ -17,6 +17,7 @@
 #include "scene/components/RectColliderComponent.h"
 #include "scene/components/RigidbodyComponent.h"
 #include "scene/components/AutoOrderComponent.h"
+#include "scripts/BotScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -63,7 +64,6 @@ Game::Game()
     // Создание игрока
     m_playerEntity = m_scene.createEntity("player");
     auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
-    playerTransform.position = glm::vec2(0.0f, 0.0f);
     m_playerEntity.addComponent<AudioListenerComponent>();
 
     Entity spriteEntity = m_scene.createEntity("sprite");
@@ -124,25 +124,56 @@ Game::Game()
 
     pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
 
+
     // Barrels
+    Entity barrels[3];
+
+    for (int i = 0; i < 3; i++)
     {
-        Entity barrels[3];
+        barrels[i] = m_scene.createEntity("barrel" + std::to_string(i));
+        auto &barrelRenderer = barrels[i].addComponent<SpriteRendererComponent>(m_baseTexture);
+        barrelRenderer.textureRect = IntRect(96, 736, 32, 32);
+        barrelRenderer.layer = 1;
 
-        for (int i = 0; i < 3; i++)
-        {
-            barrels[i] = m_scene.createEntity("barrel" + std::to_string(i));
-            auto &barrelRenderer = barrels[i].addComponent<SpriteRendererComponent>(m_baseTexture);
-            barrelRenderer.textureRect = IntRect(96, 736, 32, 32);
-            barrelRenderer.layer = 1;
+        auto &barrelTransform = barrels[i].getComponent<TransformComponent>();
+        barrelTransform.position = glm::vec2(128.f + i * 64.f, 384.f );
+        barrelTransform.scale = glm::vec2(2.f, 2.f);
 
-            auto &barrelTransform = barrels[i].getComponent<TransformComponent>();
-            barrelTransform.position = glm::vec2(128.f + i * 64.f, 384.f );
-            barrelTransform.scale = glm::vec2(2.f, 2.f);
-
-            barrels[i].addComponent<RectColliderComponent>().size = glm::vec2(64, 32);
-            auto &order = barrels[i].addComponent<AutoOrderComponent>();
-        }
+        barrels[i].addComponent<RectColliderComponent>().size = glm::vec2(64, 32);
+        auto &order = barrels[i].addComponent<AutoOrderComponent>();
     }
+
+
+    // Bot
+    Entity botEntity = m_scene.createEntity("bot");
+    botEntity.getComponent<TransformComponent>().position = glm::vec2(0.f, 5 * 64.f);
+
+    Entity botSprite = m_scene.createEntity("sprite");
+    auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(m_heroTexture);
+    botRenderer.textureRect = IntRect(32, 96, 32, 32);
+    botRenderer.layer = 1;
+    botSprite.addComponent<AutoOrderComponent>();
+
+    auto &botSpriteTransform = botSprite.getComponent<TransformComponent>();
+    botSpriteTransform.scale = glm::vec2(2.f, 2.f);
+    botSpriteTransform.origin = glm::vec2(16, 0);
+
+    Entity botNameEntity = m_scene.createEntity("name");
+    auto& botTextRenderer = botNameEntity.addComponent<TextRendererComponent>(&m_font, "Bot");
+    botTextRenderer.horizontalAlign = HorizontalAlign::Center;
+    botTextRenderer.layer = 10;
+    auto &botNameTransform = botNameEntity.getComponent<TransformComponent>();
+    botNameTransform.position = glm::vec2(0.f, 64.f);
+
+    auto &botCollider = botEntity.addComponent<RectColliderComponent>();
+    botCollider.offset = glm::vec2(-16, 0);
+    botCollider.size = glm::vec2(32, 32);
+    botEntity.addComponent<RigidbodyComponent>();
+
+    Hierarchy::addChild(botEntity, botSprite);
+    Hierarchy::addChild(botEntity, botNameEntity);
+
+    botEntity.addComponent<NativeScriptComponent>().bind<BotScript>();
 }
 
 void Game::update(float deltaTime)

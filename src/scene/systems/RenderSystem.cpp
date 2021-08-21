@@ -81,7 +81,7 @@ void RenderSystem::draw()
                             m_batch.draw(tileSprite, worldMapComponent.tileLayer);
                         }
                         // Generate objects
-                        std::vector<Object> objects = worldMapComponent.generator->generateObjects(x, y);
+                        std::vector<Object> objects = worldMapComponent.generator->generateObjects(x, y, tiles);
                         for (const auto &object : objects)
                         {
                             Sprite objectSprite(*object.texture);
