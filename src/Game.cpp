@@ -6,6 +6,7 @@
 #include "scene/components/SpriteRendererComponent.h"
 #include "scene/components/TextRendererComponent.h"
 #include "scene/components/WorldMapComponent.h"
+#include "scene/components/LuaScriptComponent.h"
 
 #include "scene/utils/Hierarchy.h"
 #include "scripts/PlayerScript.h"
@@ -33,10 +34,15 @@ Game::Game()
 
     auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
     worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
-
+    auto &testScript2 = worldMapEntity.addComponent<LuaScriptComponent>();
+    testScript2.scriptName = "test1";
+    testScript2.scriptPath = "../res/scripts/test.lua";
 
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
+    auto &testScript1 = m_cameraEntity.addComponent<LuaScriptComponent>();
+    testScript1.scriptName = "test2";
+    testScript1.scriptPath = "../res/scripts/test2.lua";
 
 
     // Создание текста
