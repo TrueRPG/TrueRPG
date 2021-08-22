@@ -8,7 +8,7 @@ ScriptSystem::ScriptSystem(entt::registry &registry)
 void ScriptSystem::update(float deltaTime)
 {
     // Обновляем все скрипты
- 	auto view = m_registry.view<NativeScriptComponent>();
+    auto view = m_registry.view<NativeScriptComponent>();
     for (auto entity : view)
     {
         auto &nativeScriptComponent = view.get<NativeScriptComponent>(entity);
