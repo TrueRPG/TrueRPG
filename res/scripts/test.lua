@@ -1,15 +1,15 @@
 local test = {}
 
-function test:init()
+function test:onCreate()
 	print("Test1.lua: "..self.entity:getName().name)
 	print(addChild)
 end
 
-function test:update(deltaTime)
+function test:onUpdate(deltaTime)
 
 end
 
-function test:destroy()
+function test:onDestroy()
 	print("This is destroy from lua")
 end
 

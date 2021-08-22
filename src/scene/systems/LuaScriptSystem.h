@@ -14,7 +14,7 @@ public:
 
 	void update(float deltaTime);
 
-	void destroyScript();
+	void destroyScript(entt::entity entity);
 
 	void destroy();
 };

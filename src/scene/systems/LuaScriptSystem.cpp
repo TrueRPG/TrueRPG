@@ -39,17 +39,23 @@ void LuaScriptSystem::update(float deltaTime)
 			luaScriptComponent.entity = std::make_shared<Entity>(entity, &m_registry);
 			m_ctx.init(luaScriptComponent.scriptPath, luaScriptComponent.entity);	
 
-			m_ctx.callFunction("init");
+			m_ctx.callFunction("onCreate");
 		}
-		m_ctx.callFunction("update", deltaTime);
+		m_ctx.callFunction("onUpdate", deltaTime);
 
 		m_ctx.reset();
 	}
 }
 
-void LuaScriptSystem::destroyScript()
+void LuaScriptSystem::destroyScript(entt::entity entity)
 {
-	
+	auto &luaScriptComponent = m_registry.get<LuaScriptComponent>(entity);
+    if (!luaScriptComponent.entity)
+    {
+        m_ctx.setCurrentScript(luaScriptComponent.scriptName);
+		m_ctx.callFunction("onDestroy");
+		m_ctx.reset();
+    }
 }
 
 void LuaScriptSystem::destroy()
