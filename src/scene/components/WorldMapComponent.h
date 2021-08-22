@@ -30,7 +30,7 @@ public:
 
     virtual std::vector<Tile> generateTiles(int x, int y) = 0;
 
-    virtual std::vector<Object> generateObjects(int x, int y) = 0;
+    virtual std::vector<Object> generateObjects(int x, int y, std::vector<Tile>) = 0;
 };
 
 struct WorldMapComponent

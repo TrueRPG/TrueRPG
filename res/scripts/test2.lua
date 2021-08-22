@@ -1,7 +1,8 @@
 local test2 = { }
 
 function test2:init()
-	print("Test2.lua: "..self.instance:getNameComponent().name)	
+	local testNameChange = self.entity:getName()
+	print("Test2.lua: "..testNameChange.name.."\n")	
 end
 
 return test2

@@ -3,11 +3,11 @@
 
 #include <string>
 #include <memory>
-#include "../LuaScript.h"
+#include "../Entity.h"
 
 struct LuaScriptComponent
-{
-	std::shared_ptr<LuaScript> instance;	
+{	
+	std::shared_ptr<Entity> entity;
 
 	std::string scriptName;
 	std::string scriptPath;

@@ -3,25 +3,28 @@
 #include "../components/LuaScriptComponent.h"
 #include "../components/NameComponent.h"
 #include "../../utils/OpenSimplexNoise.h"
+#include "../utils/Hierarchy.h"
+
+void testPrintGlob()
+{
+	printf("1 Hello from c++\n");
+}
+
+int testPrintGlob2()
+{
+	printf("2 Hello from c++\n");
+	return 1;
+}
 
 LuaScriptSystem::LuaScriptSystem(entt::registry &registry) 
 	: m_registry(registry),
 	  m_ctx()
 {
-	m_ctx.m_luaState.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);
-	m_ctx.addType<Entity>("Entity");
-	m_ctx.addType<LuaScript>("LuaScript",
-			"getEntity", &LuaScript::getEntity,
-			"testPrint", &LuaScript::testPrint,
-			"getNameComponent", &LuaScript::getComponent<NameComponent>);
-	m_ctx.addType<OpenSimplexNoise>("OpenSimplexNoise", sol::constructors<OpenSimplexNoise(), OpenSimplexNoise(unsigned int)>(),
-			"seed", sol::property(&OpenSimplexNoise::getSeed, &OpenSimplexNoise::setSeed),
-			"octaves", sol::property(&OpenSimplexNoise::getOctaves, &OpenSimplexNoise::setOctaves),
-			"lacunarity", sol::property(&OpenSimplexNoise::getLacunarity, &OpenSimplexNoise::setLacunarity),
-			"persistence", sol::property(&OpenSimplexNoise::getPersistence, &OpenSimplexNoise::setPersistence),
-			"period", sol::property(&OpenSimplexNoise::getPeriod, &OpenSimplexNoise::setPeriod),
-			"getNoise", &OpenSimplexNoise::getNoise);
-	m_ctx.addType<NameComponent>("NameComponent", "name", &NameComponent::name);
+	m_ctx.m_luaState.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);	
+    m_ctx.addFunction("testPrintGlob", testPrintGlob);
+    m_ctx.addFunction("testPrintGlob2", testPrintGlob2);
+    m_ctx.addFunction("addChild", Hierarchy::addChild);
+    m_ctx.addFunction("find", Hierarchy::find);
 }
 
 void LuaScriptSystem::update(float deltaTime)
@@ -31,12 +34,10 @@ void LuaScriptSystem::update(float deltaTime)
 	{
 		auto &luaScriptComponent = view.get<LuaScriptComponent>(entity);
 		m_ctx.setCurrentScript(luaScriptComponent.scriptName);
-		if (!luaScriptComponent.instance)
-		{
-			luaScriptComponent.instance = std::make_shared<LuaScript>();
-			luaScriptComponent.instance->m_entity = { entity, &m_registry };
-			m_ctx.init(luaScriptComponent.scriptPath);
-			m_ctx.m_luaState[m_ctx.m_currentTable]["instance"] = luaScriptComponent.instance;
+		if (!luaScriptComponent.entity)
+		{	
+			luaScriptComponent.entity = std::make_shared<Entity>(entity, &m_registry);
+			m_ctx.init(luaScriptComponent.scriptPath, luaScriptComponent.entity);	
 
 			m_ctx.callFunction("init");
 		}
