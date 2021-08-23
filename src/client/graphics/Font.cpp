@@ -4,21 +4,68 @@
 #include FT_FREETYPE_H
 
 Font::Font(const std::string &path, int size)
-        : m_path(path), m_size(size)
+        : m_path(path), m_size(size) { }
+
+Character Font::getCharacter(char c)
 {
-    // TODO: инициализацию надо бы куда-то вынести
+    return m_characters[c];
+}
+
+std::string Font::getPath() const
+{
+    return m_path;
+}
+
+int Font::getSize() const
+{
+    return m_size;
+}
+
+Texture &Font::getTexture()
+{
+    return m_texture;
+}
+
+void Font::destroy()
+{
+    m_texture.destroy();
+}
+
+// Выглядит жутко, но похожую штуку увидал в SFML. У нас особо нет выбора,
+// потому что хочется переиспользовать уже имеющийся шейдер, а freetype умеет только в один канал.
+void Font::fillPixelBuffer(const unsigned char *buffer, size_t width, size_t height)
+{
+    m_pixelBuffer.resize(width * height * 4);
+    for (unsigned int y = 0; y < height; ++y)
+    {
+        for (unsigned int x = 0; x < width; ++x)
+        {
+            // Делаем белый цвет по умолчанию, альфу забиваем тем, что нам дал freetype
+            std::size_t index = x + y * width;
+            m_pixelBuffer[index * 4 + 0] = 255;
+            m_pixelBuffer[index * 4 + 1] = 255;
+            m_pixelBuffer[index * 4 + 2] = 255;
+            m_pixelBuffer[index * 4 + 3] = buffer[index];
+        }
+    }
+}
+
+Font Font::create(const std::string& path, int size)
+{
+    Font res{path, size};
+
     FT_Library freetype;
     if (FT_Init_FreeType(&freetype))
     {
         std::cout << "Could not init FreeType Library" << std::endl;
-        return;
+        return Font();
     }
 
     FT_Face face;
     if (FT_New_Face(freetype, path.c_str(), 0, &face))
     {
         std::cout << "Failed to load font " << path << std::endl;
-        return;
+        return Font();
     }
     FT_Set_Pixel_Sizes(face, 0, size);
 
@@ -64,66 +111,24 @@ Font::Font(const std::string &path, int size)
             continue;
         }
 
-        fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows);
+        res.fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows);
 
         // уOffset нужен, чтобы разместить наши символы на одной линии
         glTextureSubImage2D(textureId, 0, x, 0, glyph->bitmap.width, glyph->bitmap.rows,
-                            GL_RGBA, GL_UNSIGNED_BYTE, &m_pixelBuffer[0]);
+                            GL_RGBA, GL_UNSIGNED_BYTE, &res.m_pixelBuffer[0]);
 
         int baseline = height - glyph->bitmap_top;
         Character character = {glm::ivec2(glyph->bitmap.width, glyph->bitmap.rows), x, baseline};
-        m_characters.insert({i, character});
+        res.m_characters.insert({i, character});
 
         x += glyph->bitmap.width;
     }
 
-    m_texture = Texture(textureId, path, width, height);
+    res.m_texture = Texture(textureId, path, width, height);
 
     // Уничтожаем все это безобразие
     FT_Done_Face(face);
     FT_Done_FreeType(freetype);
-}
 
-Character Font::getCharacter(char c)
-{
-    return m_characters[c];
-}
-
-std::string Font::getPath() const
-{
-    return m_path;
-}
-
-int Font::getSize() const
-{
-    return m_size;
-}
-
-Texture &Font::getTexture()
-{
-    return m_texture;
-}
-
-void Font::destroy()
-{
-    m_texture.destroy();
-}
-
-// Выглядит жутко, но похожую штуку увидал в SFML. У нас особо нет выбора,
-// потому что хочется переиспользовать уже имеющийся шейдер, а freetype умеет только в один канал.
-void Font::fillPixelBuffer(const unsigned char *buffer, size_t width, size_t height)
-{
-    m_pixelBuffer.resize(width * height * 4);
-    for (unsigned int y = 0; y < height; ++y)
-    {
-        for (unsigned int x = 0; x < width; ++x)
-        {
-            // Делаем белый цвет по умолчанию, альфу забиваем тем, что нам дал freetype
-            std::size_t index = x + y * width;
-            m_pixelBuffer[index * 4 + 0] = 255;
-            m_pixelBuffer[index * 4 + 1] = 255;
-            m_pixelBuffer[index * 4 + 2] = 255;
-            m_pixelBuffer[index * 4 + 3] = buffer[index];
-        }
-    }
+    return res;
 }

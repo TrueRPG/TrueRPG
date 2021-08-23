@@ -1,3 +1,6 @@
+#ifndef RPG_RTIME_H
+#define RPG_RTIME_H
+
 #include <GLFW/glfw3.h>
 
 class RTime
@@ -25,3 +28,5 @@ public:
         return m_deltaTime; 
     }
 };
+
+#endif // RPG_RTIME_H

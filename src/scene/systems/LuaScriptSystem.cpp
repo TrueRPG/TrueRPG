@@ -1,9 +1,6 @@
 #include <memory>
 #include "LuaScriptSystem.h"
 #include "../components/LuaScriptComponent.h"
-#include "../components/NameComponent.h"
-#include "../../utils/OpenSimplexNoise.h"
-#include "../utils/Hierarchy.h"
 
 LuaScriptSystem::LuaScriptSystem(entt::registry &registry) 
 	: m_registry(registry),
@@ -19,11 +16,11 @@ void LuaScriptSystem::update(float deltaTime)
 		if (!luaScriptComponent.entity)
 		{	
 			luaScriptComponent.entity = std::make_shared<Entity>(entity, &m_registry);
-			m_ctx.init(luaScriptComponent.scriptPath, luaScriptComponent.entity);	
+			m_ctx.init(luaScriptComponent.scriptPath, luaScriptComponent.entity);
 
-			m_ctx.callFunction("onCreate");
+            m_ctx.callMethod("onCreate");
 		}
-		m_ctx.callFunction("onUpdate", deltaTime);
+        m_ctx.callMethod("onUpdate", deltaTime);
 
 		m_ctx.reset();
 	}
@@ -35,7 +32,8 @@ void LuaScriptSystem::destroyScript(entt::entity entity)
     if (!luaScriptComponent.entity)
     {
         m_ctx.setCurrentScript(luaScriptComponent.scriptName);
-		m_ctx.callFunction("onDestroy");
+        m_ctx.callMethod("onDestroy");
+		m_ctx.collectGarbage();
 		m_ctx.reset();
     }
 }
@@ -44,5 +42,3 @@ void LuaScriptSystem::destroy()
 {
 	
 }
-
-

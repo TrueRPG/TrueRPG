@@ -1,5 +1,5 @@
-#ifndef SCRIPTCONTEXT_H
-#define SCRIPTCONTEXT_H
+#ifndef RPG_SCRIPTCONTEXT_H
+#define RPG_SCRIPTCONTEXT_H
 
 #include <limits>
 #include <cstdio>
@@ -14,20 +14,23 @@ class ScriptContext
 {
 private:
 	sol::state m_luaState;
-	std::string m_currentTable;
+	std::string m_currentScript;
 public:
 	ScriptContext();
 
 	void setCurrentScript(const std::string &name);
 
 	template<typename... Args>
-	void callFunction(const std::string &method, Args&&... args);
+	void callMethod(const std::string &method, Args&&... args);
 
 	template<typename Class, typename... Args>
-	void addType(const std::string &method, Args&&... args);
+	[[maybe_unused]] void addType(const std::string &name, Args&&... args);
 	
 	template<typename T, typename... Args>
-	void addFunction(T&& key, Args&&... args);
+	[[maybe_unused]] void addFunction(T&& key, Args&&... args);
+
+    template<typename T>
+	[[maybe_unused]] void addGlobalVar(const std::string &name, T &varibale);
 
 	void reset();
 
@@ -39,15 +42,15 @@ private:
 };
 
 template<typename... Args>
-void ScriptContext::callFunction(const std::string &method, Args&&... args)
+void ScriptContext::callMethod(const std::string &method, Args&&... args)
 {
-	auto scriptTable = m_luaState[m_currentTable];
+	auto scriptTable = m_luaState[m_currentScript];
 	sol::function func = scriptTable[method];
 	sol::function_result res = func(scriptTable, std::forward<Args>(args)...);
 	// if (!res.valid())
 	// {
 	// 	sol::error R = res;
-	// 	fprintf(stderr, "[WARN] Error runing lua %s function %s: %s\n", m_currentTable.c_str(), method.c_str(), R.what());
+	// 	fprintf(stderr, "[WARN] Error runing lua %s function %s: %s\n", m_currentScript.c_str(), method.c_str(), R.what());
 	// }
 }
 
@@ -63,6 +66,10 @@ void ScriptContext::addFunction(T&& key, Args&&... args)
 	m_luaState.set_function(std::forward<T>(key), std::forward<Args>(args)...);
 }
 
-#endif
+template<typename T>
+void ScriptContext::addGlobalVar(const std::string &name, T &varibale)
+{
+    m_luaState.set(name, varibale);
+}
 
-
+#endif // RPG_SCRIPTCONTEXT_H

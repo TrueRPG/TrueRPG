@@ -1,5 +1,5 @@
-#ifndef OPENSIMPLEXNOISE_H
-#define OPENSIMPLEXNOISE_H
+#ifndef RPG_OPENSIMPLEXNOISE_H
+#define RPG_OPENSIMPLEXNOISE_H
 
 #include "Types.h"
 #include <array>
@@ -52,4 +52,4 @@ private:
     void updateSeed();
 };
 
-#endif
+#endif // RPG_OPENSIMPLEXNOISE_H

@@ -1,5 +1,5 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef RPG_TYPES_H
+#define RPG_TYPES_H
 
 #include <cstdint>
 
@@ -23,4 +23,4 @@ using i16f = std::int_fast16_t;
 using i32f = std::int_fast32_t;
 using i64f = std::int_fast64_t;
 
-#endif
+#endif // RPG_TYPES_H

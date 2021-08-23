@@ -33,6 +33,7 @@ public:
 
     void destroy();
 
+    static Font create(const std::string& path, int size);
 private:
     Texture& getTexture();
 

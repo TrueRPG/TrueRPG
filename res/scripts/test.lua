@@ -1,10 +1,10 @@
 local test = {
+	-- properties & fields contains here
 	simplexNoise = OpenSimplexNoise.new()
 }
 
 function test:onCreate()
-	print("Test1.lua: "..self.entity:getComponent(Components.Name).name)
-	print(self.simplexNoise:getNoise(5, 6))
+	print("Test1.lua: "..self.entity:getName().name)
 	print('\n')
 end
 

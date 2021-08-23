@@ -1,16 +1,13 @@
 local test2 = { 
-	-- properties contains here 
-	testivec2 = ivec2.new(1, 50),
-	testvec2 = vec2.new(2.7, 6.0)
+	-- properties & fields contains here
+	testivec2 = glm.ivec2.new(1, 50),
+	testvec2 = glm.vec2.new(2.7, 6.0)
 }
 
 function test2:onCreate()
-	local testNameChange = self.entity:getComponent(Components.Name)
-	print("Test2.lua: "..testNameChange.name.."\n")
-	print(self.testivec2.y)
-	print(self.testvec2.x)
-	self.testvec2 = self.testvec2 - self.testvec2
-	print(self.testvec2.x)
+	print("Test2.lua: "..self.entity:getName().name)
+	self.lol = self.entity:getRigidBody()
+
 	print('\n')
 end
 

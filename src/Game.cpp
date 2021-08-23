@@ -21,7 +21,7 @@
 #include "scripts/BotScript.h"
 
 Game::Game()
-        : m_font("../res/fonts/vt323.ttf", 32),
+        : m_font(Font::create("../res/fonts/vt323.ttf", 32)),
           m_heroTexture(Texture::create("../res/textures/hero.png")),
           m_baseTexture(Texture::create("../res/textures/base.png")),
           m_steps("../res/audio/steps.mp3"),

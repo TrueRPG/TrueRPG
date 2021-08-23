@@ -1,5 +1,5 @@
-#ifndef LUASCRIPTCOMPONENT_H
-#define LUASCRIPTCOMPONENT_H
+#ifndef RPG_LUASCRIPTCOMPONENT_H
+#define RPG_LUASCRIPTCOMPONENT_H
 
 #include <string>
 #include <memory>
@@ -13,5 +13,5 @@ struct LuaScriptComponent
 	std::string scriptPath;
 };
 
-#endif
+#endif // RPG_LUASCRIPTCOMPONENT_H
 
