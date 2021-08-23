@@ -34,16 +34,12 @@ Game::Game()
 
     auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
     worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
-    auto &testScript2 = worldMapEntity.addComponent<LuaScriptComponent>();
-    testScript2.scriptName = "test1";
-    testScript2.scriptPath = "../res/scripts/test.lua";
+    auto &testScript1 = worldMapEntity.addComponent<LuaScriptComponent>();
+    testScript1.scriptName = "test1";
+    testScript1.scriptPath = "../res/scripts/test.lua";
 
     m_cameraEntity = m_scene.createEntity("camera");
-    m_cameraEntity.addComponent<CameraComponent>();
-    auto &testScript1 = m_cameraEntity.addComponent<LuaScriptComponent>();
-    testScript1.scriptName = "test2";
-    testScript1.scriptPath = "../res/scripts/test2.lua";
-
+    m_cameraEntity.addComponent<CameraComponent>();    
 
     // Создание текста
     Entity textEntity = m_scene.createEntity("text");
@@ -163,6 +159,10 @@ Game::Game()
     auto &botSpriteTransform = botSprite.getComponent<TransformComponent>();
     botSpriteTransform.scale = glm::vec2(2.f, 2.f);
     botSpriteTransform.origin = glm::vec2(16, 0);
+
+	auto &testScript2 = botEntity.addComponent<LuaScriptComponent>();
+    testScript2.scriptName = "test2";
+    testScript2.scriptPath = "../res/scripts/test2.lua";
 
     Entity botNameEntity = m_scene.createEntity("name");
     auto& botTextRenderer = botNameEntity.addComponent<TextRendererComponent>(&m_font, "Bot");

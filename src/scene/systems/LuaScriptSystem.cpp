@@ -5,27 +5,9 @@
 #include "../../utils/OpenSimplexNoise.h"
 #include "../utils/Hierarchy.h"
 
-void testPrintGlob()
-{
-	printf("1 Hello from c++\n");
-}
-
-int testPrintGlob2()
-{
-	printf("2 Hello from c++\n");
-	return 1;
-}
-
 LuaScriptSystem::LuaScriptSystem(entt::registry &registry) 
 	: m_registry(registry),
-	  m_ctx()
-{
-	m_ctx.m_luaState.open_libraries(sol::lib::base, sol::lib::math, sol::lib::string);	
-    m_ctx.addFunction("testPrintGlob", testPrintGlob);
-    m_ctx.addFunction("testPrintGlob2", testPrintGlob2);
-    m_ctx.addFunction("addChild", Hierarchy::addChild);
-    m_ctx.addFunction("find", Hierarchy::find);
-}
+	  m_ctx() { }
 
 void LuaScriptSystem::update(float deltaTime)
 {
