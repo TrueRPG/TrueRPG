@@ -8,6 +8,9 @@ function test2:onCreate()
 	print("Test2.lua: "..self.entity:getName().name)
 	self.lol = self.entity:getRigidBody()
 
+    local vec = glm.vec2.new(2, 3) * 3;
+    print(vec.x..", "..vec.y)
+
 	print('\n')
 end
 
