@@ -5,8 +5,7 @@ local test2 = {
 }
 
 function test2:onCreate()
-	print("Test2.lua: "..self.entity:getName().name)
-	self.lol = self.entity:getRigidBody()
+	print("Test2.lua: "..self.entity:getName().name)	
 
     local vec = glm.vec2.new(2, 3) * 3;
     print(vec.x..", "..vec.y)

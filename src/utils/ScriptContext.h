@@ -73,3 +73,4 @@ void ScriptContext::addGlobalVar(const std::string &name, T &varibale)
 }
 
 #endif // RPG_SCRIPTCONTEXT_H
+

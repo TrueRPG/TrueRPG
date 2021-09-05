@@ -108,8 +108,8 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
 }
 
 void Shader::checkCompileErrors(unsigned int glHandel, unsigned int status,
-                                    void (*GLget)(unsigned int, unsigned int, int*),
-                                    void (*GLinfoLog)(unsigned int, int, int*, char*))
+                                    void (*const GLget)(unsigned int, unsigned int, int*),
+                                    void (*const GLinfoLog)(unsigned int, int, int*, char*))
 {
     char infoLog[1024];
     int success;

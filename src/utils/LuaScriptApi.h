@@ -21,6 +21,8 @@
 #include "../scene/components/AutoOrderComponent.h"
 
 #include "../scene/utils/Hierarchy.h"
+#include "../client/audio/StreamAudioClip.h"
+#include "../client/audio/CachedAudioClip.h"
 
 #define SCTX_INLINE inline __attribute__((always_inline))
 
@@ -39,19 +41,19 @@ namespace LuaApi
 
     // TODO: не знаю стоит ли переделывать эти функции в макросы. Так что пока inline
     template<typename S, typename T>
-    SCTX_INLINE decltype(auto) glmAddFunction()
+    SCTX_INLINE auto glmAddFunction()
     {
         return sol::resolve<S(const S &, const S &)>(glm::operator+);
     }
 
     template<typename S, typename T>
-    SCTX_INLINE decltype(auto) glmSubFunction()
+    SCTX_INLINE auto glmSubFunction()
     {
         return sol::resolve<S(const S &, const S &)>(glm::operator-);
     }
 
     template<typename S, typename T>
-    SCTX_INLINE decltype(auto) glmMulFunction()
+    SCTX_INLINE auto glmMulFunction()
     {
         return sol::overload(
                 [](const S &v1, const S &v2) -> S { return v1 * v2; },
@@ -60,7 +62,7 @@ namespace LuaApi
     }
 
     template<typename S, typename T>
-    SCTX_INLINE decltype(auto) glmDivFunction()
+    SCTX_INLINE auto glmDivFunction()
     {
         return sol::overload(
                 [](const S &v1, const S &v2) -> S { return v1 / v2; },
@@ -69,7 +71,7 @@ namespace LuaApi
     }
 
     template<typename S, typename T>
-    SCTX_INLINE decltype(auto) glmIndexOperator()
+    SCTX_INLINE auto glmIndexOperator()
     {
         return [](const S &v, i32 index) -> T { return v[index - 1]; };
     }
@@ -257,7 +259,8 @@ namespace LuaApi
                                  "getCamera", &Entity::getComponent<CameraComponent>,
                                  "getRectCollider", &Entity::getComponent<RectColliderComponent>,
                                  "getRigidBody", &Entity::getComponent<RigidbodyComponent>,
-                                 "getHierarchy", &Entity::getComponent<HierarchyComponent>);
+                                 "getHierarchy", &Entity::getComponent<HierarchyComponent>,
+								 "getAudioSource", &Entity::getComponent<AudioSourceComponent>);
     }
 
     inline void initComponents(sol::state &ctx)
@@ -312,7 +315,14 @@ namespace LuaApi
 
     inline void initAudioApi(sol::state &ctx)
     {
+		sol::table audioTable = ctx.create_table("audio");
 
+		audioTable.new_usertype<StreamAudioClip>("StreamAudioClip",
+												 sol::constructors<StreamAudioClip(const std::string &)>(),
+												 "getPath", &StreamAudioClip::getPath);
+		audioTable.new_usertype<CachedAudioClip>("CachedAudioClip",
+												 sol::constructors<CachedAudioClip(const std::string &)>(),
+												 "getPath", &CachedAudioClip::getPath);
     }
 
     inline void initApi(sol::state &ctx)

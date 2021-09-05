@@ -5,7 +5,6 @@ local test = {
 
 function test:onCreate()
 	print("Test1.lua: "..self.entity:getName().name)
-	print('\n')
 end
 
 function test:onUpdate(deltaTime)

@@ -34,9 +34,6 @@ Game::Game()
 
     auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
     worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
-    auto &testScript1 = worldMapEntity.addComponent<LuaScriptComponent>();
-    testScript1.scriptName = "test1";
-    testScript1.scriptPath = "../res/scripts/test.lua";
 
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();    
@@ -125,7 +122,9 @@ Game::Game()
     Hierarchy::addChild(pumpkinEntity, pumpkinTextEntity);
 
     pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
-
+	auto &testScript1 = pumpkinEntity.addComponent<LuaScriptComponent>();
+    testScript1.scriptName = "test1";
+    testScript1.scriptPath = "../res/scripts/test.lua";
 
     // Barrels
     Entity barrels[3];
