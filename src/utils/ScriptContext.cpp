@@ -1,5 +1,6 @@
 #include "ScriptContext.h"
 #include "LuaScriptApi.h"
+#include "../scene/Entity.h"
 
 ScriptContext::ScriptContext() : m_luaState() 
 {

@@ -10,7 +10,7 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.h" "src/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 add_subdirectory(libs/glad)
 add_subdirectory(libs/glfw)
@@ -41,6 +41,7 @@ elseif(WIN32)
                 "${PROJECT_SOURCE_DIR}/libs/luaJIT/msvc/lua51.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
     elseif(MINGW)
         message("MinGW")
+        target_compile_options(${PROJECT_NAME} PUBLIC -O1 -Wa,-mbig-obj)
         set(LUA_JIT ${PROJECT_SOURCE_DIR}/libs/luaJIT/mingw/lua51.dll)
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 "${PROJECT_SOURCE_DIR}/libs/luaJIT/mingw/lua51.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
