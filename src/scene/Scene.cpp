@@ -8,7 +8,8 @@ Scene::Scene()
         : m_scriptSystem(m_registry),
           m_physicsSystem(m_registry),
           m_renderSystem(m_registry),
-          m_audioSystem(m_registry) {}
+          m_audioSystem(m_registry),
+          m_spriteAnimatorSystem(m_registry){}
 
 Entity Scene::createEntity(const std::string &name)
 {
@@ -31,6 +32,7 @@ void Scene::update(float deltaTime)
 {
     m_scriptSystem.update(deltaTime);
     m_physicsSystem.update(deltaTime);
+    m_spriteAnimatorSystem.update(deltaTime);
     m_renderSystem.draw();
     m_audioSystem.update();
 }

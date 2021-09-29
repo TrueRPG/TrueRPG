@@ -7,12 +7,14 @@
 #include "client/graphics/Font.h"
 #include "client/audio/StreamAudioClip.h"
 #include "client/audio/CachedAudioClip.h"
+#include "client/animation/SpriteAnimator.h"
 
 class Game
 {
     Font m_font;
     Texture m_heroTexture;
     Texture m_baseTexture;
+    SpriteAnimator m_characterAnimator;
 
     StreamAudioClip m_steps;
     StreamAudioClip m_music;

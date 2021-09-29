@@ -8,6 +8,7 @@
 #include "scene/components/WorldMapComponent.h"
 
 #include "scene/utils/Hierarchy.h"
+#include "scene/utils/Animation.h"
 #include "scripts/PlayerScript.h"
 #include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
@@ -60,6 +61,34 @@ Game::Game()
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
 
+    // Создание анимации
+    m_characterAnimator = Animation::createAnimator([](SpriteAnimatorBuilder &builder) {
+        auto velocity = builder.parameter("velocity", SpriteAnimatorParameterType::Vec2);
+
+        auto idle = builder.node("idle", {{{32, 96, 32, 32}}});
+        auto walkLeft =
+            builder.node("walkLeft", {{{0, 64, 32, 32}, 0.1f}, {{32, 64, 32, 32}, 0.1f}, {{64, 64, 32, 32}, 0.1f}});
+        auto walkRight =
+            builder.node("walkRight", {{{0, 32, 32, 32}, 0.1f}, {{32, 32, 32, 32}, 0.1f}, {{64, 32, 32, 32}, 0.1f}});
+        auto walkUp =
+            builder.node("walkUp", {{{0, 96, 32, 32}, 0.1f}, {{32, 96, 32, 32}, 0.1f}, {{64, 96, 32, 32}, 0.1f}});
+        auto walkDown =
+            builder.node("walkDown", {{{0, 0, 32, 32}, 0.1f}, {{32, 0, 32, 32}, 0.1f}, {{64, 0, 32, 32}, 0.1f}});
+
+        builder.entry().transition(idle, [](auto) { return true; });
+
+        idle.transition(walkLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x < 0; });
+        walkLeft.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x >= 0; });
+
+        idle.transition(walkRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x > 0; });
+        walkRight.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x <= 0; });
+
+        idle.transition(walkDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y > 0; });
+        walkDown.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y <= 0; });
+
+        idle.transition(walkUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y < 0; });
+        walkUp.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y >= 0; });
+    });
 
     // Создание игрока
     m_playerEntity = m_scene.createEntity("player");
@@ -68,9 +97,10 @@ Game::Game()
 
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
-    heroRenderer.textureRect = IntRect(32, 96, 32, 32);
     heroRenderer.layer = 1;
     spriteEntity.addComponent<AutoOrderComponent>();
+
+    Animation::addAnimator(spriteEntity, &m_characterAnimator);
 
     auto &heroTransform = spriteEntity.getComponent<TransformComponent>();
     heroTransform.scale = glm::vec2(2.f, 2.f);
@@ -150,9 +180,10 @@ Game::Game()
 
     Entity botSprite = m_scene.createEntity("sprite");
     auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(m_heroTexture);
-    botRenderer.textureRect = IntRect(32, 96, 32, 32);
     botRenderer.layer = 1;
     botSprite.addComponent<AutoOrderComponent>();
+
+    Animation::addAnimator(botSprite, &m_characterAnimator);
 
     auto &botSpriteTransform = botSprite.getComponent<TransformComponent>();
     botSpriteTransform.scale = glm::vec2(2.f, 2.f);

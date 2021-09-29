@@ -8,6 +8,7 @@
 #include "systems/RenderSystem.h"
 #include "systems/AudioSystem.h"
 #include "systems/PhysicsSystem.h"
+#include "systems/SpriteAnimatorSystem.h"
 
 class Entity;
 
@@ -19,6 +20,7 @@ class Scene
     PhysicsSystem m_physicsSystem;
     RenderSystem m_renderSystem;
     AudioSystem m_audioSystem;
+    SpriteAnimatorSystem m_spriteAnimatorSystem;
 public:
     Scene();
 

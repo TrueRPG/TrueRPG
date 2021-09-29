@@ -14,10 +14,6 @@ class BotScript : public Script
 
     Entity m_spriteEntity{};
 
-    float m_animationDelay{0.f};
-    int m_currentAnimation{3};
-    int m_frame{0};
-
     BotState m_currentState{IDLE};
     glm::ivec2 m_dir{0};
 
@@ -61,43 +57,10 @@ public:
 
         m_time += deltaTime;
 
-        if (m_dir == glm::ivec2(0, 1))
-        {
-            m_currentAnimation = 0;
-        }
-        if (m_dir == glm::ivec2(-1, 0))
-        {
-            m_currentAnimation = 2;
-        }
-        if (m_dir == glm::ivec2(0, -1))
-        {
-            m_currentAnimation = 3;
-        }
-        if (m_dir == glm::ivec2(1, 0))
-        {
-            m_currentAnimation = 1;
-        }
+        // SpriteAnimator
+        auto &animator = m_spriteEntity.getComponent<SpriteAnimatorComponent>();
 
-        // Animation
-        auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
-
-        if (m_animationDelay > 30.f)
-        {
-            renderer.textureRect = IntRect(m_frame * 32, m_currentAnimation * 32, 32, 32);
-            m_frame++;
-            m_animationDelay = 0.f;
-        }
-        m_animationDelay += deltaTime * 200.f;
-
-        if (m_frame > 2)
-        {
-            m_frame = 0;
-        }
-
-        if (m_currentState == IDLE)
-        {
-            m_frame = 1;
-        }
+        animator.parameterStorage.at("velocity") = rigidbody.velocity;
     }
 };
 
