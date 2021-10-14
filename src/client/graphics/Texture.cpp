@@ -55,7 +55,7 @@ Texture Texture::create(const std::string& path, unsigned int type)
     int channels;
     int width;
     int height;
-    unsigned char* data = nullptr;
+    unsigned char* data;
 
     glCreateTextures(type, 1, &texture);
 

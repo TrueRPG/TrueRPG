@@ -14,10 +14,8 @@ class DebugInfoScript : public Script
     int m_fps{0};
 
 public:
-    DebugInfoScript(Entity cameraEntity)
+    explicit DebugInfoScript(Entity cameraEntity)
             : m_cameraEntity(cameraEntity) {}
-
-    void onCreate() {}
 
     void onUpdate(float deltaTime)
     {
@@ -49,8 +47,6 @@ public:
         textRenderer.text +=
                 "\nx: " + std::to_string(playerPosition.x / 64) + " y: " + std::to_string(playerPosition.y / 64);
     }
-
-    void onDestroy() {}
 };
 
 #endif //RPG_DEBUGINFOSCRIPT_H

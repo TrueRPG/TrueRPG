@@ -7,6 +7,9 @@ class Script
 {
     Entity m_entity;
 public:
+
+    virtual ~Script() = default;
+
     template<typename T>
     T& getComponent()
     {
@@ -17,6 +20,11 @@ public:
     {
         return m_entity;
     }
+
+protected:
+    virtual void onCreate() {}
+    virtual void onUpdate(float deltaTime) {}
+    virtual void onDestroy() {};
 
     friend class ScriptSystem;
 };

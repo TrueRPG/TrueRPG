@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <map>
+#include <set>
 #include "VertexArray.h"
 #include "Buffer.h"
 #include "Texture.h"
@@ -18,38 +19,46 @@ struct Vertex
     float texId;
 };
 
+struct VertexWrapper
+{
+    Vertex vertex{};
+    int order{0};
+};
+
 static const size_t MaxTextures = 16;
 
-// TODO: Класс пока еще сырой, его стоит дальше дорабатывать и оптимизировать
 class SpriteBatch
 {
     Shader m_shader;
-    int m_spriteCount;
 
+    int m_maxSprites;
     VertexArray m_vao;
     Buffer m_vbo;
+
     Buffer m_ibo;
 
-    std::vector<Vertex> m_vertices;
-
-    // Функция сравнения текстур, хз куда ее лучше положить
-    inline static bool compareTextures(const Texture &texture1, const Texture &texture2)
+    inline static bool compareVertices(const VertexWrapper &a, const VertexWrapper &b)
     {
-        return texture1.getId() < texture2.getId();
+        return a.order < b.order;
     }
 
-    // Мапа с текстурами. Нужна для проверки дубликатов и биндинга
-    std::map<Texture, unsigned int, decltype(&compareTextures)> m_textures;
+    // layer -> vertices
+    std::map<int, std::multiset<VertexWrapper, decltype(&compareVertices)>> m_vertices;
+    int m_spritesSize{0};
+
+    Texture m_textures[MaxTextures];
+    int m_texturesSize{0};
 
 public:
     SpriteBatch() = default;
+
     SpriteBatch(Shader shader, int spriteCount = 2000);
 
     void begin();
 
     void end();
 
-    void draw(const Sprite &sprite);
+    void draw(const Sprite &sprite, int layer = 0, int order = 0);
 
     void setProjectionMatrix(glm::mat4 projMat);
 

@@ -5,15 +5,19 @@
 #include "scene/components/NativeScriptComponent.h"
 #include "scene/components/SpriteRendererComponent.h"
 #include "scene/components/TextRendererComponent.h"
-#include "scene/components/TileMapComponent.h"
-#include "scene/utils/Hierarchy.h"
+#include "scene/components/WorldMapComponent.h"
 
+#include "scene/utils/Hierarchy.h"
 #include "scripts/PlayerScript.h"
 #include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
-#include "scripts/WorldGenScript.h"
+#include "scripts/WorldMapScript.h"
 #include "scene/components/AudioListenerComponent.h"
 #include "scripts/PumpkinScript.h"
+#include "scene/components/RectColliderComponent.h"
+#include "scene/components/RigidbodyComponent.h"
+#include "scene/components/AutoOrderComponent.h"
+#include "scripts/BotScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -22,24 +26,17 @@ Game::Game()
           m_steps("../res/audio/steps.mp3"),
           m_music("../res/audio/music.mp3")
 {
-    m_pallet.setTexture(&m_baseTexture);
-    m_pallet.setCellSize({32.f, 32.f});
-    m_pallet.setCellOrigin({16.f, 16.f});
-    m_pallet.setCellScale({2.f, 2.f});
+    Entity worldMapEntity = m_scene.createEntity("worldMap");
 
-    m_pallet.addTile({192, 4256 - 32});
-    m_pallet.addTile({96, 4256 - 32});
-    m_pallet.addTile({160, 4256 - 32});
-    m_pallet.addTile({64, 4256 - 64});
+    auto &worldTransform = worldMapEntity.getComponent<TransformComponent>();
+    worldTransform.scale = glm::vec2(2.f, 2.f);
+
+    auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
+    worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
+
 
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
-
-
-    Entity tileMapEntity = m_scene.createEntity("TileMapComponent");
-    auto& tileMap = tileMapEntity.addComponent<TileMapComponent>(IntRect(-10, -10, 10, 10));
-    tileMap.setTilePallet(&m_pallet);
-    tileMapEntity.addComponent<NativeScriptComponent>().bind<WorldGenScript>();
 
 
     // Создание текста
@@ -49,6 +46,7 @@ Game::Game()
     // Некоторые настройки текста для примера
     textRenderer.horizontalAlign = HorizontalAlign::Center;
     textRenderer.verticalAlign = VerticalAlign::Top;
+    textRenderer.layer = 10;
 
     // Биндим скрипт к энтити и передаем туда камеру
     textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_cameraEntity);
@@ -56,7 +54,8 @@ Game::Game()
 
     // Создание fps счетчика
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
-    debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
+    auto &debugText = debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
+    debugText.layer = 10;
     auto &fpsTransform = debugInfoEntity.getComponent<TransformComponent>();
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
@@ -65,21 +64,27 @@ Game::Game()
     // Создание игрока
     m_playerEntity = m_scene.createEntity("player");
     auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
-    playerTransform.position = glm::vec2(0.0f, 0.0f);
     m_playerEntity.addComponent<AudioListenerComponent>();
 
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
     heroRenderer.textureRect = IntRect(32, 96, 32, 32);
+    heroRenderer.layer = 1;
+    spriteEntity.addComponent<AutoOrderComponent>();
 
     auto &heroTransform = spriteEntity.getComponent<TransformComponent>();
     heroTransform.scale = glm::vec2(2.f, 2.f);
-    heroTransform.origin = glm::vec2(16, 16);
+    heroTransform.origin = glm::vec2(16, 0);
 
     auto stepsSoundEntity = m_scene.createEntity("stepsSound");
     auto &stepsComponent = stepsSoundEntity.addComponent<AudioSourceComponent>(m_steps);
     stepsComponent.volume = 0.25f;
     stepsComponent.loop = true;
+
+    auto &playerCollider = m_playerEntity.addComponent<RectColliderComponent>();
+    playerCollider.offset = glm::vec2(-16, 0);
+    playerCollider.size = glm::vec2(32, 32);
+    m_playerEntity.addComponent<RigidbodyComponent>();
 
     // Крепим к игроку спрайт, звук, текст и камеру
     Hierarchy::addChild(m_playerEntity, spriteEntity);
@@ -96,9 +101,10 @@ Game::Game()
     Entity pumpkinEntity = m_scene.createEntity("pumpkin");
     auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(m_baseTexture);
     pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
+    pumpkinRenderer.layer = 0;
 
     auto &pumpkinTransform = pumpkinEntity.getComponent<TransformComponent>();
-    pumpkinTransform.position = glm::vec2(384.f, 256.f);
+    pumpkinTransform.position = glm::vec2(384.f - 32, 256.f - 32);
     pumpkinTransform.scale = glm::vec2(2.f, 2.f);
     pumpkinTransform.origin = glm::vec2(16, 16);
 
@@ -109,6 +115,7 @@ Game::Game()
     Entity pumpkinTextEntity = m_scene.createEntity("text");
     auto &pumpkinTextRenderer = pumpkinTextEntity.addComponent<TextRendererComponent>(&m_font);
     pumpkinTextRenderer.horizontalAlign = HorizontalAlign::Center;
+    pumpkinTextRenderer.layer = 10;
 
     auto &pumpkinTextTransform = pumpkinTextEntity.getComponent<TransformComponent>();
     pumpkinTextTransform.scale = glm::vec2(0.5f);
@@ -116,6 +123,57 @@ Game::Game()
     Hierarchy::addChild(pumpkinEntity, pumpkinTextEntity);
 
     pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
+
+
+    // Barrels
+    Entity barrels[3];
+
+    for (int i = 0; i < 3; i++)
+    {
+        barrels[i] = m_scene.createEntity("barrel" + std::to_string(i));
+        auto &barrelRenderer = barrels[i].addComponent<SpriteRendererComponent>(m_baseTexture);
+        barrelRenderer.textureRect = IntRect(96, 736, 32, 32);
+        barrelRenderer.layer = 1;
+
+        auto &barrelTransform = barrels[i].getComponent<TransformComponent>();
+        barrelTransform.position = glm::vec2(128.f + i * 64.f, 384.f );
+        barrelTransform.scale = glm::vec2(2.f, 2.f);
+
+        barrels[i].addComponent<RectColliderComponent>().size = glm::vec2(64, 32);
+        auto &order = barrels[i].addComponent<AutoOrderComponent>();
+    }
+
+
+    // Bot
+    Entity botEntity = m_scene.createEntity("bot");
+    botEntity.getComponent<TransformComponent>().position = glm::vec2(0.f, 5 * 64.f);
+
+    Entity botSprite = m_scene.createEntity("sprite");
+    auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(m_heroTexture);
+    botRenderer.textureRect = IntRect(32, 96, 32, 32);
+    botRenderer.layer = 1;
+    botSprite.addComponent<AutoOrderComponent>();
+
+    auto &botSpriteTransform = botSprite.getComponent<TransformComponent>();
+    botSpriteTransform.scale = glm::vec2(2.f, 2.f);
+    botSpriteTransform.origin = glm::vec2(16, 0);
+
+    Entity botNameEntity = m_scene.createEntity("name");
+    auto& botTextRenderer = botNameEntity.addComponent<TextRendererComponent>(&m_font, "Bot");
+    botTextRenderer.horizontalAlign = HorizontalAlign::Center;
+    botTextRenderer.layer = 10;
+    auto &botNameTransform = botNameEntity.getComponent<TransformComponent>();
+    botNameTransform.position = glm::vec2(0.f, 64.f);
+
+    auto &botCollider = botEntity.addComponent<RectColliderComponent>();
+    botCollider.offset = glm::vec2(-16, 0);
+    botCollider.size = glm::vec2(32, 32);
+    botEntity.addComponent<RigidbodyComponent>();
+
+    Hierarchy::addChild(botEntity, botSprite);
+    Hierarchy::addChild(botEntity, botNameEntity);
+
+    botEntity.addComponent<NativeScriptComponent>().bind<BotScript>();
 }
 
 void Game::update(float deltaTime)

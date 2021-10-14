@@ -11,9 +11,7 @@ public:
     TextScript(Entity cameraEntity)
             : m_cameraEntity(cameraEntity) {}
 
-    void onCreate() {}
-
-    void onUpdate(float deltaTime)
+    void onUpdate(float deltaTime) override
     {
         static float t = 0;
         t += deltaTime;
@@ -31,8 +29,6 @@ public:
                 (std::sin(0.5 * t) + 2) / 2, 1.f
         );
     }
-
-    void onDestroy() {}
 };
 
 #endif //RPG_TEXTSCRIPT_H

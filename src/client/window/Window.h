@@ -24,9 +24,9 @@ public:
 
     void destroy() const;
 
-    void makeContextCurrent() const noexcept;
-
     void swapBuffers() const noexcept;
+
+    void pollEvents() const;
 
     int getWidth() const;
 

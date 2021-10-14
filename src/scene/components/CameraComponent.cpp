@@ -1,7 +1,7 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include "CameraComponent.h"
 
-#include "../../window/Window.h"
+#include "../../client/window/Window.h"
 
 glm::mat4 CameraComponent::getProjectionMatrix() const
 {

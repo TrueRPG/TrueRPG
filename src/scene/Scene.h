@@ -7,6 +7,7 @@
 #include "systems/ScriptSystem.h"
 #include "systems/RenderSystem.h"
 #include "systems/AudioSystem.h"
+#include "systems/PhysicsSystem.h"
 
 class Entity;
 
@@ -15,6 +16,7 @@ class Scene
     entt::registry m_registry;
 
     ScriptSystem m_scriptSystem;
+    PhysicsSystem m_physicsSystem;
     RenderSystem m_renderSystem;
     AudioSystem m_audioSystem;
 public:

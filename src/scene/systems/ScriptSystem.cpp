@@ -2,8 +2,8 @@
 
 #include "../components/NativeScriptComponent.h"
 
-ScriptSystem::ScriptSystem(entt::registry &registry, Scene *scene)
-        : m_registry(registry), m_scene(scene) {}
+ScriptSystem::ScriptSystem(entt::registry &registry)
+        : m_registry(registry) {}
 
 void ScriptSystem::update(float deltaTime)
 {
@@ -16,12 +16,12 @@ void ScriptSystem::update(float deltaTime)
         // Если они еще не были созданы, то создаем
         if (!nativeScriptComponent.instance)
         {
-            nativeScriptComponent.instantiateFunction();
+            nativeScriptComponent.instantiateScript();
             nativeScriptComponent.instance->m_entity = {entity, &m_registry};
-            nativeScriptComponent.onCreateFunction(nativeScriptComponent.instance);
+            nativeScriptComponent.instance->onCreate();
         }
 
-        nativeScriptComponent.onUpdateFunction(nativeScriptComponent.instance, deltaTime);
+        nativeScriptComponent.instance->onUpdate(deltaTime);
     }
 }
 
@@ -31,8 +31,8 @@ void ScriptSystem::destroyScript(entt::entity entity)
     auto &nativeScriptComponent = m_registry.get<NativeScriptComponent>(entity);
     if (!nativeScriptComponent.instance)
     {
-        nativeScriptComponent.onDestroyFunction(nativeScriptComponent.instance);
-        nativeScriptComponent.destroyInstanceFunction();
+        nativeScriptComponent.instance->onDestroy();
+        nativeScriptComponent.destroyScript();
     }
 }
 
@@ -45,8 +45,8 @@ void ScriptSystem::destroy()
         auto &nativeScriptComponent = view.get<NativeScriptComponent>(entity);
         if (nativeScriptComponent.instance)
         {
-            nativeScriptComponent.onDestroyFunction(nativeScriptComponent.instance);
-            nativeScriptComponent.destroyInstanceFunction();
+            nativeScriptComponent.instance->onDestroy();
+            nativeScriptComponent.destroyScript();
         }
     }
 }

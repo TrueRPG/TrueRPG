@@ -26,7 +26,7 @@ class Text
 public:
     Text(Font& font, std::string text);
 
-    void draw(SpriteBatch& batch);
+    void draw(SpriteBatch& batch, int layer = 0, int order = 0);
 
     std::string getText() const;
     void setText(const std::string& text);

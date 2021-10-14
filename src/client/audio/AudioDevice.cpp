@@ -30,6 +30,7 @@ AudioDevice::AudioDevice() : m_userData({m_sources, m_mutex})
 
 AudioDevice::~AudioDevice()
 {
+    clear();
     ma_device_uninit(&m_device);
 }
 
@@ -52,6 +53,7 @@ void AudioDevice::remove(AudioSource &source)
     if (result != m_sources.end())
     {
         m_mutex.lock();
+        ma_decoder_uninit(&result->second);
         m_sources.erase(&source);
         m_mutex.unlock();
     }
@@ -60,6 +62,10 @@ void AudioDevice::remove(AudioSource &source)
 void AudioDevice::clear()
 {
     m_mutex.lock();
+    for (auto &source : m_sources)
+    {
+        ma_decoder_uninit(&source.second);
+    }
     m_sources.clear();
     m_mutex.unlock();
 }

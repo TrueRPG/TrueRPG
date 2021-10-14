@@ -4,3 +4,4 @@
 /build
 /cmake-build-debug
 .vs
+compile_flags.txt
