@@ -9,7 +9,7 @@ Window& Window::getInstance(int width, int height, const std::string& title)
     return window;
 }
 
-Window::Window(int width, int height, const std::string &title) : m_keys()
+Window::Window(int width, int height, const std::string &title) : m_keys(), onResize(m_onResize), onInput(m_onInput)
 {
     assert(glfwInit());
 
@@ -18,8 +18,6 @@ Window::Window(int width, int height, const std::string &title) : m_keys()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
-    m_inputCallback = [](Window *, int, int, int, int) {};
-    m_resizeCallback = [](Window *, int, int) {};
 
     if (m_window == nullptr)
     {
@@ -83,32 +81,17 @@ bool Window::getKey(int key)
     return m_keys[key];
 }
 
-void Window::setInputCallback(InputCallback inputCallback)
+const Window::ResizeEvent &Window::getOnResize() const
 {
-    m_inputCallback = inputCallback;
-}
-
-void Window::setResizeCallback(ResizeCallback resizeCallback)
-{
-    m_resizeCallback = resizeCallback;
-}
-
-void Window::onKey(int key, int scancode, int actions, int mods)
-{
-    m_inputCallback(this, key, scancode, actions, mods);
-}
-
-void Window::onResize(int width, int height)
-{
-    m_resizeCallback(this, width, height);
+    return m_onResize;
 }
 
 void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int actions, int mods)
 {
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
-    win->onKey(key, scancode, actions, mods);
-
     if (key < 0) return;
+
+    win->m_onInput(*win, key, actions);
 
     switch (actions)
     {
@@ -126,5 +109,5 @@ void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int acti
 void Window::glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height)
 {
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
-    win->onResize(width, height);
+    win->m_onResize(width, height);
 }

@@ -16,6 +16,8 @@ public:
     void draw();
 
     void destroy();
+
+    static void resize(int width, int height);
 };
 
 #endif //RPG_RENDERSYSTEM_H
