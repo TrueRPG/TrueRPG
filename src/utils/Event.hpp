@@ -6,15 +6,6 @@
 #include <cassert>
 #include <algorithm>
 
-template<typename T, typename M>
-struct Pair
-{
-    T &first;
-    M second;
-
-    Pair(T &f, M s) : first(f), second(s) { }
-};
-
 template<typename ...Args>
 class AbstarctEventHandler
 {
@@ -42,22 +33,22 @@ class FunctionEventHandler : public AbstarctEventHandler<Args...>
 private:
     using function = void(*)(Args...);
 
-    function _func;
+    function m_func;
 public:
-    FunctionEventHandler(function f) : AbstarctEventHandler<Args...>(), _func(f) 
+    FunctionEventHandler(function f) : AbstarctEventHandler<Args...>(), m_func(f) 
     {
         assert(f);
     }
 
     void call(Args ...args) override
     {
-        _func(args...);
+        m_func(args...);
     }
 protected:
     bool isEqual(const AbstarctEventHandler<Args...> &o) const override
     {
         const FunctionEventHandler<Args...> *other = dynamic_cast<const FunctionEventHandler<Args...> *>(&o);
-        return (other != nullptr && other->_func == _func);
+        return (other != nullptr && other->m_func == m_func);
     }
 };
 
@@ -67,23 +58,23 @@ class MethodEventHandler : public AbstarctEventHandler<Args...>
 private:
     using Method = void(C::*)(Args...);
 
-    C &_class;
-    Method _method;
+    C &m_class;
+    Method m_method;
 public: 
-    MethodEventHandler(C &c, Method m) : AbstarctEventHandler<Args...>(), _class(c), _method(m) 
+    MethodEventHandler(C &c, Method m) : AbstarctEventHandler<Args...>(), m_class(c), m_method(m) 
     {
         assert(m);
     }
 
     void call(Args ...args) override
     {
-        (_class.*_method)(args...);
+        (m_class.*m_method)(args...);
     }
 protected:
     bool isEqual(const AbstarctEventHandler<Args...> &o) const override
     {
         const MethodEventHandler<C, Args...> *other = dynamic_cast<const MethodEventHandler<C, Args...> *>(&o);
-        return (other != nullptr && &other->_class == &_class && other->_method == _method);
+        return (other != nullptr && &other->m_class == &m_class && other->m_method == m_method);
     }
 };
 
@@ -132,15 +123,15 @@ private:
         using HandlerPtr = std::shared_ptr<AbstarctEventHandler<Args...>>;
         using HandlerIt = typename std::vector<HandlerPtr>::const_iterator;
 
-        std::vector<HandlerPtr> _handlers;
+        std::vector<HandlerPtr> m_handlers;
     public:
-        EventHandlerList() : _handlers() { }
+        EventHandlerList() : m_handlers() { }
 
         void add(HandlerPtr handler)
         {
-            if (findHandler(handler) == _handlers.end())
+            if (findHandler(handler) == m_handlers.end())
             {
-                _handlers.emplace_back(handler);
+                m_handlers.emplace_back(handler);
             }
         }
 
@@ -148,15 +139,15 @@ private:
         {
             auto it = findHandler(handler);
 
-            if (it != _handlers.end())
+            if (it != m_handlers.end())
             {
-                _handlers.erase(it);
+                m_handlers.erase(it);
             }
         }
 
         void call(Args... args)
         {
-            for (auto &handle : _handlers)
+            for (auto &handle : m_handlers)
             {
                 if (handle)
                     handle->call(args...);
@@ -165,7 +156,7 @@ private:
     private:
         inline HandlerIt findHandler(HandlerPtr &handler) const
         {
-            return std::find_if(_handlers.cbegin(), _handlers.cend(), 
+            return std::find_if(m_handlers.cbegin(), m_handlers.cend(), 
                                     [&handler](const HandlerPtr oneHandler)
                                     {
                                         return (*oneHandler == *handler);
@@ -173,33 +164,33 @@ private:
         }
     };
 
-    EventHandlerList _handlerList;
+    EventHandlerList m_handlerList;
 public:
-    Event() : IEvent<Args...>(), _handlerList() { }
+    Event() : IEvent<Args...>(), m_handlerList() { }
 
     void operator()(Args... args)
     {
-        _handlerList.call(args...);
+        m_handlerList.call(args...);
     }
 protected:
     void add(std::shared_ptr<AbstarctEventHandler<Args...>> handler) override
     {
-        _handlerList.add(handler);
+        m_handlerList.add(handler);
     }
 
     void remove(std::shared_ptr<AbstarctEventHandler<Args...>> handler) override
     {
-        _handlerList.remove(handler);
+        m_handlerList.remove(handler);
     }
 
     void add(void(*f)(Args...)) override
     {
-        _handlerList.add(std::make_shared<FunctionEventHandler<Args...>>(f));
+        m_handlerList.add(std::make_shared<FunctionEventHandler<Args...>>(f));
     }
 
     void remove(void(*f)(Args...)) override
     {
-        _handlerList.remove(std::make_shared<FunctionEventHandler<Args...>>(f));
+        m_handlerList.remove(std::make_shared<FunctionEventHandler<Args...>>(f));
     }
 };
 
