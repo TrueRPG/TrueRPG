@@ -10,7 +10,7 @@ template<typename ...Args>
 class AbstarctEventHandler
 {
 public:
-    AbstarctEventHandler() {}
+    AbstarctEventHandler() = default;
     virtual ~AbstarctEventHandler() = default;
     virtual void call(Args ...args) = 0;
 
@@ -21,7 +21,7 @@ public:
 
     bool operator!=(const AbstarctEventHandler<Args...> &o) const
     {
-        return !(*this == o);
+        return *this != o;
     }
 protected:
     virtual bool isEqual(const AbstarctEventHandler<Args...> &o) const = 0;
@@ -35,7 +35,7 @@ private:
 
     function m_func;
 public:
-    FunctionEventHandler(function f) : AbstarctEventHandler<Args...>(), m_func(f) 
+    explicit FunctionEventHandler(function f) : AbstarctEventHandler<Args...>(), m_func(f)
     {
         assert(f);
     }
@@ -47,7 +47,7 @@ public:
 protected:
     bool isEqual(const AbstarctEventHandler<Args...> &o) const override
     {
-        const FunctionEventHandler<Args...> *other = dynamic_cast<const FunctionEventHandler<Args...> *>(&o);
+        const auto *other = dynamic_cast<const FunctionEventHandler<Args...> *>(&o);
         return (other != nullptr && other->m_func == m_func);
     }
 };
@@ -61,7 +61,7 @@ private:
     C &m_class;
     Method m_method;
 public: 
-    MethodEventHandler(C &c, Method m) : AbstarctEventHandler<Args...>(), m_class(c), m_method(m) 
+    MethodEventHandler(C &c, Method m) : AbstarctEventHandler<Args...>(), m_class(c), m_method(m)
     {
         assert(m);
     }
@@ -73,7 +73,7 @@ public:
 protected:
     bool isEqual(const AbstarctEventHandler<Args...> &o) const override
     {
-        const MethodEventHandler<C, Args...> *other = dynamic_cast<const MethodEventHandler<C, Args...> *>(&o);
+        const auto *other = dynamic_cast<const MethodEventHandler<C, Args...> *>(&o);
         return (other != nullptr && &other->m_class == &m_class && other->m_method == m_method);
     }
 };
@@ -82,7 +82,8 @@ template<typename ...Args>
 class IEvent
 {
 public:
-    
+    virtual ~IEvent() = default;
+
     void operator+=(std::shared_ptr<AbstarctEventHandler<Args...>> handler)
     {
         add(handler);
@@ -104,8 +105,6 @@ public:
     }
 
 protected:
-    IEvent() {};
-
     virtual void add(std::shared_ptr<AbstarctEventHandler<Args...>> handler) = 0;
     virtual void remove(std::shared_ptr<AbstarctEventHandler<Args...>> handler) = 0;
 
@@ -166,7 +165,9 @@ private:
 
     EventHandlerList m_handlerList;
 public:
-    Event() : IEvent<Args...>(), m_handlerList() { }
+    using IType = IEvent<Args...>;
+
+    Event() : m_handlerList() { }
 
     void operator()(Args... args)
     {

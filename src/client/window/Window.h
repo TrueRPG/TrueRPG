@@ -15,16 +15,13 @@ private:
     using InputEvent = Event<const Window &, int, int>;
     using ResizeEvent = Event<int, int>;
 
-    using IInputEvent = IEvent<const Window &, int, int>;
-    using IResizeEvent = IEvent<int, int>;
-
     GLFWwindow *m_window;
     InputEvent m_onInput;
     ResizeEvent m_onResize;
     bool m_keys[GLFW_KEY_LAST + 1];
 public:
-    IResizeEvent &onResize;
-    IInputEvent &onInput;
+    ResizeEvent::IType &onResize;
+    InputEvent::IType &onInput;
 
     bool isOpen() const;
 
