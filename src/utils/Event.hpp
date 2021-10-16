@@ -105,8 +105,8 @@ public:
     }
 
 protected:
-    virtual void add(std::shared_ptr<AbstarctEventHandler<Args...>> handler) = 0;
-    virtual void remove(std::shared_ptr<AbstarctEventHandler<Args...>> handler) = 0;
+    virtual void add(std::shared_ptr<AbstarctEventHandler<Args...>> &handler) = 0;
+    virtual void remove(std::shared_ptr<AbstarctEventHandler<Args...>> &handler) = 0;
 
     virtual void add(void(*f)(Args...)) = 0;
     virtual void remove(void(*f)(Args...)) = 0;
@@ -174,12 +174,12 @@ public:
         m_handlerList.call(args...);
     }
 protected:
-    void add(std::shared_ptr<AbstarctEventHandler<Args...>> handler) override
+    void add(std::shared_ptr<AbstarctEventHandler<Args...>> &handler) override
     {
         m_handlerList.add(handler);
     }
 
-    void remove(std::shared_ptr<AbstarctEventHandler<Args...>> handler) override
+    void remove(std::shared_ptr<AbstarctEventHandler<Args...>> &handler) override
     {
         m_handlerList.remove(handler);
     }
@@ -200,5 +200,7 @@ std::shared_ptr<MethodEventHandler<C, Args...>> createEventHandler(C &object, vo
 {
     return std::make_shared<MethodEventHandler<C, Args...>>(object, method);
 }
+
+#define METHOD_HANDLER(O, M) createEventHandler(O, M)
 
 #endif

@@ -12,7 +12,7 @@ class Window;
 class Window
 {
 private:
-    using InputEvent = Event<const Window &, int, int>;
+    using InputEvent = Event<int, int>;
     using ResizeEvent = Event<int, int>;
 
     GLFWwindow *m_window;

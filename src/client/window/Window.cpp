@@ -91,7 +91,7 @@ void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int acti
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
     if (key < 0) return;
 
-    win->m_onInput(*win, key, actions);
+    win->m_onInput(key, actions);
 
     switch (actions)
     {
