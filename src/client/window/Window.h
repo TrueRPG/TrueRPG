@@ -39,8 +39,6 @@ public:
 
     bool getKey(int key);
 
-    const ResizeEvent &getOnResize() const;
-
     static Window& getInstance(int width = 0, int height = 0, const std::string& title = "");
 
 private:

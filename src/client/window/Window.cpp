@@ -81,11 +81,6 @@ bool Window::getKey(int key)
     return m_keys[key];
 }
 
-const Window::ResizeEvent &Window::getOnResize() const
-{
-    return m_onResize;
-}
-
 void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int actions, int mods)
 {
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));

@@ -201,6 +201,4 @@ std::shared_ptr<MethodEventHandler<C, Args...>> createEventHandler(C &object, vo
     return std::make_shared<MethodEventHandler<C, Args...>>(object, method);
 }
 
-#define METHOD_HANDLER(O, M) createEventHandler(O, M)
-
 #endif
