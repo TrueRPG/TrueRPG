@@ -116,10 +116,10 @@ template<typename ...Args>
 class Event : public IEvent<Args...>
 {
 private:
+    using HandlerPtr = std::shared_ptr<AbstractEventHandler<Args...>>;
     class EventHandlerList
     {
     private:
-        using HandlerPtr = std::shared_ptr<AbstractEventHandler<Args...>>;
         using HandlerIt = typename std::vector<HandlerPtr>::const_iterator;
 
         std::vector<HandlerPtr> m_handlers;
@@ -174,12 +174,12 @@ public:
         m_handlerList.call(args...);
     }
 protected:
-    void add(std::shared_ptr<AbstractEventHandler<Args...>> &handler) override
+    void add(HandlerPtr &handler) override
     {
         m_handlerList.add(handler);
     }
 
-    void remove(std::shared_ptr<AbstractEventHandler<Args...>> &handler) override
+    void remove(HandlerPtr &handler) override
     {
         m_handlerList.remove(handler);
     }
