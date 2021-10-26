@@ -5,19 +5,24 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-class Window;
+#include "../../utils/Event.hpp"
 
-using InputCallback = void (*)(Window *, int, int, int, int);
-using ResizeCallback = void (*)(Window *, int, int);
+class Window;
 
 class Window
 {
 private:
+    using InputEvent = Event<int, int>;
+    using ResizeEvent = Event<int, int>;
+
     GLFWwindow *m_window;
-    InputCallback m_inputCallback;
-    ResizeCallback m_resizeCallback;
+    InputEvent m_onInput;
+    ResizeEvent m_onResize;
     bool m_keys[GLFW_KEY_LAST + 1];
 public:
+    ResizeEvent::IType &onResize;
+    InputEvent::IType &onInput;
+
     bool isOpen() const;
 
     void close() const;
@@ -34,10 +39,6 @@ public:
 
     bool getKey(int key);
 
-    void setInputCallback(InputCallback inputCallback);
-
-    void setResizeCallback(ResizeCallback resizeCallback);
-
     static Window& getInstance(int width = 0, int height = 0, const std::string& title = "");
 
 private:
@@ -45,10 +46,6 @@ private:
 
     Window(const Window&) = delete;
     Window& operator= (const Window&) = delete;
-
-    void onKey(int key, int scancode, int actions, int mods);
-
-    void onResize(int width, int height);
 
     static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int actions, int mods);
 

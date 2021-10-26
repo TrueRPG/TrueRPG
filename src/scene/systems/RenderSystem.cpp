@@ -12,20 +12,12 @@
 #include "../components/WorldMapComponent.h"
 #include "../components/AutoOrderComponent.h"
 
-// всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
-void resizeCallback(Window *window, int width, int height)
-{
-    // Убеждаемся, что окно просмотра соответствует новым размерам окна.
-    // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
-    glViewport(0, 0, width, height);
-}
-
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
           m_shader(Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs")),
           m_batch(m_shader, 30000)
 {
-    Window::getInstance().setResizeCallback(resizeCallback);
+    Window::getInstance().onResize += &RenderSystem::resize;
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
@@ -168,4 +160,12 @@ void RenderSystem::destroy()
 {
     m_batch.destroy();
     m_shader.destroy();
+}
+
+// всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
+void RenderSystem::resize(int width, int height)
+{
+    // Убеждаемся, что окно просмотра соответствует новым размерам окна.
+    // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
+    glViewport(0, 0, width, height);
 }
