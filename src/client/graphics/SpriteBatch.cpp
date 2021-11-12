@@ -90,7 +90,7 @@ void SpriteBatch::end()
 
     int *ids = new int[m_texturesSize];
     std::iota(ids, ids + m_texturesSize, 0);
-    m_shader.setUniform("textures", ids, m_texturesSize);
+    m_shader.setUniform("textures", m_texturesSize, ids);
 
     m_shader.setUniform("model", glm::mat4(1));
 

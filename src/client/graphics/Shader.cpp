@@ -1,51 +1,21 @@
 #include "Shader.h"
 
-Shader::Shader(unsigned int id) : m_id(id) { }
+Shader::Shader(unsigned int id) : ID(id) { }
 
 void Shader::use() const
 {
-    glUseProgram(m_id);
-}
-
-void Shader::setUniform(const std::string &name, bool value) const
-{
-    glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
-}
-
-void Shader::setUniform(const std::string &name, int value) const
-{
-    glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
-}
-
-void Shader::setUniform(const std::string &name, float value) const
-{
-    glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
-}
-
-void Shader::setUniform(const std::string &name, const glm::vec3 &vec) const
-{
-    glUniform3f(glGetUniformLocation(m_id, name.c_str()), vec.x, vec.y, vec.z);
-}
-
-void Shader::setUniform(const std::string &name, const glm::mat4& mat) const
-{
-    glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
-}
-
-void Shader::setUniform(const std::string &name, const int arr[], int size) const
-{
-    glUniform1iv(glGetUniformLocation(m_id, name.c_str()), size, arr);
+    glUseProgram(ID);
 }
 
 unsigned int Shader::getId() const noexcept
 {
-    return m_id;
+    return ID;
 }
 
 void Shader::destroy()
 {
-    glDeleteProgram(m_id);
-    m_id = 0;
+    glDeleteProgram(ID);
+    ID = 0;
 }
 
 Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath)
