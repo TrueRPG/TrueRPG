@@ -1,21 +1,21 @@
 #include "Shader.h"
 
-Shader::Shader(unsigned int id) : ID(id) { }
+Shader::Shader(unsigned int m_id) : m_id(m_id) { }
 
 void Shader::use() const
 {
-    glUseProgram(ID);
+    glUseProgram(m_id);
 }
 
 unsigned int Shader::getId() const noexcept
 {
-    return ID;
+    return m_id;
 }
 
 void Shader::destroy()
 {
-    glDeleteProgram(ID);
-    ID = 0;
+    glDeleteProgram(m_id);
+    m_id = 0;
 }
 
 Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath)
