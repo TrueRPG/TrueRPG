@@ -12,7 +12,7 @@ class AbstractEventHandler
 public:
     AbstractEventHandler() = default;
     virtual ~AbstractEventHandler() = default;
-    virtual void call(Args ...args) = 0;
+    virtual void call(Args... args) = 0;
 
     bool operator==(const AbstractEventHandler<Args...> &o) const
     {
@@ -40,9 +40,9 @@ public:
         assert(f);
     }
 
-    void call(Args ...args) override
+    void call(Args... args) override
     {
-        m_func(args...);
+        m_func(std::forward<Args>(args)...);
     }
 protected:
     bool isEqual(const AbstractEventHandler<Args...> &o) const override
@@ -66,9 +66,9 @@ public:
         assert(m);
     }
 
-    void call(Args ...args) override
+    void call(Args... args) override
     {
-        (m_class.*m_method)(args...);
+        (m_class.*m_method)(std::forward<Args>(args)...);
     }
 protected:
     bool isEqual(const AbstractEventHandler<Args...> &o) const override
@@ -149,7 +149,7 @@ private:
             for (auto &handle : m_handlers)
             {
                 if (handle)
-                    handle->call(args...);
+                    handle->call(std::forward<Args>(args)...);
             }
         }
     private:
@@ -171,7 +171,7 @@ public:
 
     void operator()(Args... args)
     {
-        m_handlerList.call(args...);
+        m_handlerList.call(std::forward<Args>(args)...);
     }
 protected:
     void add(HandlerPtr &handler) override
