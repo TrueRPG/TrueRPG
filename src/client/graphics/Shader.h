@@ -32,17 +32,21 @@ constexpr void callIfCallable(F&& func, S&& ...args){
         return;
     }
 }
-template<typename T, typename... types>
-struct get_types {
-    using type1 = T;
-    using type2 = void;
+
+template<std::size_t N, typename T, typename... types>
+struct get_Nth_type
+{
+    using type = typename get_Nth_type<N - 1, types...>::type;
 };
 
-template<typename T, typename U, typename... types>
-struct get_types<T, U, types...> {
-    using type1 = T;
-    using type2 = U;
+template<typename T, typename... types>
+struct get_Nth_type<0, T, types...>
+{
+    using type = T;
 };
+
+template<std::size_t N, typename... Args>
+using get_ = typename get_Nth_type<N, Args...>::type;
 
 class Shader : public IGLObject
 {
@@ -57,20 +61,17 @@ public:
 
     template <typename ... Params>
     void setUniform(const std::string &val_name, Params... params){
-        if constexpr (std::is_same_v<typename get_types<Params...>::type1, float>) {
-            if constexpr (std::is_pointer_v<typename get_types<Params...>::type2>) {
+        if constexpr (std::is_floating_point_v<get_<0, Params...>> || std::is_same_v<get_<0,Params...>, glm::vec3>) {
+            if constexpr (std::is_pointer_v<get_<1,Params...>>) {
                 callFuncs(fv, m_id, ;);
             } else { callFuncs(f, m_id, ;); }
         }
-        else if constexpr (std::is_same_v<typename get_types<Params...>::type1, int>) {
-            if constexpr (std::is_pointer_v<typename get_types<Params...>::type2>) {
+        else if constexpr (std::is_integral_v<get_<0,Params...>>) {
+            if constexpr (std::is_pointer_v<get_<1, Params...>>) {
                 callFuncs(iv, m_id, ;);
             } else { callFuncs(i, m_id, ;); }
         }
-        else if constexpr (std::is_same_v<typename get_types<Params...>::type1, glm::vec3>) {
-            callFuncs(f, m_id, ;);
-        }
-        else if constexpr (std::is_same_v<typename get_types<Params...>::type1, glm::mat4>){
+        else if constexpr (std::is_same_v<get_<0, Params...>, glm::mat4>){
             callFuncsForMatrix(Matrix, m_id, ;);
         }
     }
