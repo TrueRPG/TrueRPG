@@ -11,6 +11,8 @@ file(GLOB_RECURSE HEADERS "src/*.h" "src/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
+target_link_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
 
 add_subdirectory(libs/glad)
 add_subdirectory(libs/glfw)
