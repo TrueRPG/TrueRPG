@@ -15,12 +15,12 @@
 
 #define UNIFORMTAG(ph_1, ph_2) glUniform ## ph_1 ## ph_2
 
-#define CallFuncs(type, ID, separate) callIfCallable(UNIFORMTAG(1, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
+#define callFuncs(type, ID, separate) callIfCallable(UNIFORMTAG(1, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
     callIfCallable(UNIFORMTAG(2, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
     callIfCallable(UNIFORMTAG(3, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
     callIfCallable(UNIFORMTAG(4, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate
 
-#define CallFuncsForMatrix(type, ID, separate) callIfCallable(UNIFORMTAG(type, 2fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate \
+#define callFuncsForMatrix(type, ID, separate) callIfCallable(UNIFORMTAG(type, 2fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate \
     callIfCallable(UNIFORMTAG(type, 3fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate  \
     callIfCallable(UNIFORMTAG(type, 4fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...))
 
@@ -59,19 +59,19 @@ public:
     void setUniform(const std::string &val_name, Params... params){
         if constexpr (std::is_same_v<typename get_types<Params...>::type1, float>) {
             if constexpr (std::is_pointer_v<typename get_types<Params...>::type2>) {
-                CallFuncs(fv, m_id, ;);
-            } else { CallFuncs(f, m_id, ;); }
+                callFuncs(fv, m_id, ;);
+            } else { callFuncs(f, m_id, ;); }
         }
         else if constexpr (std::is_same_v<typename get_types<Params...>::type1, int>) {
             if constexpr (std::is_pointer_v<typename get_types<Params...>::type2>) {
-                CallFuncs(iv, m_id, ;);
-            } else { CallFuncs(i, m_id, ;); }
+                callFuncs(iv, m_id, ;);
+            } else { callFuncs(i, m_id, ;); }
         }
         else if constexpr (std::is_same_v<typename get_types<Params...>::type1, glm::vec3>) {
-            CallFuncs(f, m_id, ;);
+            callFuncs(f, m_id, ;);
         }
         else if constexpr (std::is_same_v<typename get_types<Params...>::type1, glm::mat4>){
-            CallFuncsForMatrix(Matrix, m_id, ;);
+            callFuncsForMatrix(Matrix, m_id, ;);
         }
     }
 
