@@ -13,6 +13,15 @@ Window::Window(int width, int height, const std::string &title) : m_keys(), onRe
 {
     assert(glfwInit());
 
+    static auto errorCallback = [](int error, const char *description)
+    {
+      // why not cerr?
+      // #error is printed in hex because GLFW defines the codes as hex values
+      std::cout << "GLFW error 0x" << std::hex << error << ": " << description
+                << std::endl;
+    };
+    glfwSetErrorCallback(errorCallback);
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -21,9 +30,9 @@ Window::Window(int width, int height, const std::string &title) : m_keys(), onRe
 
     if (m_window == nullptr)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        // we'll not print any information, because if GLFW fails, it will print the error.
         glfwTerminate();
-        return;
+        exit(EXIT_FAILURE);
     }
 
     glfwMakeContextCurrent(m_window);
