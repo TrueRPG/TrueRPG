@@ -6,16 +6,16 @@ in vec4 Color;
 in vec2 TexCoord;
 in float TexIndex;
 
-// Текстурные сэмплеры
+// Texture samplers
 uniform sampler2D textures[16];
 
 void main()
 {
-    // Оказалось, что такое использование массива в glsl является undefined behavior.
-    // Да, в большинстве случаев данный код сработает, но как мы уже выяснили, не всегда.
+    // It turned out that it's undefined behavior in glsl.
+    // Yes, in most cases it works, but, as we already know, not always
     //int index = int(TexIndex);
     //FragColor = texture(textures[index], TexCoord) * Color;
-    // Поэтому делаем по старинке 👍
+    // So we have to do this scary thing 👍
     int index = int(TexIndex);
     switch (index) {
         case 0:

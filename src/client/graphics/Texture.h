@@ -9,9 +9,9 @@ class Texture : public IGLObject
 {
 private:
     unsigned int m_id{};
-    std::string m_path; // Путь до файла
-    int m_width{}; // Ширина текстуры
-    int m_height{}; // Высота текстуры
+    std::string m_path; // The file path
+    int m_width{}; // The width of the texture
+    int m_height{}; // The height of the texture
 
 public:
     Texture();

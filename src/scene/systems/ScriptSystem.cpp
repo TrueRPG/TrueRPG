@@ -7,13 +7,13 @@ ScriptSystem::ScriptSystem(entt::registry &registry)
 
 void ScriptSystem::update(float deltaTime)
 {
-    // Обновляем все скрипты
+    // Update all scripts
     auto view = m_registry.view<NativeScriptComponent>();
     for (auto entity : view)
     {
         auto &nativeScriptComponent = view.get<NativeScriptComponent>(entity);
 
-        // Если они еще не были созданы, то создаем
+        // if the scripts aren't created, create them
         if (!nativeScriptComponent.instance)
         {
             nativeScriptComponent.instantiateScript();
@@ -27,7 +27,7 @@ void ScriptSystem::update(float deltaTime)
 
 void ScriptSystem::destroyScript(entt::entity entity)
 {
-    // Уничтожаем скрипт
+    // Destroy the script
     auto &nativeScriptComponent = m_registry.get<NativeScriptComponent>(entity);
     if (!nativeScriptComponent.instance)
     {
@@ -38,7 +38,7 @@ void ScriptSystem::destroyScript(entt::entity entity)
 
 void ScriptSystem::destroy()
 {
-    // Уничтожаем все скрипты
+    // Destroy all scripts
     auto view = m_registry.view<NativeScriptComponent>();
     for (auto entity : view)
     {

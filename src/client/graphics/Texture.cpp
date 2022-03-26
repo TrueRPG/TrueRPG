@@ -48,7 +48,7 @@ int Texture::getHeight() const
     return m_height;
 }
 
-// Нам может пригодиться тип текстур GL_TEXTURE_RECTANGLE и GL_TEXTURE_2D
+// GL_TEXTURE_RECTANGLE and GL_TEXTURE_2D might be useful for us
 Texture Texture::create(const std::string& path, unsigned int type)
 {
     unsigned int texture;
@@ -59,7 +59,7 @@ Texture Texture::create(const std::string& path, unsigned int type)
 
     glCreateTextures(type, 1, &texture);
 
-    // Установка параметров наложения текстуры
+    // Set up the texture params
     glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
 

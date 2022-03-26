@@ -74,17 +74,17 @@ void AudioDevice::dataCallback(ma_device *pDevice, void *pOutput, const void *pI
 {
     auto *userData = (UserData *) pDevice->pUserData;
 
-    // Достаем все звуки
+    // Get all sources
     auto &sources = userData->sources;
 
-    // Лочим мьютекс
+    // Lock the mutex
     std::lock_guard<std::mutex> lockGuard(userData->mutex);
 
     if (sources.empty()) return;
 
     std::vector<AudioSource*> stoppedSources;
 
-    // Смешиваем все источники
+    // Mix all sources
     for (auto &item : sources)
     {
         if (item.first->getState() == AudioState::Play)
@@ -112,15 +112,15 @@ bool AudioDevice::readAndMixSound(const AudioSource &source, ma_decoder& decoder
         return false;
     }
 
-    // Смешиваем фреймы
+    // Mix the frames
     for (ma_uint32 sample = 0; sample < frameCount * CHANNELS; sample += CHANNELS)
     {
-        // Громкость левого канала
+        // The volume of the left channel
         float left = 1 - std::clamp(source.getPan(), 0.f, 1.f);
         pOutputF32[sample] += source.getVolume() * left * temp[sample];
         std::clamp(pOutputF32[sample], -1.f, 1.f);
 
-        // Громкость правого канала
+        // The volume of the right channel
         float right = 1 - std::abs(std::clamp(source.getPan(), -1.f, 0.f));
         pOutputF32[sample + 1] += source.getVolume() * right * temp[sample + 1];
         std::clamp(pOutputF32[sample + 1], -1.f, 1.f);

@@ -5,7 +5,7 @@
 #include <string>
 
 /**
- * Интерфейс аудио-клипа.
+ * Audio clip interface.
  */
 class IAudioClip
 {
@@ -13,19 +13,19 @@ public:
     virtual ~IAudioClip() = default;
 
     /**
-     * Получить путь до аудио-файла.
+     * Get the audio file path.
      *
-     * @return путь до файла
+     * @return the file path
      */
     virtual std::string getPath() const = 0;
 
 protected:
 
     /**
-     * Создать декодер для аудио-клипа.
+     * Create a decoder for the audio clip.
      *
-     * @param decoder декодер
-     * @param config конфиг
+     * @param decoder the decoder
+     * @param config the config
      */
     virtual void createDecoder(ma_decoder* decoder, ma_decoder_config* config) const = 0;
 

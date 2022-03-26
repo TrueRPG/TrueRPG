@@ -36,16 +36,16 @@ public:
     void setTextureRect(const IntRect &rect);
 
     /**
-     * Получить границы спрайта без учета всех трансформаций.
+     * Get the bounds of the sprite in the local coordinates.
      *
-     * @return локальные границы спрайта
+     * @return the local bounds of the sprite
      */
     FloatRect getLocalBounds() const;
 
     /**
-     * Получить границы спрайта с учетом всех трансформаций.
+     * Get the bounds of the sprite in the world coordinates.
      *
-     * @return глобальные границы спрайта
+     * @return the global bounds of the sprite
      */
     FloatRect getGlobalBounds() const;
 };

@@ -19,11 +19,11 @@ public:
 
     void onUpdate(float deltaTime)
     {
-        // TODO: Приходится обращаться к функции glfw, это плохо
+        // TODO: we invokes glfw function, it's not good
         m_currentTime = glfwGetTime();
         m_frameCount++;
 
-        // Если прошла секунда
+        // if a second has passed
         if (m_currentTime - m_lastTime >= 1.0)
         {
             m_fps = m_frameCount;

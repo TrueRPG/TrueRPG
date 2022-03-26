@@ -4,18 +4,19 @@
 #include <string>
 #include "IAudioClip.h"
 
-/**
- * Класс не хранит ничего в памяти, воспроизводит файл напрямую с диска.
- * Данную реализацию лучше использовать для длинных аудио-файлов.
- */
+ /**
+  * This class doesn't store anything in memory, it plays the file directly from the disk.
+  * It's better to use for long audio files.
+  */
 class StreamAudioClip : public IAudioClip
 {
     std::string m_path;
 public:
+
     /**
-     * Создать аудио-клип.
+     * Create an audio clip.
      *
-     * @param path путь до файла
+     * @param path the file path
      */
     StreamAudioClip(const std::string &path);
 

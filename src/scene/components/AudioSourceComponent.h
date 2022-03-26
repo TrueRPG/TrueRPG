@@ -6,8 +6,7 @@
 #include "../../client/audio/AudioState.h"
 
 /**
- * Компонент аудио-сурса.
- * Необходим для воспроизведения аудио-клипа.
+ * Audio source component that is used to play an audio clip.
  */
 struct AudioSourceComponent
 {
@@ -24,24 +23,24 @@ struct AudioSourceComponent
 public:
 
     /**
-     * Создать аудио-сурс.
+     * Create an audio source.
      *
-     * @param audioClip аудио-клип
+     * @param audioClip the audio clip
      */
     AudioSourceComponent(IAudioClip &audioClip);
 
     /**
-     * Начать воспроизведение.
+     * Play the audio clip.
      */
     void play();
 
     /**
-     * Поставить на паузу.
+     * Pause the audio clip.
      */
     void pause();
 
     /**
-     * Остановить воспроизведение.
+     * Stop the audio clip.
      */
     void stop();
 };

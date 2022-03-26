@@ -162,10 +162,8 @@ void RenderSystem::destroy()
     m_shader.destroy();
 }
 
-// всякий раз, когда изменяются размеры окна (пользователем или операционной системой), вызывается данная callback-функция
+// Every time when the window size is changed (by user or OS), this callback function is invoked
 void RenderSystem::resize(int width, int height)
 {
-    // Убеждаемся, что окно просмотра соответствует новым размерам окна.
-    // Обратите внимание, что высота и ширина будут значительно больше, чем указано, на Retina-дисплеях
     glViewport(0, 0, width, height);
 }

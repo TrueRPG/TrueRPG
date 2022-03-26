@@ -11,7 +11,7 @@ void Text::draw(SpriteBatch &batch, int layer, int order)
 {
     for (auto sprite : m_sprites)
     {
-        // Шаманим, чтобы центр был в левом нижнем углу текста и работал ориджин
+        // Do some magic to make the center in the bottom left corner and to make the origin works
         sprite.setPosition(m_position + (sprite.getPosition() + glm::vec2(0.f, m_height) - m_origin) * m_scale);
         sprite.setScale(m_scale);
         sprite.setColor(m_color);
@@ -24,7 +24,7 @@ std::string Text::getText() const
     return m_text;
 }
 
-// Нужно иметь в виду, что от текста зависят размеры
+// Please note, that the size depends on the text
 void Text::setText(const std::string &text)
 {
     m_text = text;
@@ -89,7 +89,7 @@ void Text::initSprites()
     m_sprites.clear();
     Sprite sprite(m_font.getTexture());
 
-    // Сразу при генерации узнаем размеры текста
+    // Find out the size of the text
     float maxWidth = 0;
     float maxHeight = 0;
 
@@ -100,26 +100,26 @@ void Text::initSprites()
 
         if (c == ' ')
         {
-            // Размер пробела пусть зависит от размера шрифта
+            // Let's make the space size dependent on the font size
             pos += glm::vec2(m_font.getSize() / 4, 0.f);
             continue;
         }
         if (c == '\n')
         {
-            // Тут шаманим, чтоб сделать отступ, вычислить ширину и высоту. Бррр..
+            // Do magic to make the indents, compute the width and height. Looks scary...
             maxWidth = std::max(maxWidth, pos.x);
             maxHeight += (float) m_font.getSize();
             pos = glm::vec2(0.f, pos.y - (float) m_font.getSize());
             continue;
         }
 
-        // Приходится отражать текстуру, потому что у freetype точка отчета находится слева вверху, а у нас слева внизу.
-        // Если кто-то знает способ лучше, сообщите
+        // We have to mirror the texture, because the coordinates in freetype starts in the top left point,
+        // but we need in the bottom left. If someone knows how to do it better, please drop me a message
         sprite.setTextureRect(
                 IntRect(character.xOffset, character.size.y, character.size.x, -character.size.y)
         );
-        // Не спрашивайте, почему тут такой ориджин.
-        // По какой-то причине так оказалось удобнее
+        // Don't ask me why the origin is like this
+        // For some reason it was more convenient
         sprite.setOrigin(glm::vec2(0.f, character.size.y));
         sprite.setPosition(pos - glm::vec2(0.f, character.baseline));
 
@@ -127,9 +127,9 @@ void Text::initSprites()
 
         pos += glm::vec2((float) character.size.x, 0.f);
     }
-    // Еще раз проверяем ширину для последней строки
+    // Check the width for the last line again
     maxWidth = std::max(maxWidth, pos.x);
-    // И добавляем высоту последней строки
+    // And add the height of the last line
     maxHeight += (float) m_font.getSize();
 
     m_width = maxWidth;
