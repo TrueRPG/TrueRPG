@@ -15,7 +15,13 @@ target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitiz
 target_link_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
 
 add_subdirectory(libs/glad)
-add_subdirectory(libs/glfw)
+
+if(NOT TRUERPG_USE_SYSTEM_GLFW)
+    add_subdirectory(libs/glfw)
+else()
+    find_package(glfw3 3.3 REQUIRED)
+endif()
+
 find_package(OpenGL REQUIRED)
 add_subdirectory(libs/stb_image)
 add_subdirectory(libs/glm)
