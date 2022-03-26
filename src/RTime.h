@@ -1,5 +1,7 @@
 #include <GLFW/glfw3.h>
 
+#define MAX_DELTA_TIME 0.01
+
 class RTime
 {
     float m_prevFrameTime;
@@ -14,14 +16,17 @@ public:
 
     void setNewFrameTime()
     {
-        m_frameTime = glfwGetTime();
+        m_frameTime = (float) glfwGetTime();
         m_deltaTime = m_frameTime - m_prevFrameTime;
         m_prevFrameTime = m_frameTime;
     }
 
     float getDeltaTime()
     {   
-        setNewFrameTime(); 
-        return m_deltaTime; 
+        setNewFrameTime();
+        if (m_deltaTime > MAX_DELTA_TIME) {
+            return MAX_DELTA_TIME;
+        }
+        return m_deltaTime;
     }
 };

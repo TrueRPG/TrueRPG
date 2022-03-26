@@ -7,14 +7,14 @@
 AudioSystem::AudioSystem(entt::registry &registry)
         : m_registry(registry)
 {
-    // Будем сразу отлавливать момент создания/уничтожения компонентов
+    // Let's catch the moment of creating/destroying components
     m_registry.on_construct<AudioSourceComponent>().connect<&AudioSystem::onConstruct>(this);
     m_registry.on_destroy<AudioSourceComponent>().connect<&AudioSystem::onDestroy>(this);
 }
 
 void AudioSystem::update()
 {
-    // Находим слушателя
+    // Find the listener
     entt::entity listenerEntity = entt::null;
     {
         auto view = m_registry.view<AudioListenerComponent>();
@@ -25,10 +25,10 @@ void AudioSystem::update()
         }
     }
 
-    // Если нет слушателя, то ничего не делаем
+    // If we don't have the listener, do nothing
     if (listenerEntity == entt::null) return;
 
-    // Определяем координаты слушателя
+    // Compute the listener's coordinates
     TransformComponent listenerTransform = Hierarchy::computeTransform({listenerEntity, &m_registry});
     glm::vec2 listenerPosition = listenerTransform.position;
 
@@ -37,15 +37,15 @@ void AudioSystem::update()
     {
         auto &audioSourceComponent = view.get<AudioSourceComponent>(entity);
 
-        // Определяем координаты аудио-сурса
+        // Compute the source's coordinates
         auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
         glm::vec2 sourcePosition = transformComponent.position;
 
-        // Пересчитываем громкость
+        // Calculate the volume
         float volumeFactor = 1.f - glm::distance(listenerPosition, sourcePosition) / audioSourceComponent.maxDistance;
         volumeFactor = std::clamp(volumeFactor, 0.f, 1.f);
 
-        // Пересчитываем панорамирование
+        // Calculate the panning
         float panFactor = (sourcePosition - listenerPosition).x / audioSourceComponent.maxDistance * 2.f;
 
         auto* audioSource = m_audioSourceRegistry[entity];
@@ -70,7 +70,7 @@ void AudioSystem::update()
 
 void AudioSystem::destroy()
 {
-    // Здесь просто все чистим
+    // Clear everything here
     m_audioDevice.clear();
     for (const auto &item : m_audioSourceRegistry)
     {
@@ -81,8 +81,8 @@ void AudioSystem::destroy()
 
 void AudioSystem::onConstruct(entt::registry &registry, entt::entity entity)
 {
-    // В момент создания, создаем соответствующий аудио-сурс для компонента
-    // и связываем с энтити в нашем реестре
+    // At creation time, we create the corresponding audio source for the component
+    // and bind it with the entity in the audio source registry
     auto &audioSourceComponent = registry.get<AudioSourceComponent>(entity);
 
     auto* audioSource = new AudioSource(*audioSourceComponent.audioClip);
@@ -92,7 +92,7 @@ void AudioSystem::onConstruct(entt::registry &registry, entt::entity entity)
 
 void AudioSystem::onDestroy(entt::registry &registry, entt::entity entity)
 {
-    // Когда компонент уничтожают, удаляем его аудио-сурс
+    // When the component is destroyed, the audio source must be destroyed as well
     auto audioSource = m_audioSourceRegistry[entity];
     m_audioDevice.remove(*audioSource);
     delete audioSource;

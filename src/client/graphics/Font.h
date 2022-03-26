@@ -7,18 +7,18 @@
 #include "SpriteBatch.h"
 
 struct Character {
-    glm::ivec2 size; // Размер символа
-    int xOffset; // Смещение от начала текстуры, до символа
+    glm::ivec2 size; // The size of the character
+    int xOffset; // The offset to the character
     int baseline;
 };
 
 class Font
 {
     std::string m_path;
-    int m_size; // Размер шрифта
+    int m_size; // The size of the font
     Texture m_texture;
 
-    // Мапа с символами
+    // Character map
     std::map<char, Character> m_characters;
 
     std::vector<unsigned char> m_pixelBuffer;

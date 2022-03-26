@@ -56,7 +56,7 @@ public:
     Shader() = default;
     Shader(unsigned int id);
 
-    // Активация шейдера
+    // Activate the shader
     void use() const;
 
     template <typename ... Params>
@@ -83,7 +83,7 @@ public:
     static Shader createShader(const std::string& vertexPath, const std::string& fragmentPath);
 
 private:
-    // Полезные функции для проверки ошибок компиляции/связывания шейдеров
+    // Some useful functions to check shader compilation/binding errors
     static unsigned int compileShader(const std::string& path, unsigned int type);
 
     static void checkCompileErrors(unsigned int glHandelr, unsigned int status, 

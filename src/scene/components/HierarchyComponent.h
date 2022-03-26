@@ -5,11 +5,11 @@
 
 struct HierarchyComponent
 {
-    std::size_t children{}; // Количество детей у текущего энтити
-    Entity firstChild{}; // Первый ребенок у текущего энтити
-    Entity prev{}; // Предыдущий ребенок у родителя
-    Entity next{}; // Следующий ребенок у родителя
-    Entity parent{}; // Родительский энтити
+    std::size_t children{}; // The number of the children of the entity
+    Entity firstChild{}; // The first child of the entity
+    Entity prev{}; // The previous child of the parent
+    Entity next{}; // The next child of the parent
+    Entity parent{}; // The parent entity
 };
 
 #endif //RPG_HIERARCHYCOMPONENT_H

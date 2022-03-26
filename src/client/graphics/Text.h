@@ -5,8 +5,8 @@
 #include "Font.h"
 
 /**
- * Сделал этот классик, чтоб была возможность удобнее работать с текстом.
- * Узнавать его размеры, изменять какие-то параметры и прочее.
+ * This class was created to simplify text-related code.
+ * You can use it to get the size of the text, change some parameters etc.
  */
 class Text
 {
@@ -44,16 +44,16 @@ public:
     void setColor(glm::vec4 color);
 
     /**
-     * Получить границы текста без учета всех трансформаций.
+     * Get the bounds of the text in the local coordinates.
      *
-     * @return локальные границы текста
+     * @return the local bounds of the text
      */
     FloatRect getLocalBounds() const;
 
     /**
-     * Получить границы текста с учетом всех трансформаций.
+     * Get the bounds of the text in the world coordinates.
      *
-     * @return глобальные границы текста
+     * @return the global bounds of the text
      */
     FloatRect getGlobalBounds() const;
 

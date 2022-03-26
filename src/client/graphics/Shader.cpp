@@ -50,16 +50,17 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
     try
     {
         // Открываем файлы
+        // Open the file
         shaderFile.open(path);
         std::stringstream shaderStream;
 
-        // Читаем содержимое файловых буферов
+        // Read the contents of file buffers
         shaderStream << shaderFile.rdbuf();
 
-        // Закрываем файлы
+        // Close the file
         shaderFile.close();
 
-        // Конвертируем в строковую переменную данные из потока
+        // Convert data from the stream into a string
         shaderCode = shaderStream.str();
     }
     catch (std::ifstream::failure &e)

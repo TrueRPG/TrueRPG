@@ -30,7 +30,7 @@ public:
     {
         Window &window = Window::getInstance();
 
-        // Пока поместил выход из игры сюда
+        // TODO: it's not okay
         if (window.getKey(GLFW_KEY_ESCAPE))
         {
             window.close();
@@ -42,7 +42,7 @@ public:
         updateInput();
         int currentKey = m_inputStack.empty() ? -1 : m_inputStack.back();
 
-        // Управление
+        // Controls
         glm::ivec2 movement(0);
         if (currentKey == GLFW_KEY_W)
         {
@@ -67,7 +67,7 @@ public:
 
         rigidbody.velocity = glm::vec2(movement) * m_speed * 200.f;
 
-        // Шаманю с анимацией
+        // Animation magic
         auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
 
         if (m_animationDelay > 30.f)

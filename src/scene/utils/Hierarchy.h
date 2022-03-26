@@ -4,36 +4,36 @@
 #include "../Entity.h"
 
 /**
- * Утилитный класс для работы с иерархией энтити.
+ * Utility class which contains useful functions for the entity hierarchy.
  */
 class Hierarchy
 {
 public:
     /**
-     * Добавить к энтити нового ребенка.
+     * Add a child to the given entity.
      *
-     * @param parent родитель
-     * @param child ребенок
+     * @param parent the parent entity
+     * @param child the child entity
      */
     static void addChild(Entity parent, Entity child);
 
     /**
-     * Найти дочерний энтити по имени.
+     * Find a child entity by name.
      *
-     * @param parent родитель
-     * @param name имя энтити
-     * @return найденный или пустой энтити
+     * @param parent the parent entity
+     * @param name the name of the child
+     * @return found or empty entity
      */
     static Entity find(Entity parent, std::string name);
 
     /**
-     * Вычислить трансформации с учетом иерархии.
+     * Compute transformation for the given entity.
+     * We can use this method to find the world position of the child entity.
      *
-     * @param entity энтити
-     * @return трансформации с учетом иерархии
+     * @param entity the entity
+     * @return calculated transformation
      */
     static TransformComponent computeTransform(Entity entity);
 };
-
 
 #endif //RPG_HIERARCHY_H

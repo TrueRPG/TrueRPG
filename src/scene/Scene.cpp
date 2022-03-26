@@ -13,7 +13,7 @@ Scene::Scene()
 Entity Scene::createEntity(const std::string &name)
 {
     Entity entity(m_registry.create(), &m_registry);
-    // Добавляем обязательные компоненты, которые должны быть у всех энтити
+    // Add the mandatory components, that each entity must have
     entity.addComponent<TransformComponent>();
     entity.addComponent<HierarchyComponent>();
     auto &nameComponent = entity.addComponent<NameComponent>();

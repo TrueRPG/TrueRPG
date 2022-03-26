@@ -39,20 +39,20 @@ Game::Game()
     m_cameraEntity.addComponent<CameraComponent>();
 
 
-    // Создание текста
+    // Create a welcome text
     Entity textEntity = m_scene.createEntity("text");
     auto &textRenderer = textEntity.addComponent<TextRendererComponent>(&m_font, "True RPG!\n Welcome!");
 
-    // Некоторые настройки текста для примера
+    // Some text setup, just for the sake of example
     textRenderer.horizontalAlign = HorizontalAlign::Center;
     textRenderer.verticalAlign = VerticalAlign::Top;
     textRenderer.layer = 10;
 
-    // Биндим скрипт к энтити и передаем туда камеру
+    // Bind the text script to the entity and pass the camera into it
     textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_cameraEntity);
 
 
-    // Создание fps счетчика
+    // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
     auto &debugText = debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
     debugText.layer = 10;
@@ -61,7 +61,7 @@ Game::Game()
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
 
 
-    // Создание игрока
+    // Create the player
     m_playerEntity = m_scene.createEntity("player");
     auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
     m_playerEntity.addComponent<AudioListenerComponent>();
@@ -86,18 +86,18 @@ Game::Game()
     playerCollider.size = glm::vec2(32, 32);
     m_playerEntity.addComponent<RigidbodyComponent>();
 
-    // Крепим к игроку спрайт, звук, текст и камеру
+    // Attach sprite, sound, text and camera to the player
     Hierarchy::addChild(m_playerEntity, spriteEntity);
     Hierarchy::addChild(m_playerEntity, stepsSoundEntity);
     Hierarchy::addChild(m_playerEntity, textEntity);
     Hierarchy::addChild(m_playerEntity, debugInfoEntity);
     Hierarchy::addChild(m_playerEntity, m_cameraEntity);
 
-    // Биндим скрипт к игроку
+    // Bind the script to the player
     m_playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
 
 
-    // Музыкальная тыква
+    // Musical pumpkin
     Entity pumpkinEntity = m_scene.createEntity("pumpkin");
     auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(m_baseTexture);
     pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
@@ -111,7 +111,7 @@ Game::Game()
     auto &musicComponent = pumpkinEntity.addComponent<AudioSourceComponent>(m_music);
     musicComponent.volume = 1.0f;
 
-    // Настройка текста тыквы
+    // Text setup for the pumpkin
     Entity pumpkinTextEntity = m_scene.createEntity("text");
     auto &pumpkinTextRenderer = pumpkinTextEntity.addComponent<TextRendererComponent>(&m_font);
     pumpkinTextRenderer.horizontalAlign = HorizontalAlign::Center;

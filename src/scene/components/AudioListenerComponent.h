@@ -2,11 +2,11 @@
 #define RPG_AUDIOLISTENERCOMPONENT_H
 
 /**
- * Компонент аудио-слушателя.
+ * Audio listener component.
  */
 struct AudioListenerComponent
 {
-    // Нет свойств, компонент-маркер
+    // It doesn't have any properties, just a marker component
 };
 
 #endif //RPG_AUDIOLISTENERCOMPONENT_H
