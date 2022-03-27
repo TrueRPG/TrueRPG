@@ -17,7 +17,7 @@ RenderSystem::RenderSystem(entt::registry &registry)
           m_shader(Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs")),
           m_batch(m_shader, 30000)
 {
-    Window::getInstance().onResize += &RenderSystem::resize;
+    Window::getInstance().onResize += createEventHandler(&RenderSystem::resize);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
