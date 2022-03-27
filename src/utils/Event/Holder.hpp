@@ -9,7 +9,7 @@ class FunctorHolder
 {
 private:
     // TODO: refernce F &m_functor doesn't work but in my Callback in https://github.com/C4e10VeK/WindowWrapper/blob/master/include/Common/Callback.hpp work.
-	F m_functor;
+	F &m_functor;
 
 	template<typename T, typename... Args> friend class FunctorEventHandler;
 public:
