@@ -1,34 +1,36 @@
-# Настоящая рпгешечка
+# True RPG
 
 <p align="center">
   <img src="https://cdn.betterttv.net/emote/5fe8b36c6ef24f34f7050764/3x">
 </p>
 
-Если ты каждый день задаешься вопросом «Где рпгешечка?», то я готов тебя поздравить, потому что она здесь!<br>
-Это форк той самой оригинальной рпгешечки, которую когда-то разрабатывал [Screamlark](https://www.twitch.tv/screamlark). Проект был отвергнут создателем, потому чатик решил продолжить разработку данного творения вместо него. Мы доведем дело до конца, во что бы то ни стало!
+If you're looking for a decent RPG game, I'm ready to congratulate you, because it's here!<br>
+This is a fork of the RPG game that was originally developed by [Screamlark](https://www.twitch.tv/screamlark).
+The founder abandon this project, so the community decided to continue development on their own.
+We'll get the job done, no matter what!
 
-Не оставайся в стороне, помоги проекту! Пулл реквесты приветствуются!<br>
-Обсуждать проект можно [тут](https://github.com/TrueRPG/TrueRPG/discussions).
+Don't stand aside, help the project! Pull requests are very welcome!<br>
+You can discuss the project [here](https://github.com/TrueRPG/TrueRPG/discussions).
 
-### Клонирование
-Для того, чтобы склонировать репозиторий со всеми зависимостями, нужно добавить флаг --recurse-submodules:
+### Cloning
+Add --recurse-submodules flag to clone the repository with all dependencies:
 ```bash
 git clone --recurse-submodules https://github.com/TrueRPG/TrueRPG
 ```
 
 ### TODO
-- [x] Отрефакторить код.
-- [x] Исправить вылет при запуске.
-- [x] Батч рендеринг.
-- [x] Рендеринг текста.
-- [x] Новая генерация мира.
-- [x] Заменить кастомную математику на glm.
-- [x] Добавить ECS.
-- [x] Collision detection.
-- [ ] Новая система анимации.
-- [x] Звук.
+- [x] Refactor code
+- [x] Fix random segfault
+- [x] Batch rendering
+- [x] Text rendering
+- [x] New world generator
+- [x] Replace custom math library with GLM
+- [x] Add ECS
+- [x] Collision detection
+- [ ] New animation system
+- [x] Sound
 - [ ] Day and night cycle
-- [ ] Генерация данжей.
-- [ ] Оружие.
-- [ ] Враги.
+- [ ] Dungeon generator
+- [ ] Weapons
+- [ ] Enemies
 - [ ] ...
