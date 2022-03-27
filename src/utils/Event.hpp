@@ -6,49 +6,27 @@
 #include <cassert>
 #include <algorithm>
 
-template<typename ...Args>
-class AbstractEventHandler
-{
-public:
-    AbstractEventHandler() = default;
-    virtual ~AbstractEventHandler() = default;
-    virtual void call(Args... args) = 0;
+#include "Event/AbstractEventHandler.hpp"
+#include "Event/HandlerPtr.hpp"
+#include "Event/Holder.hpp"
 
-    bool operator==(const AbstractEventHandler<Args...> &o) const
-    {
-        return isEqual(o);
-    }
-
-    bool operator!=(const AbstractEventHandler<Args...> &o) const
-    {
-        return *this != o;
-    }
-protected:
-    virtual bool isEqual(const AbstractEventHandler<Args...> &o) const = 0;
-};
-
-template<typename ...Args>
-class FunctionEventHandler : public AbstractEventHandler<Args...>
+template<typename T, typename ...Args>
+class FunctorEventHandler : public AbstractEventHandler<Args...>
 {
 private:
-    using function = void(*)(Args...);
-
-    function m_func;
+    FunctorHolder<T> m_functorHolder;
 public:
-    explicit FunctionEventHandler(function f) : AbstractEventHandler<Args...>(), m_func(f)
-    {
-        assert(f);
-    }
+    explicit FunctorEventHandler(FunctorHolder<T> &functorHolder) : AbstractEventHandler<Args...>(), m_functorHolder(functorHolder) { }
 
-    void call(Args... args) override
+    void call(Args &&...args) override
     {
-        m_func(std::forward<Args>(args)...);
+        m_functorHolder.m_functor(std::forward<Args>(args)...);
     }
 protected:
     bool isEqual(const AbstractEventHandler<Args...> &o) const override
     {
-        const auto *other = dynamic_cast<const FunctionEventHandler<Args...> *>(&o);
-        return (other != nullptr && other->m_func == m_func);
+        const auto *other = dynamic_cast<const FunctorEventHandler<T, Args...> *>(&o);
+        return other != nullptr && other->m_functorHolder == m_functorHolder;
     }
 };
 
@@ -66,7 +44,7 @@ public:
         assert(m);
     }
 
-    void call(Args... args) override
+    void call(Args &&...args) override
     {
         (m_class.*m_method)(std::forward<Args>(args)...);
     }
@@ -84,39 +62,31 @@ class IEvent
 public:
     virtual ~IEvent() = default;
 
-    void operator+=(std::shared_ptr<AbstractEventHandler<Args...>> handler)
+    template<typename T>
+    IEvent &operator+=(T &&some)
     {
-        add(handler);
+        add(static_cast<HandlerPtr>(some));
+        return *this;
     }
 
-    void operator-=(std::shared_ptr<AbstractEventHandler<Args...>> handler)
+    template<typename T>
+    IEvent &operator-=(T &&some)
     {
-        remove(handler);
-    }
-
-    void operator+=(void(*f)(Args...))
-    {
-        add(f);
-    }
-
-    void operator-=(void(*f)(Args...))
-    {
-        remove(f);
+        remove(static_cast<HandlerPtr>(some));
+        return *this;
     }
 
 protected:
-    virtual void add(std::shared_ptr<AbstractEventHandler<Args...>> &handler) = 0;
-    virtual void remove(std::shared_ptr<AbstractEventHandler<Args...>> &handler) = 0;
-
-    virtual void add(void(*f)(Args...)) = 0;
-    virtual void remove(void(*f)(Args...)) = 0;
+    using HandlerPtr = THandlerPtr<Args...>;
+    virtual void add(HandlerPtr &&handler) = 0;
+    virtual void remove(HandlerPtr &&handler) = 0;
 };
 
 template<typename ...Args>
 class Event : public IEvent<Args...>
 {
 private:
-    using HandlerPtr = std::shared_ptr<AbstractEventHandler<Args...>>;
+    using HandlerPtr = THandlerPtr<Args...>;
     class EventHandlerList
     {
     private:
@@ -144,7 +114,7 @@ private:
             }
         }
 
-        void call(Args... args)
+        void call(Args &&...args)
         {
             for (auto &handle : m_handlers)
             {
@@ -156,7 +126,7 @@ private:
         inline HandlerIt findHandler(HandlerPtr &handler) const
         {
             return std::find_if(m_handlers.cbegin(), m_handlers.cend(), 
-                                    [&handler](const HandlerPtr oneHandler)
+                                    [&handler](const HandlerPtr &oneHandler)
                                     {
                                         return (*oneHandler == *handler);
                                     });
@@ -169,31 +139,32 @@ public:
 
     Event() : m_handlerList() { }
 
-    void operator()(Args... args)
+    void operator()(Args ...args)
     {
-        m_handlerList.call(std::forward<Args>(args)...);
+        call(std::forward<Args>(args)...);
     }
 protected:
-    void add(HandlerPtr &handler) override
+    void add(HandlerPtr &&handler) override
     {
         m_handlerList.add(handler);
     }
 
-    void remove(HandlerPtr &handler) override
+    void remove(HandlerPtr &&handler) override
     {
         m_handlerList.remove(handler);
     }
 
-    void add(void(*f)(Args...)) override
+    void call(Args &&...args)
     {
-        m_handlerList.add(std::make_shared<FunctionEventHandler<Args...>>(f));
-    }
-
-    void remove(void(*f)(Args...)) override
-    {
-        m_handlerList.remove(std::make_shared<FunctionEventHandler<Args...>>(f));
+        m_handlerList.call(std::forward<Args>(args)...);
     }
 };
+
+template<typename F>
+FunctorHolder<F> createEventHandler(F &&functor)
+{
+	return FunctorHolder<F>(functor);
+}
 
 template<class C, typename ...Args>
 std::shared_ptr<MethodEventHandler<C, Args...>> createEventHandler(C &object, void(C::*method)(Args...))
