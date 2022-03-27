@@ -4,10 +4,10 @@
 #include <memory>
 
 template<typename ...Args>
-class AbstractEventHandler;
+class IEventHandler;
 
 template<class ...Types>
-using THandlerPtr = std::shared_ptr<AbstractEventHandler<Types...>>;
+using THandlerPtr = std::shared_ptr<IEventHandler<Types...>>;
 
 
 #endif
