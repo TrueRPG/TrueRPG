@@ -27,6 +27,7 @@ git clone --recurse-submodules https://github.com/rpgdeveloper707/TrueRPG
 - [x] Collision detection.
 - [ ] Новая система анимации.
 - [x] Звук.
+- [ ] Day and night cycle
 - [ ] Генерация данжей.
 - [ ] Оружие.
 - [ ] Враги.
