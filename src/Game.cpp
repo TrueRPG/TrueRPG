@@ -9,7 +9,6 @@
 
 #include "scene/utils/Hierarchy.h"
 #include "scripts/PlayerScript.h"
-#include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
 #include "scripts/WorldMapScript.h"
 #include "scene/components/AudioListenerComponent.h"
@@ -18,6 +17,7 @@
 #include "scene/components/RigidbodyComponent.h"
 #include "scene/components/AutoOrderComponent.h"
 #include "scripts/BotScript.h"
+#include "scene/components/HpComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -37,19 +37,6 @@ Game::Game()
 
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
-
-
-    // Create a welcome text
-    Entity textEntity = m_scene.createEntity("text");
-    auto &textRenderer = textEntity.addComponent<TextRendererComponent>(&m_font, "True RPG!\n Welcome!");
-
-    // Some text setup, just for the sake of example
-    textRenderer.horizontalAlign = HorizontalAlign::Center;
-    textRenderer.verticalAlign = VerticalAlign::Top;
-    textRenderer.layer = 10;
-
-    // Bind the text script to the entity and pass the camera into it
-    textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_cameraEntity);
 
 
     // Create an FPS counter
@@ -86,10 +73,18 @@ Game::Game()
     playerCollider.size = glm::vec2(32, 32);
     m_playerEntity.addComponent<RigidbodyComponent>();
 
-    // Attach sprite, sound, text and camera to the player
+    // HP
+    auto hpEntity = m_scene.createEntity("hp");
+    auto &hpRenderer = hpEntity.addComponent<TextRendererComponent>(&m_font, "HP: 100");
+    hpRenderer.horizontalAlign = HorizontalAlign::Right;
+    hpRenderer.verticalAlign = VerticalAlign::Top;
+    hpRenderer.layer = 10;
+    m_playerEntity.addComponent<HpComponent>();
+
+    // Attach sprite, sound, hp and camera to the player
     Hierarchy::addChild(m_playerEntity, spriteEntity);
     Hierarchy::addChild(m_playerEntity, stepsSoundEntity);
-    Hierarchy::addChild(m_playerEntity, textEntity);
+    Hierarchy::addChild(m_playerEntity, hpEntity);
     Hierarchy::addChild(m_playerEntity, debugInfoEntity);
     Hierarchy::addChild(m_playerEntity, m_cameraEntity);
 

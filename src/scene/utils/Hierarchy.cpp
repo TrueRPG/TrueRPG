@@ -21,7 +21,7 @@ void Hierarchy::addChild(Entity parent, Entity child)
     childHierarchy.parent = parent;
 }
 
-Entity Hierarchy::find(Entity parent, std::string name)
+Entity Hierarchy::find(Entity parent, const std::string& name)
 {
     auto &parentHierarchy = parent.getComponent<HierarchyComponent>();
     auto current = parentHierarchy.firstChild;

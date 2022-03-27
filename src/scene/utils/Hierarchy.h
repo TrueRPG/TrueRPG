@@ -24,7 +24,7 @@ public:
      * @param name the name of the child
      * @return found or empty entity
      */
-    static Entity find(Entity parent, std::string name);
+    static Entity find(Entity parent, const std::string& name);
 
     /**
      * Compute transformation for the given entity.

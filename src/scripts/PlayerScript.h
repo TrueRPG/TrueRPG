@@ -5,6 +5,7 @@
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
 #include "../scene/components/RigidbodyComponent.h"
+#include "../scene/components/HpComponent.h"
 
 class PlayerScript : public Script
 {
@@ -13,27 +14,51 @@ class PlayerScript : public Script
     Entity m_spriteEntity{};
     Entity m_stepsEntity{};
 
+    Entity m_cameraEntity{};
+    Entity m_hpEntity{};
+
     std::vector<int> m_inputStack;
 
     float m_animationDelay{0.f};
     int m_currentAnimation{3};
     int m_frame{0};
 
+    bool pressedK;
+
 public:
     void onCreate() override
     {
         m_spriteEntity = Hierarchy::find(getEntity(), "sprite");
         m_stepsEntity = Hierarchy::find(getEntity(), "stepsSound");
+
+        m_cameraEntity = Hierarchy::find(getEntity(), "camera");
+        m_hpEntity = Hierarchy::find(getEntity(), "hp");
     }
 
     void onUpdate(float deltaTime) override
     {
         Window &window = Window::getInstance();
 
-        // TODO: it's not okay
+        // TODO: temporary solution
         if (window.getKey(GLFW_KEY_ESCAPE))
         {
             window.close();
+        }
+
+        // TODO: just for a test, delete this in the future
+        if (window.getKey(GLFW_KEY_K) && !pressedK)
+        {
+            auto &hpComponent = getComponent<HpComponent>();
+            hpComponent.value -= 10;
+            pressedK = true;
+            auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
+            renderer.color = glm::vec4(1.f, 0.f, 0.f, 1.f);
+        }
+        if (!window.getKey(GLFW_KEY_K))
+        {
+            pressedK = false;
+            auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
+            renderer.color = glm::vec4(1.f);
         }
 
         auto &rigidbody = getComponent<RigidbodyComponent>();
@@ -92,6 +117,8 @@ public:
         {
             stepsSound.play();
         }
+
+        updateUi();
     }
 
 private:
@@ -117,6 +144,19 @@ private:
                 m_inputStack.erase(newEnd, m_inputStack.end());
             }
         }
+    }
+
+    void updateUi()
+    {
+        auto &textTransform = m_hpEntity.getComponent<TransformComponent>();
+        auto &cameraComponent = m_cameraEntity.getComponent<CameraComponent>();
+
+        textTransform.position = glm::vec2(cameraComponent.getWidth() / 2, cameraComponent.getHeight() / 2);
+        textTransform.scale = glm::vec2(1 / cameraComponent.zoom);
+
+        auto &hpComponent = getComponent<HpComponent>();
+        auto &textRenderer = m_hpEntity.getComponent<TextRendererComponent>();
+        textRenderer.text = "HP: " + std::to_string(hpComponent.value);
     }
 };
 
