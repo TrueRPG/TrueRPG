@@ -16,11 +16,11 @@ class FunctorEventHandler : public AbstractEventHandler<Args...>
 private:
     FunctorHolder<T> m_functorHolder;
 public:
-    explicit FunctorEventHandler(FunctorHolder<T> &functorHolder) : AbstractEventHandler<Args...>(), m_functorHolder(functorHolder) { }
+    explicit FunctorEventHandler(T &functor) : m_functorHolder(functor) { }
 
     void call(Args &&...args) override
     {
-        m_functorHolder.m_functor(std::forward<Args>(args)...);
+        m_functorHolder.call(std::forward<Args>(args)...);
     }
 protected:
     bool isEqual(const AbstractEventHandler<Args...> &o) const override
