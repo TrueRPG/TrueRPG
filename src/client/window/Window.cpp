@@ -11,7 +11,7 @@ Window& Window::getInstance(int width, int height, const std::string& title)
 
 Window::Window(int width, int height, const std::string &title) : m_keys(), onResize(m_onResize), onInput(m_onInput)
 {
-    assert(glfwInit());
+    glfwInit();
 
     static auto errorCallback = [](int error, const char *description)
     {
