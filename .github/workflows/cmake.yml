@@ -14,9 +14,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
       - uses: actions/checkout@v3
         with:
           submodules: recursive
+
       - name: Install Packages
         run: |
           sudo apt-get update
@@ -27,3 +29,12 @@ jobs:
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        
+      - name: Save Build
+        uses: actions/upload-artifact@v3
+        with:
+          name: true-rpg
+          path: |
+            bin
+            res
+
