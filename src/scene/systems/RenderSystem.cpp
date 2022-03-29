@@ -4,13 +4,13 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "../../client/window/Window.h"
 #include "../../client/graphics/Text.h"
-#include "../components/CameraComponent.h"
-#include "../components/SpriteRendererComponent.h"
-#include "../components/TextRendererComponent.h"
-#include "../components/HierarchyComponent.h"
+#include "../components/render/CameraComponent.h"
+#include "../components/render/SpriteRendererComponent.h"
+#include "../components/render/TextRendererComponent.h"
+#include "../components/basic/HierarchyComponent.h"
 #include "../utils/Hierarchy.h"
-#include "../components/WorldMapComponent.h"
-#include "../components/AutoOrderComponent.h"
+#include "../components/world/WorldMapComponent.h"
+#include "../components/render/AutoOrderComponent.h"
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),

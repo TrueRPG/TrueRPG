@@ -1,9 +1,9 @@
 #ifndef RPG_AUDIOSOURCECOMPONENT_H
 #define RPG_AUDIOSOURCECOMPONENT_H
 
-#include "../../client/audio/IAudioClip.h"
-#include "../../utils/Types.h"
-#include "../../client/audio/AudioState.h"
+#include "../../../client/audio/IAudioClip.h"
+#include "../../../utils/Types.h"
+#include "../../../client/audio/AudioState.h"
 
 /**
  * Audio source component that is used to play an audio clip.

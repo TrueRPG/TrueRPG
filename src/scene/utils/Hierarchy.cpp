@@ -1,7 +1,7 @@
 #include "Hierarchy.h"
 
-#include "../components/HierarchyComponent.h"
-#include "../components/NameComponent.h"
+#include "../components/basic/HierarchyComponent.h"
+#include "../components/basic/NameComponent.h"
 
 void Hierarchy::addChild(Entity parent, Entity child)
 {

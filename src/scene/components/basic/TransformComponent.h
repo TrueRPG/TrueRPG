@@ -1,7 +1,7 @@
 #ifndef RPG_TRANSFORMCOMPONENT_H
 #define RPG_TRANSFORMCOMPONENT_H
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 struct TransformComponent
 {

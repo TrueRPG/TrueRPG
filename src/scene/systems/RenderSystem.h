@@ -3,7 +3,7 @@
 
 #include <entt.hpp>
 #include "../../client/graphics/SpriteBatch.h"
-#include "../components/TransformComponent.h"
+#include "../components/basic/TransformComponent.h"
 
 class RenderSystem
 {

@@ -1,8 +1,8 @@
 #include "Scene.h"
 
 #include "Entity.h"
-#include "components/HierarchyComponent.h"
-#include "components/NameComponent.h"
+#include "components/basic/HierarchyComponent.h"
+#include "components/basic/NameComponent.h"
 
 Scene::Scene()
         : m_scriptSystem(m_registry),

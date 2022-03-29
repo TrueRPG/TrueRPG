@@ -1,6 +1,6 @@
 #include "ScriptSystem.h"
 
-#include "../components/NativeScriptComponent.h"
+#include "../components/basic/NativeScriptComponent.h"
 
 ScriptSystem::ScriptSystem(entt::registry &registry)
         : m_registry(registry) {}

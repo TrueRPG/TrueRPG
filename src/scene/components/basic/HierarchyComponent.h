@@ -1,7 +1,7 @@
 #ifndef RPG_HIERARCHYCOMPONENT_H
 #define RPG_HIERARCHYCOMPONENT_H
 
-#include "../Entity.h"
+#include "../../Entity.h"
 
 struct HierarchyComponent
 {

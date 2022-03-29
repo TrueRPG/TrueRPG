@@ -1,9 +1,9 @@
 #include "PhysicsSystem.h"
 
-#include "../components/RigidbodyComponent.h"
-#include "../components/TransformComponent.h"
+#include "../components/physics/RigidbodyComponent.h"
+#include "../components/basic/TransformComponent.h"
 #include "../../client/graphics/Rect.h"
-#include "../components/RectColliderComponent.h"
+#include "../components/physics/RectColliderComponent.h"
 
 PhysicsSystem::PhysicsSystem(entt::registry &registry)
         : m_registry(registry) {}

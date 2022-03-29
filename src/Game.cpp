@@ -1,23 +1,23 @@
 #include "Game.h"
 
 #include "scene/Entity.h"
-#include "scene/components/CameraComponent.h"
-#include "scene/components/NativeScriptComponent.h"
-#include "scene/components/SpriteRendererComponent.h"
-#include "scene/components/TextRendererComponent.h"
-#include "scene/components/WorldMapComponent.h"
+#include "scene/components/render/CameraComponent.h"
+#include "scene/components/basic/NativeScriptComponent.h"
+#include "scene/components/render/SpriteRendererComponent.h"
+#include "scene/components/render/TextRendererComponent.h"
+#include "scene/components/world/WorldMapComponent.h"
 
 #include "scene/utils/Hierarchy.h"
 #include "scripts/PlayerScript.h"
 #include "scripts/DebugInfoScript.h"
 #include "scripts/WorldMapScript.h"
-#include "scene/components/AudioListenerComponent.h"
+#include "scene/components/audio/AudioListenerComponent.h"
 #include "scripts/PumpkinScript.h"
-#include "scene/components/RectColliderComponent.h"
-#include "scene/components/RigidbodyComponent.h"
-#include "scene/components/AutoOrderComponent.h"
+#include "scene/components/physics/RectColliderComponent.h"
+#include "scene/components/physics/RigidbodyComponent.h"
+#include "scene/components/render/AutoOrderComponent.h"
 #include "scripts/BotScript.h"
-#include "scene/components/HpComponent.h"
+#include "scene/components/world/HpComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
