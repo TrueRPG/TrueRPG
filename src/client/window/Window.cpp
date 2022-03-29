@@ -36,7 +36,7 @@ Window::Window(int width, int height, const std::string &title) : m_keys(), onRe
     }
 
     glfwMakeContextCurrent(m_window);
-    assert(gladLoadGL(glfwGetProcAddress));
+    gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(0); // It's useful to see max fps, so I turned off vsync
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, glfwKeyCallback);
