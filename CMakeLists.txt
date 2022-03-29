@@ -13,11 +13,11 @@ file(GLOB_RECURSE HEADERS "src/*.h" "src/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-if(NOT WIN32)
-    # it doesn't work on Windows with mingw
-    target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
-    target_link_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
-endif()
+#if(NOT WIN32)
+#    # it doesn't work on Windows with mingw
+#    target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
+#    target_link_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)
+#endif()
 
 add_subdirectory(libs/glad)
 add_subdirectory(libs/glfw)
