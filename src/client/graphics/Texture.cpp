@@ -83,3 +83,29 @@ Texture Texture::create(const std::string& path, unsigned int type)
 
     return Texture(texture, path, width, height);
 }
+
+Texture Texture::create(const unsigned char *rawTexture, int width, int height, unsigned int type)
+{
+    if (rawTexture == nullptr)
+    {
+        std::clog << "Failed to load texture" << std::endl;
+        return Texture(0, "", 0, 0);
+    }
+
+    unsigned int texture;
+
+    glCreateTextures(type, 1, &texture);
+
+    // Set up the texture params
+    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
+    glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rawTexture);
+    glGenerateTextureMipmap(texture);
+
+    return Texture(texture, "no_path", width, height);
+}
