@@ -146,11 +146,19 @@ void RenderSystem::draw()
                 sprite.setPosition(transformComponent.position);
                 if (isRectSelected(sprite.getGlobalBounds(), cursor))
                 {
-                    sprite.setColor(glm::vec4(0.9f, 0.6f, 0.6f, 1.f));
+                    // TODO: hardcoded mouse button
+                    if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
+                    {
+                        sprite.setColor(buttonComponent.pressedColor);
+                    }
+                    else
+                    {
+                        sprite.setColor(buttonComponent.highlightedColor);
+                    }
                 }
                 else
                 {
-                    sprite.setColor(glm::vec4(0.7f, 0.7f, 0.7f, 1.f));
+                    sprite.setColor(buttonComponent.color);
                 }
                 m_batch.draw(sprite, 100);
 

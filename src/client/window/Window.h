@@ -20,6 +20,7 @@ private:
     InputEvent m_onInput;
     ResizeEvent m_onResize;
     bool m_keys[GLFW_KEY_LAST + 1];
+    bool m_mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1];
 public:
     ResizeEvent::IType &onResize;
     InputEvent::IType &onInput;
@@ -40,6 +41,8 @@ public:
 
     bool getKey(int key);
 
+    bool getMouseButton(int mouseButton);
+
     glm::vec2 getCursorPosition();
 
     static Window& getInstance(int width = 0, int height = 0, const std::string& title = "");
@@ -51,6 +54,8 @@ private:
     Window& operator= (const Window&) = delete;
 
     static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int actions, int mods);
+
+    static void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 
     static void glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height);
 };
