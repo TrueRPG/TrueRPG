@@ -49,6 +49,11 @@ class SpriteBatch
     Texture m_textures[MaxTextures];
     int m_texturesSize{0};
 
+    // It's not necessary to have this fields here,
+    // but it's quite useful for the rendering system
+    glm::mat4 m_projMat{};
+    glm::mat4 m_viewMat{};
+
 public:
     SpriteBatch() = default;
 
@@ -60,7 +65,11 @@ public:
 
     void draw(const Sprite &sprite, int layer = 0, int order = 0);
 
+    glm::mat4 getProjectionMatrix();
+
     void setProjectionMatrix(glm::mat4 projMat);
+
+    glm::mat4 getViewMatrix();
 
     void setViewMatrix(glm::mat4 viewMat);
 

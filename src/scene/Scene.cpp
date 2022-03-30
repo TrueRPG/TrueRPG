@@ -7,7 +7,11 @@
 Scene::Scene()
     : m_scriptSystem(m_registry),
       m_physicsSystem(m_registry),
-      m_renderSystem(m_registry),
+      m_worldMapRenderSystem(m_registry),
+      m_spriteRenderSystem(m_registry),
+      m_uiRenderSystem(m_registry),
+      m_textRenderSystem(m_registry),
+      m_renderSystem(m_registry,{&m_worldMapRenderSystem, &m_spriteRenderSystem, &m_uiRenderSystem, &m_textRenderSystem}),
       m_audioSystem(m_registry)
 {
 }

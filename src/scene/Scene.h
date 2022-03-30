@@ -5,9 +5,12 @@
 #include "../client/graphics/SpriteBatch.h"
 
 #include "systems/ScriptSystem.h"
-#include "systems/RenderSystem.h"
+#include "systems/render/PipelineRenderSystem.h"
 #include "systems/AudioSystem.h"
 #include "systems/PhysicsSystem.h"
+#include "systems/render/TextRenderSystem.h"
+#include "systems/render/SpriteRenderSystem.h"
+#include "systems/render/WorldMapRenderSystem.h"
 
 class Entity;
 
@@ -17,7 +20,14 @@ class Scene
 
     ScriptSystem m_scriptSystem;
     PhysicsSystem m_physicsSystem;
-    RenderSystem m_renderSystem;
+
+    WorldMapRenderSystem m_worldMapRenderSystem;
+    SpriteRenderSystem m_spriteRenderSystem;
+    UIRenderSystem m_uiRenderSystem;
+    TextRenderSystem m_textRenderSystem;
+
+    PipelineRenderSystem m_renderSystem;
+
     AudioSystem m_audioSystem;
 public:
     Scene();

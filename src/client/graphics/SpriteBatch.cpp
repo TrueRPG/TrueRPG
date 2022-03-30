@@ -221,14 +221,26 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
             });
 }
 
+glm::mat4 SpriteBatch::getProjectionMatrix()
+{
+    return m_projMat;
+}
+
 void SpriteBatch::setProjectionMatrix(glm::mat4 projMat)
 {
+    m_projMat = projMat;
     m_shader.use();
     m_shader.setUniform("projection", projMat);
 }
 
+glm::mat4 SpriteBatch::getViewMatrix()
+{
+    return m_viewMat;
+}
+
 void SpriteBatch::setViewMatrix(glm::mat4 viewMat)
 {
+    m_viewMat = viewMat;
     m_shader.use();
     m_shader.setUniform("view", viewMat);
 }
