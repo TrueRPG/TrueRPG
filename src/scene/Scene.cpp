@@ -5,10 +5,12 @@
 #include "components/basic/NameComponent.h"
 
 Scene::Scene()
-        : m_scriptSystem(m_registry),
-          m_physicsSystem(m_registry),
-          m_renderSystem(m_registry),
-          m_audioSystem(m_registry) {}
+    : m_scriptSystem(m_registry),
+      m_physicsSystem(m_registry),
+      m_renderSystem(m_registry),
+      m_audioSystem(m_registry)
+{
+}
 
 Entity Scene::createEntity(const std::string &name)
 {

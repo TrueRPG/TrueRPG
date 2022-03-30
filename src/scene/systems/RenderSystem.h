@@ -10,6 +10,9 @@ class RenderSystem
     entt::registry& m_registry;
     Shader m_shader;
     SpriteBatch m_batch;
+
+    Texture m_emptyTexture;
+
 public:
     RenderSystem(entt::registry& registry);
 

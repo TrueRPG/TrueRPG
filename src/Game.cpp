@@ -18,6 +18,7 @@
 #include "scene/components/render/AutoOrderComponent.h"
 #include "scripts/BotScript.h"
 #include "scene/components/world/HpComponent.h"
+#include "scene/components/render/ui/ButtonComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -38,6 +39,10 @@ Game::Game()
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
 
+    // Button
+    Entity buttonEntity = m_scene.createEntity("button");
+    buttonEntity.getComponent<TransformComponent>().position = {100.f, 100.f};
+    auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
 
     // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");

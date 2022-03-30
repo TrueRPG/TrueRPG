@@ -6,6 +6,7 @@
 #include <string>
 
 #include "../../utils/Event.hpp"
+#include "glm/vec2.hpp"
 
 class Window;
 
@@ -38,6 +39,8 @@ public:
     int getHeight() const;
 
     bool getKey(int key);
+
+    glm::vec2 getCursorPosition();
 
     static Window& getInstance(int width = 0, int height = 0, const std::string& title = "");
 

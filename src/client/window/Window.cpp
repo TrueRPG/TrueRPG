@@ -115,3 +115,10 @@ void Window::glfwFramebufferSizeCallback(GLFWwindow *window, int width, int heig
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
     win->m_onResize(width, height);
 }
+
+glm::vec2 Window::getCursorPosition()
+{
+    double x, y;
+    glfwGetCursorPos(m_window, &x, &y);
+    return {x, y};
+}

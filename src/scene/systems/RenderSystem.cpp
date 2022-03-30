@@ -11,17 +11,26 @@
 #include "../utils/Hierarchy.h"
 #include "../components/world/WorldMapComponent.h"
 #include "../components/render/AutoOrderComponent.h"
+#include "../components/render/ui/ButtonComponent.h"
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
           m_shader(Shader::createShader("../res/shaders/shader.vs", "../res/shaders/shader.fs")),
-          m_batch(m_shader, 30000)
+          m_batch(m_shader, 30000),
+          m_emptyTexture(Texture::createEmpty())
 {
     Window::getInstance().onResize += createEventHandler(&RenderSystem::resize);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+static bool isRectSelected(FloatRect rect, glm::vec2 cursor)
+{
+    return cursor.x > rect.getLeft() && cursor.x < rect.getLeft() + rect.getWidth()
+           && cursor.y > rect.getBottom() && cursor.y < rect.getBottom() + rect.getHeight();
+}
+
+// TODO: This method is too big
 void RenderSystem::draw()
 {
     // Find the camera
@@ -113,6 +122,42 @@ void RenderSystem::draw()
                 }
 
                 m_batch.draw(sprite, spriteComponent.layer, order);
+            }
+        }
+
+        // UI rendering
+        // TODO: It's not ready yet
+        {
+            Window &window = Window::getInstance();
+            glm::vec2 cursor = window.getCursorPosition();
+            cursor = cursor - glm::vec2(window.getWidth(), window.getHeight()) / 2.f; // the origin is the center of the screen now
+            cursor = glm::vec2(-cursor.x, cursor.y); // change the direction of x-axis
+            cursor = viewMatrix * -glm::vec4(cursor, 0.f, 1.f); // convert it to world coords
+
+            auto view = m_registry.view<ButtonComponent>();
+            for (auto entity : view)
+            {
+                auto &buttonComponent = view.get<ButtonComponent>(entity);
+
+                auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
+
+                Sprite sprite(m_emptyTexture);
+                sprite.setScale(buttonComponent.size);
+                sprite.setPosition(transformComponent.position);
+                if (isRectSelected(sprite.getGlobalBounds(), cursor))
+                {
+                    sprite.setColor(glm::vec4(0.9f, 0.6f, 0.6f, 1.f));
+                }
+                else
+                {
+                    sprite.setColor(glm::vec4(0.7f, 0.7f, 0.7f, 1.f));
+                }
+                m_batch.draw(sprite, 100);
+
+                Text text(*buttonComponent.font, buttonComponent.text);
+                auto textBounds = text.getLocalBounds();
+                text.setPosition(transformComponent.position + buttonComponent.size / 2.f - glm::vec2(textBounds.getWidth(), textBounds.getHeight()) / 2.f);
+                text.draw(m_batch, 100);
             }
         }
 
