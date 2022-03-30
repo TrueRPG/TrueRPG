@@ -11,3 +11,5 @@ AllowShortBlocksOnASingleLine: Empty
 AlignAfterOpenBracket: DontAlign
 AllowShortFunctionsOnASingleLine: Inline
 PointerAlignment: Right
+BreakConstructorInitializers: BeforeColon
+PackConstructorInitializers: Never
