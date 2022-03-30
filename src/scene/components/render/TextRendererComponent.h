@@ -24,7 +24,7 @@ struct TextRendererComponent
     int layer{0};
     int order{0};
 
-    TextRendererComponent(Font *font, std::string text = "");
+    TextRendererComponent(Font *font, std::string text = "Text");
 };
 
 #endif //RPG_TEXTRENDERERCOMPONENT_H

@@ -20,6 +20,8 @@
 #include "scene/components/world/HpComponent.h"
 #include "scene/components/render/ui/ButtonComponent.h"
 #include "scripts/ButtonScript.h"
+#include "scene/components/render/ui/InventoryComponent.h"
+#include "scripts/InventoryScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -46,6 +48,12 @@ Game::Game()
     auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
     buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
     Hierarchy::addChild(m_cameraEntity, buttonEntity);
+
+    // Inventory test
+    Entity inventoryEntity = m_scene.createEntity("inventory");
+    inventoryEntity.addComponent<InventoryComponent>(&m_font, "Inventory");
+    inventoryEntity.addComponent<NativeScriptComponent>().bind<InventoryScript>();
+    Hierarchy::addChild(m_cameraEntity, inventoryEntity);
 
     // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");

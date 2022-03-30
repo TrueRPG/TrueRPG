@@ -15,7 +15,7 @@ struct ButtonComponent
 
     bool enabled{true};
 
-    ButtonComponent(Font *font, std::string text = "");
+    ButtonComponent(Font *font, std::string text = "Button");
 };
 
 #endif // RPG_BUTTONCOMPONENT_H
