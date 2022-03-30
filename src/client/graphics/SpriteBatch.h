@@ -49,7 +49,7 @@ class SpriteBatch
     Texture m_textures[MaxTextures];
     int m_texturesSize{0};
 
-    // It's not necessary to have this fields here,
+    // It's not necessary to have these fields here,
     // but it's quite useful for the rendering system
     glm::mat4 m_projMat{};
     glm::mat4 m_viewMat{};

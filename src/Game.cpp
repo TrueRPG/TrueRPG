@@ -19,6 +19,7 @@
 #include "scripts/BotScript.h"
 #include "scene/components/world/HpComponent.h"
 #include "scene/components/render/ui/ButtonComponent.h"
+#include "scripts/ButtonScript.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -43,6 +44,8 @@ Game::Game()
     Entity buttonEntity = m_scene.createEntity("button");
     buttonEntity.getComponent<TransformComponent>().position = {100.f, 100.f};
     auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
+    buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
+    Hierarchy::addChild(m_cameraEntity, buttonEntity);
 
     // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
