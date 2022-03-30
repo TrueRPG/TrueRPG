@@ -1,7 +1,7 @@
 #ifndef RPG_NATIVESCRIPTCOMPONENT_H
 #define RPG_NATIVESCRIPTCOMPONENT_H
 
-#include "../Script.h"
+#include "../../Script.h"
 
 struct NativeScriptComponent
 {

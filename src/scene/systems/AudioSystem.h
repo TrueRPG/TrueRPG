@@ -2,7 +2,7 @@
 #define RPG_AUDIOSYSTEM_H
 
 #include <entt.hpp>
-#include "../components/AudioSourceComponent.h"
+#include "../components/audio/AudioSourceComponent.h"
 #include "../../client/audio/AudioSource.h"
 #include "../../client/audio/AudioDevice.h"
 

@@ -1,7 +1,7 @@
 #ifndef RPG_CAMERACOMPONENT_H
 #define RPG_CAMERACOMPONENT_H
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 struct CameraComponent
 {

@@ -4,8 +4,8 @@
 #include <vector>
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
-#include "../scene/components/RigidbodyComponent.h"
-#include "../scene/components/HpComponent.h"
+#include "../scene/components/physics/RigidbodyComponent.h"
+#include "../scene/components/world/HpComponent.h"
 
 class PlayerScript : public Script
 {

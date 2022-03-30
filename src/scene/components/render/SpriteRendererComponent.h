@@ -1,9 +1,9 @@
 #ifndef RPG_SPRITERENDERERCOMPONENT_H
 #define RPG_SPRITERENDERERCOMPONENT_H
 
-#include <glm/glm.hpp>
-#include "../../client/graphics/Texture.h"
-#include "../../client/graphics/Rect.h"
+#include "glm/glm.hpp"
+#include "../../../client/graphics/Texture.h"
+#include "../../../client/graphics/Rect.h"
 
 struct SpriteRendererComponent
 {

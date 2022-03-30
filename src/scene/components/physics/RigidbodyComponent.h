@@ -1,7 +1,7 @@
 #ifndef RPG_RIGIDBODYCOMPONENT_H
 #define RPG_RIGIDBODYCOMPONENT_H
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
 struct RigidbodyComponent
 {

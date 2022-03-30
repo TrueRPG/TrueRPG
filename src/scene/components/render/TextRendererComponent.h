@@ -1,7 +1,7 @@
 #ifndef RPG_TEXTRENDERERCOMPONENT_H
 #define RPG_TEXTRENDERERCOMPONENT_H
 
-#include "../../client/graphics/Font.h"
+#include "../../../client/graphics/Font.h"
 
 enum class HorizontalAlign
 {

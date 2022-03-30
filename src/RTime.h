@@ -1,6 +1,6 @@
 #include <GLFW/glfw3.h>
 
-#define MAX_DELTA_TIME 0.01
+#define MAX_DELTA_TIME 0.4
 
 class RTime
 {

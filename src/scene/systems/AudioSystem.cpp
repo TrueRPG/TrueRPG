@@ -1,7 +1,7 @@
 #include "AudioSystem.h"
 
 #include <iostream>
-#include "../components/AudioListenerComponent.h"
+#include "../components/audio/AudioListenerComponent.h"
 #include "../utils/Hierarchy.h"
 
 AudioSystem::AudioSystem(entt::registry &registry)

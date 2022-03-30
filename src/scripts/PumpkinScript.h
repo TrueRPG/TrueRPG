@@ -5,9 +5,9 @@
 #include <glm/glm.hpp>
 #include "../scene/utils/Hierarchy.h"
 #include "../client/window/Window.h"
-#include "../scene/components/TransformComponent.h"
-#include "../scene/components/TextRendererComponent.h"
-#include "../scene/components/AudioSourceComponent.h"
+#include "../scene/components/basic/TransformComponent.h"
+#include "../scene/components/render/TextRendererComponent.h"
+#include "../scene/components/audio/AudioSourceComponent.h"
 
 class PumpkinScript : public Script
 {
