@@ -4,6 +4,8 @@
 #include <glad/gl.h>
 #include <stb_image.h>
 
+#include "Bitmap.h"
+
 Texture::Texture() : m_id(0), m_path(""), m_width(0), m_height(0) { }
 
 Texture::Texture(unsigned int id, const std::string& path, int width, int height) 
@@ -82,4 +84,24 @@ Texture Texture::create(const std::string& path, unsigned int type)
     stbi_image_free(data);
 
     return Texture(texture, path, width, height);
+}
+
+Texture Texture::create(const Bitmap &bitmap, unsigned int type)
+{
+    unsigned int texture;
+
+    glCreateTextures(type, 1, &texture);
+
+    // Set up the texture params
+    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTextureStorage2D(texture, 1, GL_RGBA8, bitmap.getWidth(), bitmap.getHeight());
+    glTextureSubImage2D(texture, 0, 0, 0, bitmap.getWidth(), bitmap.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, bitmap.getRawPixels().data());
+    glGenerateTextureMipmap(texture);
+
+    return Texture(texture, "no_path", bitmap.getWidth(), bitmap.getHeight());
 }
