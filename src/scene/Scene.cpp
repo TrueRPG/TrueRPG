@@ -7,6 +7,7 @@
 Scene::Scene()
         : m_scriptSystem(m_registry),
           m_physicsSystem(m_registry),
+          m_lightSystem(m_registry),
           m_renderSystem(m_registry),
           m_audioSystem(m_registry) {}
 
@@ -31,6 +32,7 @@ void Scene::update(float deltaTime)
 {
     m_scriptSystem.update(deltaTime);
     m_physicsSystem.update(deltaTime);
+    m_lightSystem.update();
     m_renderSystem.draw();
     m_audioSystem.update();
 }
@@ -40,4 +42,5 @@ void Scene::destroy()
     m_scriptSystem.destroy();
     m_renderSystem.destroy();
     m_audioSystem.destroy();
+    m_lightSystem.destroy();
 }

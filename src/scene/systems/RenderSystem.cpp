@@ -11,6 +11,7 @@
 #include "../utils/Hierarchy.h"
 #include "../components/world/WorldMapComponent.h"
 #include "../components/render/AutoOrderComponent.h"
+#include "../components/render/GlobalLightComponent.h"
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
@@ -113,6 +114,27 @@ void RenderSystem::draw()
                 }
 
                 m_batch.draw(sprite, spriteComponent.layer, order);
+            }
+        }
+
+        {
+            auto view = m_registry.view<GlobalLightComponent>();
+            for (auto entity : view)
+            {
+                auto &wnd = Window::getInstance();
+                auto &lightComponent = view.get<GlobalLightComponent>(entity);
+
+                Sprite sprite(lightComponent.lightMap);
+                sprite.setTextureRect(IntRect(0, 0, lightComponent.lightMap.getWidth(), lightComponent.lightMap.getHeight()));
+
+                auto transoform = Hierarchy::computeTransform({entity, &m_registry});
+
+                glm::vec2 origin(wnd.getWidth() / 2, wnd.getHeight() / 2);
+
+                sprite.setPosition(transoform.position);
+                sprite.setOrigin(origin);
+
+                m_batch.draw(sprite, 9);
             }
         }
 

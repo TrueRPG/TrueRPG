@@ -18,6 +18,7 @@
 #include "scene/components/render/AutoOrderComponent.h"
 #include "scripts/BotScript.h"
 #include "scene/components/world/HpComponent.h"
+#include "scene/components/render/GlobalLightComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -169,6 +170,14 @@ Game::Game()
     Hierarchy::addChild(botEntity, botNameEntity);
 
     botEntity.addComponent<NativeScriptComponent>().bind<BotScript>();
+
+    Entity globalLight = m_scene.createEntity("global_light");
+    auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
+    globalLightComponent.brightness = 0.0f;
+    auto &globalLightTransform = globalLight.getComponent<TransformComponent>();
+    globalLightTransform.origin = glm::vec2(Window::getInstance().getWidth() / 2, Window::getInstance().getHeight() / 2);
+
+    Hierarchy::addChild(m_playerEntity, globalLight);
 }
 
 void Game::update(float deltaTime)
