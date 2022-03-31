@@ -42,12 +42,12 @@ int Bitmap::getChannels() const
 
 Pixel Bitmap::getPixel(int x, int y) const
 {
-	assert(x < m_width && y < m_height);
+	assert(x < m_width && y < m_height && x >= 0 && y >= 0);
 	return m_pixels[y * m_width + x];
 }
 
 void Bitmap::setPixel(int x, int y, Pixel pixel)
 {
-	assert(x < m_width && y < m_height);
+	assert(x < m_width && y < m_height && x >= 0 && y >= 0);
 	m_pixels[y * m_width + x] = pixel;
 }
