@@ -5,6 +5,8 @@
 #include <glad/gl.h>
 #include "IGLObject.h"
 
+class Bitmap;
+
 class Texture : public IGLObject
 {
 private:
@@ -32,7 +34,7 @@ public:
     int getHeight() const;
 
     static Texture create(const std::string &path, unsigned int type = GL_TEXTURE_2D);
-    static Texture create(const unsigned char *rawTexture, int width, int height, unsigned int type = GL_TEXTURE_2D);
+    static Texture create(const Bitmap &rawTexture, unsigned int type = GL_TEXTURE_2D);
 };
 
 

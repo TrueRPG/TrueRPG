@@ -1,10 +1,9 @@
-#include "ImageHelper.h"
+#include "Bitmap.h"
 #include <cassert>
 
-Bitmap::Bitmap(int width, int height, int channels) 
+Bitmap::Bitmap(int width, int height) 
 		: m_width(width), 
-		  m_height(height), 
-		  m_channels(channels),
+		  m_height(height),
 		  m_pixels(width * height) { }
 
 const std::vector<Pixel> &Bitmap::getPixels() const
@@ -38,7 +37,7 @@ int Bitmap::getHeight() const
 
 int Bitmap::getChannels() const
 {
-	return m_channels;
+	return 4;
 }
 
 Pixel Bitmap::getPixel(int x, int y) const
