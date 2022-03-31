@@ -4,6 +4,7 @@
 #include "components/basic/HierarchyComponent.h"
 #include "components/basic/NameComponent.h"
 
+// TODO: create ISystem interface
 Scene::Scene()
     : m_scriptSystem(m_registry),
       m_physicsSystem(m_registry),

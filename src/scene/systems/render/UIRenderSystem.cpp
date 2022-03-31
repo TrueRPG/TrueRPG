@@ -4,7 +4,9 @@
 #include "../../components/render/ui/ButtonComponent.h"
 #include "../../utils/Hierarchy.h"
 #include "../../../client/graphics/Text.h"
-#include "../../components/render/ui/InventoryComponent.h"
+#include "../../components/world/InventoryComponent.h"
+#include "../../components/render/CameraComponent.h"
+#include "../../components/world/ItemComponent.h"
 
 UIRenderSystem::UIRenderSystem(entt::registry &registry)
     : m_registry(registry),
@@ -28,6 +30,7 @@ void UIRenderSystem::draw(SpriteBatch &batch)
     cursor = glm::vec2(-cursor.x, cursor.y); // change the direction of x-axis
     cursor = batch.getViewMatrix() * -glm::vec4(cursor, 0.f, 1.f); // convert it to world coords
 
+    // TODO: make separate classes
     drawButtons(batch, cursor);
     drawInventory(batch, cursor);
 }
@@ -75,42 +78,83 @@ void UIRenderSystem::drawButtons(SpriteBatch &batch, glm::vec2 cursor)
 
 void UIRenderSystem::drawInventory(SpriteBatch &batch, glm::vec2 cursor)
 {
+    glm::vec4 cellColor{0.6f, 0.6f, 0.6f, 1.f};
+    glm::vec4 panelColor{0.7f, 0.7f, 0.7f, 1.f};
+
+    // If this method is invoked, it means we have at least one camera
+    auto cameraEntity = m_registry.view<CameraComponent>()[0];
+    auto cameraTransform = Hierarchy::computeTransform({cameraEntity, &m_registry});
+
     Window &window = Window::getInstance();
     auto view = m_registry.view<InventoryComponent>();
+
+    // we can show only one inventory, so find the first one
+    entt::entity inventoryEntity = entt::null;
     for (auto entity : view)
     {
         auto &inventoryComponent = view.get<InventoryComponent>(entity);
-        auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
-
         if (inventoryComponent.shown)
         {
-            float indent = 10;
-            float cellSize = 70;
-            glm::vec2 size(inventoryComponent.size * 80 + (int) indent);
-            Sprite panel(m_emptyTexture);
-            panel.setScale(glm::vec2(size));
-            panel.setPosition(transformComponent.position - size / 2.f);
-            panel.setColor(inventoryComponent.panelColor);
-            batch.draw(panel, 100);
+            inventoryEntity = entity;
+        }
+    }
+    if (inventoryEntity != entt::null)
+    {
+        auto &inventoryComponent = m_registry.get<InventoryComponent>(inventoryEntity);
 
-            for (int i = 0; i < inventoryComponent.size.x; i++)
+        float indent = 10;
+        float cellSize = 70;
+        glm::ivec2 inventorySize(inventoryComponent.items.size(), inventoryComponent.items[0].size());
+        glm::vec2 menuSize(inventorySize * 80 + (int) indent);
+
+        // draw panel
+        Sprite panel(m_emptyTexture);
+        panel.setScale(glm::vec2(menuSize));
+        panel.setPosition(cameraTransform.position - menuSize / 2.f);
+        panel.setColor(panelColor);
+        batch.draw(panel, 100);
+
+        for (int i = 0; i < inventorySize.x; i++)
+        {
+            for (int j = 0; j < inventorySize.y; j++)
             {
-                for (int j = 0; j < inventoryComponent.size.y; j++)
+                glm::vec2 cellPos = cameraTransform.position + glm::vec2(i, j) * (cellSize + indent) - menuSize / 2.f + indent;
+
+                // draw cells
+                Sprite cell(m_emptyTexture);
+                cell.setScale(glm::vec2(cellSize, cellSize));
+                cell.setPosition(cellPos);
+                cell.setColor(cellColor);
+                batch.draw(cell, 100);
+
+                // draw items
+                Entity itemEntity = inventoryComponent.items[i][inventorySize.y - j - 1];
+                if (itemEntity)
                 {
-                    Sprite cell(m_emptyTexture);
-                    cell.setScale(glm::vec2(cellSize, cellSize));
-                    cell.setPosition(transformComponent.position
-                                     + glm::vec2(i, j) * (cellSize + indent) - size / 2.f + indent);
-                    cell.setColor(inventoryComponent.cellColor);
-                    batch.draw(cell, 100);
+                    auto &itemComponent = itemEntity.getComponent<ItemComponent>();
+                    Sprite item(itemComponent.icon);
+                    item.setTextureRect(itemComponent.iconRect);
+
+                    // we need to fill the whole cell with the sprite
+                    FloatRect bounds = item.getLocalBounds();
+                    glm::vec2 itemSize(bounds.getWidth(), bounds.getWidth());
+                    item.setScale(cellSize / itemSize);
+
+                    item.setPosition(cellPos);
+
+                    if (isRectSelected(item.getGlobalBounds(), cursor))
+                    {
+                        // highlight the item
+                        item.setColor({1.1f, 1.1f, 1.1f, 1.f});
+                    }
+                    else
+                    {
+                        item.setColor({1.f, 1.f, 1.f, 1.f});
+                    }
+
+                    batch.draw(item, 110);
                 }
             }
-
-            Text text(*inventoryComponent.font, inventoryComponent.title);
-            auto textBounds = text.getLocalBounds();
-            text.setPosition(transformComponent.position
-                             - glm::vec2(textBounds.getWidth(), textBounds.getHeight() - size.y - indent) / 2.f);
-            text.draw(batch, 100);
         }
     }
 }

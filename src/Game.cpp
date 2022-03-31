@@ -20,8 +20,8 @@
 #include "scene/components/world/HpComponent.h"
 #include "scene/components/render/ui/ButtonComponent.h"
 #include "scripts/ButtonScript.h"
-#include "scene/components/render/ui/InventoryComponent.h"
-#include "scripts/InventoryScript.h"
+#include "scene/components/world/ItemComponent.h"
+#include "scene/components/world/InventoryComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -48,12 +48,6 @@ Game::Game()
     auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
     buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
     Hierarchy::addChild(m_cameraEntity, buttonEntity);
-
-    // Inventory test
-    Entity inventoryEntity = m_scene.createEntity("inventory");
-    inventoryEntity.addComponent<InventoryComponent>(&m_font, "Inventory");
-    inventoryEntity.addComponent<NativeScriptComponent>().bind<InventoryScript>();
-    Hierarchy::addChild(m_cameraEntity, inventoryEntity);
 
     // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
@@ -96,6 +90,22 @@ Game::Game()
     hpRenderer.verticalAlign = VerticalAlign::Top;
     hpRenderer.layer = 10;
     m_playerEntity.addComponent<HpComponent>();
+
+
+    // --------- Inventory ---------
+    // Item
+    Entity axeItem = m_scene.createEntity("axeItem");
+    auto& itemComponent = axeItem.addComponent<ItemComponent>();
+    itemComponent.name = "Axe";
+    itemComponent.description = "It's a very useful thing when you need to cut down trees or cut off some heads.";
+    itemComponent.icon = m_baseTexture;
+    itemComponent.iconRect = IntRect(163, 41, 24, 24);
+
+    // Inventory
+    auto& inventoryComponent = m_playerEntity.addComponent<InventoryComponent>();
+    inventoryComponent.items = {6, std::vector<Entity>(4, Entity())};
+    inventoryComponent.items[0][0] = axeItem;
+
 
     // Attach sprite, sound, hp and camera to the player
     Hierarchy::addChild(m_playerEntity, spriteEntity);
