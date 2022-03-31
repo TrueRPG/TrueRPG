@@ -86,7 +86,7 @@ Texture Texture::create(const std::string& path, unsigned int type)
     return Texture(texture, path, width, height);
 }
 
-Texture Texture::create(const Bitmap &rawTexture, unsigned int type)
+Texture Texture::create(const Bitmap &bitmap, unsigned int type)
 {
     unsigned int texture;
 
@@ -99,9 +99,9 @@ Texture Texture::create(const Bitmap &rawTexture, unsigned int type)
     glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureStorage2D(texture, 1, GL_RGBA8, rawTexture.getWidth(), rawTexture.getHeight());
-    glTextureSubImage2D(texture, 0, 0, 0, rawTexture.getWidth(), rawTexture.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, rawTexture.getRawPixels().data());
+    glTextureStorage2D(texture, 1, GL_RGBA8, bitmap.getWidth(), bitmap.getHeight());
+    glTextureSubImage2D(texture, 0, 0, 0, bitmap.getWidth(), bitmap.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, bitmap.getRawPixels().data());
     glGenerateTextureMipmap(texture);
 
-    return Texture(texture, "no_path", rawTexture.getWidth(), rawTexture.getHeight());
+    return Texture(texture, "no_path", bitmap.getWidth(), bitmap.getHeight());
 }
