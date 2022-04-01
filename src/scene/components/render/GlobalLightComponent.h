@@ -6,7 +6,9 @@
 struct GlobalLightComponent
 {
 	Texture lightMap;
+	glm::vec4 color{1.0f};
 	float brightness;
+	bool dayNightCycleEnable{false};
 };
 
 

@@ -50,6 +50,11 @@ int Texture::getHeight() const
     return m_height;
 }
 
+void Texture::setData(const Bitmap &bitmap)
+{
+    glTextureSubImage2D(m_id, 0, 0, 0, bitmap.getWidth(), bitmap.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, bitmap.getRawPixels().data());
+}
+
 // GL_TEXTURE_RECTANGLE and GL_TEXTURE_2D might be useful for us
 Texture Texture::create(const std::string& path, unsigned int type)
 {

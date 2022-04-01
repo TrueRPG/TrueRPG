@@ -11,12 +11,13 @@ private:
 	Texture m_lightTexture;
 	int m_windowWidth;
 	int m_windowHeight;
+	float m_prevBrightness{0.0f};
 	bool m_isResized;
 public:
 
 	LightSystem(entt::registry &registry);
 
-	void update();
+	void update(float deltaTime);
 
 	void resize(int width, int height);
 

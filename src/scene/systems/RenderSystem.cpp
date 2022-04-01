@@ -129,10 +129,11 @@ void RenderSystem::draw()
 
                 auto transoform = Hierarchy::computeTransform({entity, &m_registry});
 
-                glm::vec2 origin(wnd.getWidth() / 2, wnd.getHeight() / 2);
+                glm::vec2 origin(lightComponent.lightMap.getWidth() / 2, lightComponent.lightMap.getHeight() / 2);
 
                 sprite.setPosition(transoform.position);
                 sprite.setOrigin(origin);
+                sprite.setScale(glm::vec2(16.0f));
 
                 m_batch.draw(sprite, 9);
             }

@@ -19,6 +19,7 @@
 #include "scripts/BotScript.h"
 #include "scene/components/world/HpComponent.h"
 #include "scene/components/render/GlobalLightComponent.h"
+#include "scene/components/render/LightSourceComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -107,6 +108,11 @@ Game::Game()
     auto &musicComponent = pumpkinEntity.addComponent<AudioSourceComponent>(m_music);
     musicComponent.volume = 1.0f;
 
+    auto &pumpkinLight = pumpkinEntity.addComponent<LightSourceComponent>();
+    pumpkinLight.brightness = 1.0f;
+    pumpkinLight.color = glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
+    pumpkinLight.radius = 15.0f;
+
     // Text setup for the pumpkin
     Entity pumpkinTextEntity = m_scene.createEntity("text");
     auto &pumpkinTextRenderer = pumpkinTextEntity.addComponent<TextRendererComponent>(&m_font);
@@ -174,8 +180,8 @@ Game::Game()
     Entity globalLight = m_scene.createEntity("global_light");
     auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
     globalLightComponent.brightness = 0.0f;
+    globalLightComponent.color = glm::vec4(0.0471, 0.0784, 0.271f, 0.5f);
     auto &globalLightTransform = globalLight.getComponent<TransformComponent>();
-    globalLightTransform.origin = glm::vec2(Window::getInstance().getWidth() / 2, Window::getInstance().getHeight() / 2);
 
     Hierarchy::addChild(m_playerEntity, globalLight);
 }

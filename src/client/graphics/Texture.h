@@ -33,6 +33,8 @@ public:
 
     int getHeight() const;
 
+    void setData(const Bitmap &bitmap);
+
     static Texture create(const std::string &path, unsigned int type = GL_TEXTURE_2D);
     static Texture create(const Bitmap &bitmap, unsigned int type = GL_TEXTURE_2D);
 };
