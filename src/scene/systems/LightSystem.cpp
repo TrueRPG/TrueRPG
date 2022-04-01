@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "../../client/window/Window.h"
-#include "../../utils/ImageHelper.h"
+#include "../../client/graphics/Bitmap.h"
 #include "../components/render/GlobalLightComponent.h"
 
 LightSystem::LightSystem(entt::registry &registry) 
@@ -50,7 +50,7 @@ void LightSystem::update()
 			}
 
 			m_lightTexture.destroy();
-			m_lightTexture = Texture::create(lightImage.getRawPixels().data(), m_windowWidth, m_windowHeight);
+			m_lightTexture = Texture::create(lightImage);
 
 			globalLightComponent.lightMap = m_lightTexture;
 
