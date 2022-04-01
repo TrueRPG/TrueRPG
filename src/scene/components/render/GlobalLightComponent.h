@@ -1,7 +1,6 @@
 #ifndef RPG_GLOBALLIGHTCOMPONENT_H
 #define RPG_GLOBALLIGHTCOMPONENT_H
 
-#include <glm/glm.hpp>
 #include "../../../client/graphics/Texture.h"
 
 struct GlobalLightComponent

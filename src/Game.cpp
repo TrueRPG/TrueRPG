@@ -19,7 +19,6 @@
 #include "scripts/BotScript.h"
 #include "scene/components/world/HpComponent.h"
 #include "scene/components/render/GlobalLightComponent.h"
-#include "scene/components/render/LightSourceComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -176,11 +175,6 @@ Game::Game()
     botCollider.size = glm::vec2(32, 32);
     botEntity.addComponent<RigidbodyComponent>();
 
-    auto &botLight = botEntity.addComponent<LightSourceComponent>();
-    botLight.color = glm::vec3(0.5, 0.0, 0.75);
-    botLight.intensity = 3.0;
-    botLight.radius = 200.0;
-
     Hierarchy::addChild(botEntity, botSprite);
     Hierarchy::addChild(botEntity, botNameEntity);
 
@@ -188,9 +182,9 @@ Game::Game()
 
     Entity globalLight = m_scene.createEntity("global_light");
     auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
-    globalLightComponent.intensity = 1.0f;
-    globalLightComponent.color = glm::vec3(40 / 255.f, 38 / 255.f, 58 / 255.f);
+    globalLightComponent.brightness = 0.0f;
     auto &globalLightTransform = globalLight.getComponent<TransformComponent>();
+    globalLightTransform.origin = glm::vec2(Window::getInstance().getWidth() / 2, Window::getInstance().getHeight() / 2);
 
     Hierarchy::addChild(m_playerEntity, globalLight);
 }
