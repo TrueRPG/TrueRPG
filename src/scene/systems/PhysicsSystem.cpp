@@ -8,14 +8,6 @@
 PhysicsSystem::PhysicsSystem(entt::registry &registry)
         : m_registry(registry) {}
 
-static bool checkRectCollision(FloatRect a, FloatRect b)
-{
-    return a.getLeft() < b.getLeft() + b.getWidth() &&
-        a.getLeft() + a.getWidth() > b.getLeft() &&
-        a.getBottom() < b.getBottom() + b.getHeight() &&
-        a.getBottom() + a.getHeight() > b.getBottom();
-}
-
 void PhysicsSystem::update(float deltaTime)
 {
     auto view = m_registry.view<RigidbodyComponent>();
@@ -37,18 +29,15 @@ void PhysicsSystem::update(float deltaTime)
                 auto &otherTransform = m_registry.get<TransformComponent>(otherEntity);
                 auto &otherRectCollider = m_registry.get<RectColliderComponent>(otherEntity);
 
-                bool collide = checkRectCollision(
-                        {
-                            nextPos.x + rectCollider.offset.x,
-                            nextPos.y + rectCollider.offset.y,
-                                rectCollider.size.x, rectCollider.size.y
-                        },
-                        {
-                                otherTransform.position.x + otherRectCollider.offset.x,
-                                otherTransform.position.y + otherRectCollider.offset.y,
-                                otherRectCollider.size.x, otherRectCollider.size.y
-                        }
-                );
+                bool collide = Rect{
+                    nextPos.x + rectCollider.offset.x,
+                    nextPos.y + rectCollider.offset.y,
+                    rectCollider.size.x, rectCollider.size.y
+                }.intersects({
+                       otherTransform.position.x + otherRectCollider.offset.x,
+                    otherTransform.position.y + otherRectCollider.offset.y,
+                    otherRectCollider.size.x, otherRectCollider.size.y
+                });
 
                 if (collide)
                 {

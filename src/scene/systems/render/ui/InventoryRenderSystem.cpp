@@ -10,12 +10,6 @@ InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry)
 {
 }
 
-static bool isRectSelected(FloatRect rect, glm::vec2 cursor)
-{
-    return cursor.x > rect.getLeft() && cursor.x < rect.getLeft() + rect.getWidth() && cursor.y > rect.getBottom() &&
-           cursor.y < rect.getBottom() + rect.getHeight();
-}
-
 void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 {
     glm::vec4 cellColor{0.6f, 0.6f, 0.6f, 1.f};
@@ -82,7 +76,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
                     item.setPosition(cellPos);
 
-                    if (isRectSelected(item.getGlobalBounds(), cursor))
+                    if (item.getGlobalBounds().contains(cursor))
                     {
                         // highlight the item
                         item.setColor({1.1f, 1.1f, 1.1f, 1.f});
