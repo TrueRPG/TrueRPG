@@ -3,11 +3,11 @@
 
 #include "../scene/Script.h"
 #include <glm/glm.hpp>
-#include "../scene/utils/Hierarchy.h"
+#include "../utils/Hierarchy.h"
 #include "../client/window/Window.h"
-#include "../scene/components/basic/TransformComponent.h"
-#include "../scene/components/render/TextRendererComponent.h"
-#include "../scene/components/audio/AudioSourceComponent.h"
+#include "../components/basic/TransformComponent.h"
+#include "../components/render/TextRendererComponent.h"
+#include "../components/audio/AudioSourceComponent.h"
 
 class PumpkinScript : public Script
 {

@@ -3,7 +3,7 @@
 
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
-#include "../scene/components/render/ui/ButtonComponent.h"
+#include "../components/render/ui/ButtonComponent.h"
 
 class ButtonScript : public Script
 {

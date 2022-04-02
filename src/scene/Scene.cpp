@@ -1,9 +1,9 @@
 #include "Scene.h"
 
 #include "Entity.h"
-#include "components/basic/HierarchyComponent.h"
-#include "components/basic/NameComponent.h"
-#include "components/basic/TransformComponent.h"
+#include "../components/basic/HierarchyComponent.h"
+#include "../components/basic/NameComponent.h"
+#include "../components/basic/TransformComponent.h"
 
 Scene::~Scene()
 {

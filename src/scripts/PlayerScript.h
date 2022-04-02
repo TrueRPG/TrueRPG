@@ -4,9 +4,10 @@
 #include <vector>
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
-#include "../scene/components/physics/RigidbodyComponent.h"
-#include "../scene/components/world/HpComponent.h"
-#include "../scene/components/world/InventoryComponent.h"
+#include "../components/physics/RigidbodyComponent.h"
+#include "../components/world/HpComponent.h"
+#include "../components/world/InventoryComponent.h"
+#include "../utils/Hierarchy.h"
 
 // TODO: refactor
 class PlayerScript : public Script

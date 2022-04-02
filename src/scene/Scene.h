@@ -2,8 +2,7 @@
 #define RPG_SCENE_H
 
 #include <entt.hpp>
-#include "../client/graphics/SpriteBatch.h"
-#include "systems/ISystem.h"
+#include "ISystem.h"
 
 class Entity;
 
