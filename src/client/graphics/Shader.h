@@ -8,10 +8,7 @@
 #include "IGLObject.h"
 
 #include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
-#include <functional>
 
 class Shader : public IGLObject
 {
