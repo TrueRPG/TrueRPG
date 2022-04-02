@@ -12,7 +12,7 @@ class SpriteRenderSystem : public IRenderSubsystem
 public:
     SpriteRenderSystem(entt::registry& registry);
 
-    virtual void draw(SpriteBatch& batch);
+    void draw(SpriteBatch& batch) override;
 };
 
 #endif // RPG_SPRITERENDERSYSTEM_H

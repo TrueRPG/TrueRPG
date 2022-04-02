@@ -12,7 +12,7 @@ class TextRenderSystem : public IRenderSubsystem
 public:
     TextRenderSystem(entt::registry& registry);
 
-    virtual void draw(SpriteBatch& batch);
+    void draw(SpriteBatch& batch) override;
 };
 
 #endif // RPG_TEXTRENDERSYSTEM_H

@@ -12,7 +12,7 @@ class WorldMapRenderSystem : public IRenderSubsystem
 public:
     WorldMapRenderSystem(entt::registry& registry);
 
-    virtual void draw(SpriteBatch& batch);
+    void draw(SpriteBatch& batch) override;
 };
 
 #endif // RPG_WORLDMAPRENDERSYSTEM_H

@@ -17,10 +17,7 @@ public:
 
     void addSubsystem(IUIRenderSubsystem& renderSystem);
 
-    virtual void draw(SpriteBatch& batch);
-
-private:
-    void drawInventory(SpriteBatch& batch, glm::vec2 cursor);
+    void draw(SpriteBatch& batch) override;
 };
 
 #endif // RPG_UIRENDERSYSTEM_H

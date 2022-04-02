@@ -20,7 +20,6 @@ void UIRenderSystem::addSubsystem(IUIRenderSubsystem& renderSystem)
     m_subsystems.push_back(&renderSystem);
 }
 
-// TODO: It's not ready yet
 void UIRenderSystem::draw(SpriteBatch &batch)
 {
     // UI rendering

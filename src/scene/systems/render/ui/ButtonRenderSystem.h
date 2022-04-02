@@ -14,7 +14,7 @@ class ButtonRenderSystem : public IUIRenderSubsystem
 public:
     ButtonRenderSystem(entt::registry& registry, Texture texture);
 
-    virtual void draw(SpriteBatch& batch, glm::vec2 cursor);
+    void draw(SpriteBatch& batch, glm::vec2 cursor) override;
 };
 
 #endif // RPG_BUTTONRENDERSYSTEM_H
