@@ -9,10 +9,8 @@ class ButtonRenderSystem : public IUIRenderSubsystem
 {
     entt::registry& m_registry;
 
-    Texture m_texture;
-
 public:
-    ButtonRenderSystem(entt::registry& registry, Texture texture);
+    ButtonRenderSystem(entt::registry& registry);
 
     void draw(SpriteBatch& batch, glm::vec2 cursor) override;
 };

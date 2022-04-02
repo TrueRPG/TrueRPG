@@ -88,23 +88,25 @@ Texture Texture::create(const std::string& path, unsigned int type)
 
 Texture Texture::createEmpty()
 {
-    unsigned int texture;
+    static unsigned int texture = -1;
 
-    glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+    if (texture == -1)
+    {
+        glCreateTextures(GL_TEXTURE_2D, 1, &texture);
 
-    // Set up the texture params
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // Set up the texture params
+        glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    unsigned char pixel[]{255, 255, 255, 255};
-    glTextureStorage2D(texture, 1, GL_RGBA8, 1, 1);
-    glTextureSubImage2D(texture, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
-    glGenerateTextureMipmap(texture);
-
-    return Texture(texture, "", 1, 1);
+        unsigned char pixel[]{255, 255, 255, 255};
+        glTextureStorage2D(texture, 1, GL_RGBA8, 1, 1);
+        glTextureSubImage2D(texture, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+        glGenerateTextureMipmap(texture);
+    }
+    return Texture(texture, "no_path", 1, 1);
 }
 
 Texture Texture::create(const Bitmap &bitmap, unsigned int type)

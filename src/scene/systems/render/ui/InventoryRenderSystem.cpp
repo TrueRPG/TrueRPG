@@ -5,9 +5,8 @@
 #include "../../../components/world/InventoryComponent.h"
 #include "../../../components/world/ItemComponent.h"
 
-InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry, Texture texture)
-    : m_registry(registry),
-      m_texture(texture)
+InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry)
+    : m_registry(registry)
 {
 }
 
@@ -49,7 +48,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
         glm::vec2 menuSize(inventorySize * 80 + (int) indent);
 
         // draw panel
-        Sprite panel(m_texture);
+        Sprite panel;
         panel.setScale(glm::vec2(menuSize));
         panel.setPosition(cameraTransform.position - menuSize / 2.f);
         panel.setColor(panelColor);
@@ -62,7 +61,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 glm::vec2 cellPos = cameraTransform.position + glm::vec2(i, j) * (cellSize + indent) - menuSize / 2.f + indent;
 
                 // draw cells
-                Sprite cell(m_texture);
+                Sprite cell;
                 cell.setScale(glm::vec2(cellSize, cellSize));
                 cell.setPosition(cellPos);
                 cell.setColor(cellColor);

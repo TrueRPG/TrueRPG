@@ -143,7 +143,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
     glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin() * sprite.getScale();
     IntRect rect = sprite.getTextureRect();
 
-    Texture &texture = sprite.getTexture();
+    Texture texture = sprite.getTexture();
 
     int i;
     for (i = 0; i < m_texturesSize; i++)

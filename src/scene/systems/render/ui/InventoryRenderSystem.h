@@ -8,10 +8,8 @@ class InventoryRenderSystem : public IUIRenderSubsystem
 {
     entt::registry& m_registry;
 
-    Texture m_texture;
-
 public:
-    InventoryRenderSystem(entt::registry& registry, Texture texture);
+    InventoryRenderSystem(entt::registry& registry);
 
     void draw(SpriteBatch& batch, glm::vec2 cursor) override;
 };

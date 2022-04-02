@@ -9,8 +9,8 @@
 Scene::Scene()
     : m_scriptSystem(m_registry),
       m_physicsSystem(m_registry),
-      m_buttonSystem(m_registry, Texture::createEmpty()),
-      m_inventorySystem(m_registry, Texture::createEmpty()),
+      m_buttonSystem(m_registry),
+      m_inventorySystem(m_registry),
       m_worldMapRenderSystem(m_registry),
       m_spriteRenderSystem(m_registry),
       m_uiRenderSystem(m_registry),

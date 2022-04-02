@@ -5,9 +5,8 @@
 #include "../../../utils/Hierarchy.h"
 #include "../../../../client/graphics/Text.h"
 
-ButtonRenderSystem::ButtonRenderSystem(entt::registry& registry, Texture texture)
-    : m_registry(registry),
-      m_texture(texture)
+ButtonRenderSystem::ButtonRenderSystem(entt::registry& registry)
+    : m_registry(registry)
 {
 }
 
@@ -27,7 +26,7 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
         auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
-        Sprite sprite(m_texture);
+        Sprite sprite;
         sprite.setScale(buttonComponent.size);
         sprite.setPosition(transformComponent.position);
 
