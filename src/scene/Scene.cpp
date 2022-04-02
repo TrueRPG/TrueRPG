@@ -3,28 +3,14 @@
 #include "Entity.h"
 #include "components/basic/HierarchyComponent.h"
 #include "components/basic/NameComponent.h"
-#include "systems/render/ui/ButtonRenderSystem.h"
+#include "components/basic/TransformComponent.h"
 
-// TODO: create ISystem interface
-Scene::Scene()
-    : m_scriptSystem(m_registry),
-      m_physicsSystem(m_registry),
-      m_buttonSystem(m_registry),
-      m_inventorySystem(m_registry),
-      m_worldMapRenderSystem(m_registry),
-      m_spriteRenderSystem(m_registry),
-      m_uiRenderSystem(m_registry),
-      m_textRenderSystem(m_registry),
-      m_renderSystem(m_registry),
-      m_audioSystem(m_registry)
+Scene::~Scene()
 {
-    m_uiRenderSystem.addSubsystem(m_buttonSystem);
-    m_uiRenderSystem.addSubsystem(m_inventorySystem);
-
-    m_renderSystem.addSubsystem(m_worldMapRenderSystem);
-    m_renderSystem.addSubsystem(m_spriteRenderSystem);
-    m_renderSystem.addSubsystem(m_uiRenderSystem);
-    m_renderSystem.addSubsystem(m_textRenderSystem);
+    for (const auto &system : m_systems)
+    {
+        delete system;
+    }
 }
 
 Entity Scene::createEntity(const std::string &name)
@@ -40,21 +26,29 @@ Entity Scene::createEntity(const std::string &name)
 
 void Scene::destroyEntity(Entity entity)
 {
-    m_scriptSystem.destroyScript(entity.m_entity);
     m_registry.destroy(entity.m_entity);
+}
+
+void Scene::create()
+{
+    for (const auto &system : m_systems)
+    {
+        system->create();
+    }
 }
 
 void Scene::update(float deltaTime)
 {
-    m_scriptSystem.update(deltaTime);
-    m_physicsSystem.update(deltaTime);
-    m_renderSystem.draw();
-    m_audioSystem.update();
+    for (const auto &system : m_systems)
+    {
+        system->update(deltaTime);
+    }
 }
 
 void Scene::destroy()
 {
-    m_scriptSystem.destroy();
-    m_renderSystem.destroy();
-    m_audioSystem.destroy();
+    for (const auto &system : m_systems)
+    {
+        system->destroy();
+    }
 }

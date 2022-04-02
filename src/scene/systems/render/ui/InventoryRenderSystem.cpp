@@ -76,10 +76,15 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
                     item.setPosition(cellPos);
 
-                    if (item.getGlobalBounds().contains(cursor))
+                    if (item.getGlobalBounds().contains(cursor) )
                     {
                         // highlight the item
                         item.setColor({1.1f, 1.1f, 1.1f, 1.f});
+                        // TODO: hardcoded mouse button
+                        if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
+                        {
+                            //m_draggedEntity = itemEntity;
+                        }
                     }
                     else
                     {

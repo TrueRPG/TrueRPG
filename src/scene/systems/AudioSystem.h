@@ -1,12 +1,13 @@
 #ifndef RPG_AUDIOSYSTEM_H
 #define RPG_AUDIOSYSTEM_H
 
-#include <entt.hpp>
+#include "entt.hpp"
 #include "../components/audio/AudioSourceComponent.h"
 #include "../../client/audio/AudioSource.h"
 #include "../../client/audio/AudioDevice.h"
+#include "ISystem.h"
 
-class AudioSystem
+class AudioSystem : public ISystem
 {
     entt::registry &m_registry;
 
@@ -17,9 +18,9 @@ class AudioSystem
 public:
     AudioSystem(entt::registry &registry);
 
-    void update();
+    void update(float deltaTime) override;
 
-    void destroy();
+    void destroy() override;
 
 private:
     void onConstruct(entt::registry &registry, entt::entity entity);

@@ -1,5 +1,16 @@
 #include "Game.h"
 
+#include "scene/systems/ScriptSystem.h"
+#include "scene/systems/PhysicsSystem.h"
+#include "scene/systems/render/RenderSystem.h"
+#include "scene/systems/render/SpriteRenderSystem.h"
+#include "scene/systems/render/WorldMapRenderSystem.h"
+#include "scene/systems/render/ui/UIRenderSystem.h"
+#include "scene/systems/render/ui/InventoryRenderSystem.h"
+#include "scene/systems/render/ui/ButtonRenderSystem.h"
+#include "scene/systems/render/TextRenderSystem.h"
+#include "scene/systems/AudioSystem.h"
+
 #include "scene/Entity.h"
 #include "scene/components/render/CameraComponent.h"
 #include "scene/components/basic/NativeScriptComponent.h"
@@ -30,6 +41,23 @@ Game::Game()
           m_steps("../res/audio/steps.mp3"),
           m_music("../res/audio/music.mp3")
 {
+    // Add systems
+    m_scene.addSystem<ScriptSystem>();
+    m_scene.addSystem<PhysicsSystem>();
+
+    auto& renderSystem = m_scene.addSystem<RenderSystem>();
+    renderSystem.addSubsystem<WorldMapRenderSystem>();
+    renderSystem.addSubsystem<SpriteRenderSystem>();
+
+    auto& uiRenderSystem = renderSystem.addSubsystem<UIRenderSystem>();
+    uiRenderSystem.addSubsystem<ButtonRenderSystem>();
+    uiRenderSystem.addSubsystem<InventoryRenderSystem>();
+
+    renderSystem.addSubsystem<TextRenderSystem>();
+
+    m_scene.addSystem<AudioSystem>();
+
+    // Add entities
     Entity worldMapEntity = m_scene.createEntity("worldMap");
 
     auto &worldTransform = worldMapEntity.getComponent<TransformComponent>();

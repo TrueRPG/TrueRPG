@@ -15,7 +15,14 @@ class UIRenderSystem : public IRenderSubsystem
 public:
     UIRenderSystem(entt::registry& registry);
 
-    void addSubsystem(IUIRenderSubsystem& renderSystem);
+    ~UIRenderSystem() override;
+
+    template <typename T>
+    decltype(auto) addSubsystem()
+    {
+        m_subsystems.push_back(new T(m_registry));
+        return (T &)*m_subsystems.back();
+    }
 
     void draw(SpriteBatch& batch) override;
 };

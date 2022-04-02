@@ -2,6 +2,7 @@
 #define RPG_HIERARCHY_H
 
 #include "../Entity.h"
+#include "../components/basic/TransformComponent.h"
 
 /**
  * Utility class which contains useful functions for the entity hierarchy.

@@ -3,7 +3,10 @@
 #include "../components/basic/NativeScriptComponent.h"
 
 ScriptSystem::ScriptSystem(entt::registry &registry)
-        : m_registry(registry) {}
+        : m_registry(registry)
+{
+    m_registry.on_destroy<NativeScriptComponent>().connect<&ScriptSystem::destroyScript>(this);
+}
 
 void ScriptSystem::update(float deltaTime)
 {
@@ -25,17 +28,6 @@ void ScriptSystem::update(float deltaTime)
     }
 }
 
-void ScriptSystem::destroyScript(entt::entity entity)
-{
-    // Destroy the script
-    auto &nativeScriptComponent = m_registry.get<NativeScriptComponent>(entity);
-    if (!nativeScriptComponent.instance)
-    {
-        nativeScriptComponent.instance->onDestroy();
-        nativeScriptComponent.destroyScript();
-    }
-}
-
 void ScriptSystem::destroy()
 {
     // Destroy all scripts
@@ -48,5 +40,16 @@ void ScriptSystem::destroy()
             nativeScriptComponent.instance->onDestroy();
             nativeScriptComponent.destroyScript();
         }
+    }
+}
+
+void ScriptSystem::destroyScript(entt::registry &registry, entt::entity entity)
+{
+    // Destroy the script
+    auto &nativeScriptComponent = m_registry.get<NativeScriptComponent>(entity);
+    if (!nativeScriptComponent.instance)
+    {
+        nativeScriptComponent.instance->onDestroy();
+        nativeScriptComponent.destroyScript();
     }
 }

@@ -1,21 +1,21 @@
 #ifndef RPG_SCRIPTSYSTEM_H
 #define RPG_SCRIPTSYSTEM_H
 
-#include <entt.hpp>
+#include "entt.hpp"
+#include "ISystem.h"
 
-class Scene;
-
-class ScriptSystem
+class ScriptSystem : public ISystem
 {
     entt::registry &m_registry;
 public:
     ScriptSystem(entt::registry &registry);
 
-    void update(float deltaTime);
+    void update(float deltaTime) override;
 
-    void destroyScript(entt::entity entity);
+    void destroy() override;
 
-    void destroy();
+private:
+    void destroyScript(entt::registry &registry, entt::entity entity);
 };
 
 #endif //RPG_SCRIPTSYSTEM_H

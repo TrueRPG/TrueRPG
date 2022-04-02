@@ -12,7 +12,7 @@ AudioSystem::AudioSystem(entt::registry &registry)
     m_registry.on_destroy<AudioSourceComponent>().connect<&AudioSystem::onDestroy>(this);
 }
 
-void AudioSystem::update()
+void AudioSystem::update(float deltaTime)
 {
     // Find the listener
     entt::entity listenerEntity = entt::null;

@@ -17,9 +17,12 @@ RenderSystem::RenderSystem(entt::registry &registry)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void RenderSystem::addSubsystem(IRenderSubsystem &renderSubsystem)
+RenderSystem::~RenderSystem()
 {
-    m_subsystems.push_back(&renderSubsystem);
+    for (const auto &system : m_subsystems)
+    {
+        delete system;
+    }
 }
 
 void RenderSystem::draw()
@@ -39,12 +42,17 @@ void RenderSystem::draw()
     m_batch.setProjectionMatrix(cameraComponent.getProjectionMatrix());
     m_batch.begin();
 
-    for (const auto &item : m_subsystems)
+    for (auto &item : m_subsystems)
     {
         item->draw(m_batch);
     }
 
     m_batch.end();
+}
+
+void RenderSystem::update(float deltaTime)
+{
+    draw();
 }
 
 void RenderSystem::destroy()
