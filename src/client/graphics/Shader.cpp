@@ -1,4 +1,6 @@
 #include "Shader.h"
+#include <fstream>
+#include <sstream>
 
 Shader::Shader(unsigned int m_id) : m_id(m_id) { }
 
