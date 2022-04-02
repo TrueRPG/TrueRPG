@@ -18,6 +18,10 @@ static bool isRectSelected(FloatRect rect, glm::vec2 cursor)
 
 void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 {
+    glm::vec4 color{0.6f, 0.6f, 0.6f, 1.f};
+    glm::vec4 highlightedColor{0.7f, 0.7f, 0.7f, 1.f};
+    glm::vec4 pressedColor{0.5f, 0.5f, 0.5f, 1.f};
+
     Window &window = Window::getInstance();
     auto view = m_registry.view<ButtonComponent>();
     for (auto entity : view)
@@ -29,22 +33,19 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
         Sprite sprite;
         sprite.setScale(buttonComponent.size);
         sprite.setPosition(transformComponent.position);
+        sprite.setColor(color);
 
-        if (isRectSelected(sprite.getGlobalBounds(), cursor))
+        if (isRectSelected(sprite.getGlobalBounds(), cursor) && buttonComponent.enabled)
         {
             // TODO: hardcoded mouse button
             if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
             {
-                sprite.setColor(buttonComponent.pressedColor);
+                sprite.setColor(pressedColor);
             }
             else
             {
-                sprite.setColor(buttonComponent.highlightedColor);
+                sprite.setColor(highlightedColor);
             }
-        }
-        else
-        {
-            sprite.setColor(buttonComponent.color);
         }
 
         batch.draw(sprite, 100);
