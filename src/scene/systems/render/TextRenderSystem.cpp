@@ -1,4 +1,5 @@
 #include "TextRenderSystem.h"
+
 #include "../../components/render/TextRendererComponent.h"
 #include "../../../client/graphics/Text.h"
 #include "../../utils/Hierarchy.h"

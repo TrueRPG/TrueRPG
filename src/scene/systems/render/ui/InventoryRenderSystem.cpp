@@ -1,16 +1,13 @@
-#include "UIRenderSystem.h"
-#include "glm/vec2.hpp"
-#include "../../../client/window/Window.h"
-#include "../../components/render/ui/ButtonComponent.h"
-#include "../../utils/Hierarchy.h"
-#include "../../../client/graphics/Text.h"
-#include "../../components/world/InventoryComponent.h"
-#include "../../components/render/CameraComponent.h"
-#include "../../components/world/ItemComponent.h"
+#include "InventoryRenderSystem.h"
+#include "../../../components/render/CameraComponent.h"
+#include "../../../utils/Hierarchy.h"
+#include "../../../../client/window/Window.h"
+#include "../../../components/world/InventoryComponent.h"
+#include "../../../components/world/ItemComponent.h"
 
-UIRenderSystem::UIRenderSystem(entt::registry &registry)
+InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry, Texture texture)
     : m_registry(registry),
-      m_emptyTexture(Texture::createEmpty())
+      m_texture(texture)
 {
 }
 
@@ -20,63 +17,7 @@ static bool isRectSelected(FloatRect rect, glm::vec2 cursor)
            cursor.y < rect.getBottom() + rect.getHeight();
 }
 
-// TODO: It's not ready yet
-void UIRenderSystem::draw(SpriteBatch &batch)
-{
-    // UI rendering
-    Window &window = Window::getInstance();
-    glm::vec2 cursor = window.getCursorPosition();
-    cursor = cursor - glm::vec2(window.getWidth(), window.getHeight()) / 2.f; // the origin is the center of the screen now
-    cursor = glm::vec2(-cursor.x, cursor.y); // change the direction of x-axis
-    cursor = batch.getViewMatrix() * -glm::vec4(cursor, 0.f, 1.f); // convert it to world coords
-
-    // TODO: make separate classes
-    drawButtons(batch, cursor);
-    drawInventory(batch, cursor);
-}
-
-void UIRenderSystem::drawButtons(SpriteBatch &batch, glm::vec2 cursor)
-{
-    Window &window = Window::getInstance();
-    auto view = m_registry.view<ButtonComponent>();
-    for (auto entity : view)
-    {
-        auto &buttonComponent = view.get<ButtonComponent>(entity);
-
-        auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
-
-        Sprite sprite(m_emptyTexture);
-        sprite.setScale(buttonComponent.size);
-        sprite.setPosition(transformComponent.position);
-
-        if (isRectSelected(sprite.getGlobalBounds(), cursor))
-        {
-            // TODO: hardcoded mouse button
-            if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
-            {
-                sprite.setColor(buttonComponent.pressedColor);
-            }
-            else
-            {
-                sprite.setColor(buttonComponent.highlightedColor);
-            }
-        }
-        else
-        {
-            sprite.setColor(buttonComponent.color);
-        }
-
-        batch.draw(sprite, 100);
-
-        Text text(*buttonComponent.font, buttonComponent.text);
-        auto textBounds = text.getLocalBounds();
-        text.setPosition(
-            transformComponent.position + buttonComponent.size / 2.f - glm::vec2(textBounds.getWidth(), textBounds.getHeight()) / 2.f);
-        text.draw(batch, 100);
-    }
-}
-
-void UIRenderSystem::drawInventory(SpriteBatch &batch, glm::vec2 cursor)
+void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 {
     glm::vec4 cellColor{0.6f, 0.6f, 0.6f, 1.f};
     glm::vec4 panelColor{0.7f, 0.7f, 0.7f, 1.f};
@@ -108,7 +49,7 @@ void UIRenderSystem::drawInventory(SpriteBatch &batch, glm::vec2 cursor)
         glm::vec2 menuSize(inventorySize * 80 + (int) indent);
 
         // draw panel
-        Sprite panel(m_emptyTexture);
+        Sprite panel(m_texture);
         panel.setScale(glm::vec2(menuSize));
         panel.setPosition(cameraTransform.position - menuSize / 2.f);
         panel.setColor(panelColor);
@@ -121,7 +62,7 @@ void UIRenderSystem::drawInventory(SpriteBatch &batch, glm::vec2 cursor)
                 glm::vec2 cellPos = cameraTransform.position + glm::vec2(i, j) * (cellSize + indent) - menuSize / 2.f + indent;
 
                 // draw cells
-                Sprite cell(m_emptyTexture);
+                Sprite cell(m_texture);
                 cell.setScale(glm::vec2(cellSize, cellSize));
                 cell.setPosition(cellPos);
                 cell.setColor(cellColor);

@@ -3,18 +3,28 @@
 #include "Entity.h"
 #include "components/basic/HierarchyComponent.h"
 #include "components/basic/NameComponent.h"
+#include "systems/render/ui/ButtonRenderSystem.h"
 
 // TODO: create ISystem interface
 Scene::Scene()
     : m_scriptSystem(m_registry),
       m_physicsSystem(m_registry),
+      m_buttonSystem(m_registry, Texture::createEmpty()),
+      m_inventorySystem(m_registry, Texture::createEmpty()),
       m_worldMapRenderSystem(m_registry),
       m_spriteRenderSystem(m_registry),
       m_uiRenderSystem(m_registry),
       m_textRenderSystem(m_registry),
-      m_renderSystem(m_registry,{&m_worldMapRenderSystem, &m_spriteRenderSystem, &m_uiRenderSystem, &m_textRenderSystem}),
+      m_renderSystem(m_registry),
       m_audioSystem(m_registry)
 {
+    m_uiRenderSystem.addSubsystem(m_buttonSystem);
+    m_uiRenderSystem.addSubsystem(m_inventorySystem);
+
+    m_renderSystem.addSubsystem(m_worldMapRenderSystem);
+    m_renderSystem.addSubsystem(m_spriteRenderSystem);
+    m_renderSystem.addSubsystem(m_uiRenderSystem);
+    m_renderSystem.addSubsystem(m_textRenderSystem);
 }
 
 Entity Scene::createEntity(const std::string &name)

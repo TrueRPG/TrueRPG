@@ -5,12 +5,15 @@
 #include "../client/graphics/SpriteBatch.h"
 
 #include "systems/ScriptSystem.h"
-#include "systems/render/PipelineRenderSystem.h"
+#include "systems/render/RenderSystem.h"
 #include "systems/AudioSystem.h"
 #include "systems/PhysicsSystem.h"
 #include "systems/render/TextRenderSystem.h"
 #include "systems/render/SpriteRenderSystem.h"
 #include "systems/render/WorldMapRenderSystem.h"
+#include "systems/render/ui/ButtonRenderSystem.h"
+#include "systems/render/ui/UIRenderSystem.h"
+#include "systems/render/ui/InventoryRenderSystem.h"
 
 class Entity;
 
@@ -21,12 +24,15 @@ class Scene
     ScriptSystem m_scriptSystem;
     PhysicsSystem m_physicsSystem;
 
+    ButtonRenderSystem m_buttonSystem;
+    InventoryRenderSystem m_inventorySystem;
+
     WorldMapRenderSystem m_worldMapRenderSystem;
     SpriteRenderSystem m_spriteRenderSystem;
     UIRenderSystem m_uiRenderSystem;
     TextRenderSystem m_textRenderSystem;
 
-    PipelineRenderSystem m_renderSystem;
+    RenderSystem m_renderSystem;
 
     AudioSystem m_audioSystem;
 public:

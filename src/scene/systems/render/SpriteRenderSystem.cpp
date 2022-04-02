@@ -1,4 +1,5 @@
 #include "SpriteRenderSystem.h"
+
 #include "../../components/render/SpriteRendererComponent.h"
 #include "../../utils/Hierarchy.h"
 #include "../../components/render/AutoOrderComponent.h"

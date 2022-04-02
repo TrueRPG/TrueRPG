@@ -3,9 +3,9 @@
 
 #include "entt.hpp"
 #include "../../../client/graphics/SpriteBatch.h"
-#include "IRenderSystem.h"
+#include "IRenderSubsystem.h"
 
-class TextRenderSystem : public IRenderSystem
+class TextRenderSystem : public IRenderSubsystem
 {
     entt::registry& m_registry;
 

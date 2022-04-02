@@ -1,23 +1,25 @@
 #ifndef RPG_UIRENDERSYSTEM_H
 #define RPG_UIRENDERSYSTEM_H
 
+#include "../../../../client/graphics/SpriteBatch.h"
+#include "../IRenderSubsystem.h"
+#include "IUIRenderSubsystem.h"
 #include "entt.hpp"
-#include "../../../client/graphics/SpriteBatch.h"
-#include "IRenderSystem.h"
 
-class UIRenderSystem : public IRenderSystem
+class UIRenderSystem : public IRenderSubsystem
 {
     entt::registry& m_registry;
 
-    Texture m_emptyTexture;
+    std::vector<IUIRenderSubsystem*> m_subsystems;
 
 public:
     UIRenderSystem(entt::registry& registry);
 
+    void addSubsystem(IUIRenderSubsystem& renderSystem);
+
     virtual void draw(SpriteBatch& batch);
 
 private:
-    void drawButtons(SpriteBatch& batch, glm::vec2 cursor);
     void drawInventory(SpriteBatch& batch, glm::vec2 cursor);
 };
 
