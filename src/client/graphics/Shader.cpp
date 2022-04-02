@@ -12,6 +12,21 @@ unsigned int Shader::getId() const noexcept
     return m_id;
 }
 
+void Shader::setVector2(const std::string &name, const glm::vec2 &data)
+{
+    glUniform2f(glGetUniformLocation(m_id, name.c_str()), data.x, data.y);
+}
+
+void Shader::setVector3(const std::string &name, const glm::vec3 &data)
+{
+    glUniform3f(glGetUniformLocation(m_id, name.c_str()), data.x, data.y, data.z);
+}
+
+void Shader::setMatrix4(const std::string &name, const glm::mat4 &data)
+{
+    glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, false, glm::value_ptr(data));
+}
+
 void Shader::destroy()
 {
     glDeleteProgram(m_id);

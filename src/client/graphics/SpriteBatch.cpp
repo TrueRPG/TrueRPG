@@ -90,9 +90,9 @@ void SpriteBatch::end()
 
     int *ids = new int[m_texturesSize];
     std::iota(ids, ids + m_texturesSize, 0);
-    m_shader.setUniform("textures", m_texturesSize, ids);
+    m_shader.setArray("textures", m_texturesSize, ids);
 
-    m_shader.setUniform("model", glm::mat4(1));
+    m_shader.setMatrix4("model", glm::mat4(1));
 
     for (int i = 0; i < m_texturesSize; i++)
     {
@@ -224,13 +224,13 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
 void SpriteBatch::setProjectionMatrix(glm::mat4 projMat)
 {
     m_shader.use();
-    m_shader.setUniform("projection", projMat);
+    m_shader.setMatrix4("projection", projMat);
 }
 
 void SpriteBatch::setViewMatrix(glm::mat4 viewMat)
 {
     m_shader.use();
-    m_shader.setUniform("view", viewMat);
+    m_shader.setMatrix4("view", viewMat);
 }
 
 void SpriteBatch::destroy()

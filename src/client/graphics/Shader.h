@@ -13,70 +13,43 @@
 #include <iostream>
 #include <functional>
 
-#define UNIFORMTAG(ph_1, ph_2) glUniform ## ph_1 ## ph_2
-
-#define callFuncs(type, ID, separate) callIfCallable(UNIFORMTAG(1, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
-    callIfCallable(UNIFORMTAG(2, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
-    callIfCallable(UNIFORMTAG(3, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
-    callIfCallable(UNIFORMTAG(4, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...)
-
-#define callFuncsForMatrix(type, ID, separate) callIfCallable(UNIFORMTAG(type, 2fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate \
-    callIfCallable(UNIFORMTAG(type, 3fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate  \
-    callIfCallable(UNIFORMTAG(type, 4fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...))
-
-template <typename F, typename... S>
-constexpr void callIfCallable(F&& func, S&& ...args){
-    if constexpr (std::is_invocable_v<F, decltype(std::forward<S>(args))...>){
-        std::invoke(std::forward<F>(func), std::forward<S>(args)...);
-    } else {
-        return;
-    }
-}
-
-template<std::size_t N, typename T, typename... types>
-struct get_Nth_type
-{
-    using type = typename get_Nth_type<N - 1, types...>::type;
-};
-
-template<typename T, typename... types>
-struct get_Nth_type<0, T, types...>
-{
-    using type = T;
-};
-
-template<std::size_t N, typename... Args>
-using get_ = typename get_Nth_type<N, Args...>::type;
-
 class Shader : public IGLObject
 {
 private:
     unsigned int m_id{};
 public:
     Shader() = default;
-    Shader(unsigned int id);
+    explicit Shader(unsigned int id);
 
     // Activate the shader
     void use() const;
 
-    template <typename ... Params>
-    void setUniform(const std::string &val_name, Params... params){
-        if constexpr (std::is_floating_point_v<get_<0, Params...>> || std::is_same_v<get_<0,Params...>, glm::vec3>) {
-            if constexpr (std::is_pointer_v<get_<1,Params...>>) {
-                callFuncs(fv, m_id, ;);
-            } else { callFuncs(f, m_id, ;); }
-        }
-        else if constexpr (std::is_integral_v<get_<0,Params...>>) {
-            if constexpr (std::is_pointer_v<get_<1, Params...>>) {
-                callFuncs(iv, m_id, ;);
-            } else { callFuncs(i, m_id, ;); }
-        }
-        else if constexpr (std::is_same_v<get_<0, Params...>, glm::mat4>){
-            callFuncsForMatrix(Matrix, m_id, ;);
-        }
+    unsigned int getId() const noexcept override;
+
+    template <typename T>
+    void setArray(const std::string &name, GLsizei count, T *data)
+    {
+        if constexpr (std::is_floating_point_v<T>)
+            glUniform1fv(glGetUniformLocation(m_id, name.c_str()), count, data);
+        else if constexpr (std::is_integral_v<T>)
+            glUniform1iv(glGetUniformLocation(m_id, name.c_str()), count, data);
+        else if constexpr (std::is_unsigned_v<T>)
+            glUniform1uiv(glGetUniformLocation(m_id, name.c_str()), count, data);
     }
 
-    unsigned int getId() const noexcept override;
+    template <typename T>
+    void setValue(const std::string &name, T data)
+    {
+        if constexpr (std::is_floating_point_v<T>)
+            glUniform1f(glGetUniformLocation(m_id, name.c_str()), data);
+        else if constexpr (std::is_integral_v<T>)
+            glUniform1i(glGetUniformLocation(m_id, name.c_str()), data);
+        else if constexpr (std::is_unsigned_v<T>)
+            glUniform1ui(glGetUniformLocation(m_id, name.c_str()), data);
+    }
+    void setVector2(const std::string &name, const glm::vec2 &data);
+    void setVector3(const std::string &name, const glm::vec3 &data);
+    void setMatrix4(const std::string &name, const glm::mat4 &data);
 
     void destroy() override;
 
