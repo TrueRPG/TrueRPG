@@ -8,8 +8,6 @@
 #include "IGLObject.h"
 
 #include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
 #include <functional>
 
@@ -48,33 +46,48 @@ struct get_Nth_type<0, T, types...>
 template<std::size_t N, typename... Args>
 using get_ = typename get_Nth_type<N, Args...>::type;
 
+
 class Shader : public IGLObject
 {
 private:
     unsigned int m_id{};
 public:
     Shader() = default;
-    Shader(unsigned int id);
-
-    // Activate the shader
-    void use() const;
+    explicit Shader(unsigned int id);
 
     template <typename ... Params>
-    void setUniform(const std::string &val_name, Params... params){
+    void setUniform(const std::string &val_name, Params... params)
+    {
         if constexpr (std::is_floating_point_v<get_<0, Params...>> || std::is_same_v<get_<0,Params...>, glm::vec3>) {
-            if constexpr (std::is_pointer_v<get_<1,Params...>>) {
-                callFuncs(fv, m_id, ;);
-            } else { callFuncs(f, m_id, ;); }
+            if constexpr (sizeof...(Params) > 1)
+            {
+                if constexpr (std::is_pointer_v<get_<1,Params...>>)
+                {
+                    callFuncs(fv, m_id, ;);
+                }
+                else { callFuncs(f, m_id, ;); }
+            }
+            else { callFuncs(f, m_id, ;); }
         }
-        else if constexpr (std::is_integral_v<get_<0,Params...>>) {
-            if constexpr (std::is_pointer_v<get_<1, Params...>>) {
-                callFuncs(iv, m_id, ;);
-            } else { callFuncs(i, m_id, ;); }
+        else if constexpr (std::is_integral_v<typename get_Nth_type<0,Params...>::type>)
+        {
+            if constexpr (sizeof...(Params) > 1)
+            {
+                if constexpr (std::is_pointer_v<typename get_Nth_type<1, Params...>::type>)
+                {
+                    callFuncs(iv, m_id, ;);
+                }
+                else { callFuncs(i, m_id, ;); }
+            }
+            else { callFuncs(i, m_id, ;); }
         }
-        else if constexpr (std::is_same_v<get_<0, Params...>, glm::mat4>){
+        else if constexpr (std::is_same_v<typename get_Nth_type<0, Params...>::type, glm::mat4>){
             callFuncsForMatrix(Matrix, m_id, ;);
         }
     }
+
+    // Activate the shader
+    void use() const;
 
     unsigned int getId() const noexcept override;
 
