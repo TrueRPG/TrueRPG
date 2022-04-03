@@ -3,10 +3,15 @@
 
 #include "IUIRenderSubsystem.h"
 #include "entt.hpp"
+#include "../../../scene/Entity.h"
 
 class InventoryRenderSystem : public IUIRenderSubsystem
 {
     entt::registry& m_registry;
+
+    Entity m_draggedEntity;
+    glm::ivec2 m_itemLastPos;
+    glm::vec2 m_itemDelta;
 
 public:
     InventoryRenderSystem(entt::registry& registry);

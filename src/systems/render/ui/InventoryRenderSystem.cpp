@@ -61,6 +61,17 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 cell.setColor(cellColor);
                 batch.draw(cell, 100);
 
+                // place the dragged item
+                if (m_draggedEntity && !window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
+                {
+                    if (cell.getGlobalBounds().contains(cursor))
+                    {
+                        inventoryComponent.items[m_itemLastPos.x][m_itemLastPos.y] = Entity();
+                        inventoryComponent.items[i][inventorySize.y - j - 1] = m_draggedEntity;
+                        m_draggedEntity = Entity();
+                    }
+                }
+
                 // draw items
                 Entity itemEntity = inventoryComponent.items[i][inventorySize.y - j - 1];
                 if (itemEntity)
@@ -76,14 +87,22 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
                     item.setPosition(cellPos);
 
-                    if (item.getGlobalBounds().contains(cursor) )
+                    if (itemEntity == m_draggedEntity)
+                    {
+                        item.setPosition(cursor - m_itemDelta);
+                    }
+
+                    if (item.getGlobalBounds().contains(cursor) && !m_draggedEntity)
                     {
                         // highlight the item
                         item.setColor({1.1f, 1.1f, 1.1f, 1.f});
                         // TODO: hardcoded mouse button
                         if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
                         {
-                            //m_draggedEntity = itemEntity;
+                            m_draggedEntity = itemEntity;
+                            // we want to drag an item by the point where we clicked, so we need this variable to offset it
+                            m_itemDelta = cursor - item.getPosition();
+                            m_itemLastPos = glm::ivec2(i, inventorySize.y - j - 1);
                         }
                     }
                     else
