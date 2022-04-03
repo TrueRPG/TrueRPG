@@ -109,9 +109,13 @@ Game::Game()
     musicComponent.volume = 1.0f;
 
     auto &pumpkinLight = pumpkinEntity.addComponent<LightSourceComponent>();
-    pumpkinLight.brightness = 1.0f;
-    pumpkinLight.color = glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
-    pumpkinLight.radius = 15.0f;
+    pumpkinLight.intensity = 2.0f;
+    pumpkinLight.radius = 150.0f;
+
+    auto &playerLight = m_playerEntity.addComponent<LightSourceComponent>();
+    playerLight.color = glm::vec3(0.5, 0.3, 0.75);
+    playerLight.intensity = 3.0;
+    playerLight.radius = 200.0f;
 
     // Text setup for the pumpkin
     Entity pumpkinTextEntity = m_scene.createEntity("text");
@@ -172,6 +176,11 @@ Game::Game()
     botCollider.size = glm::vec2(32, 32);
     botEntity.addComponent<RigidbodyComponent>();
 
+    auto &botLight = botEntity.addComponent<LightSourceComponent>();
+    botLight.color = glm::vec3(0.5, 0.0, 0.75);
+    botLight.intensity = 3.0;
+    botLight.radius = 200.0;
+
     Hierarchy::addChild(botEntity, botSprite);
     Hierarchy::addChild(botEntity, botNameEntity);
 
@@ -179,8 +188,8 @@ Game::Game()
 
     Entity globalLight = m_scene.createEntity("global_light");
     auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
-    globalLightComponent.brightness = 0.0f;
-    globalLightComponent.color = glm::vec4(0.0471, 0.0784, 0.271f, 0.5f);
+    globalLightComponent.intensity = 1.0f;
+    globalLightComponent.color = glm::vec3(40 / 255.f, 38 / 255.f, 58 / 255.f);
     auto &globalLightTransform = globalLight.getComponent<TransformComponent>();
 
     Hierarchy::addChild(m_playerEntity, globalLight);

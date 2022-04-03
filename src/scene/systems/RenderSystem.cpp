@@ -4,6 +4,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "../../client/window/Window.h"
 #include "../../client/graphics/Text.h"
+#include "../../client/graphics/Light.h"
 #include "../components/render/CameraComponent.h"
 #include "../components/render/SpriteRendererComponent.h"
 #include "../components/render/TextRendererComponent.h"
@@ -12,6 +13,7 @@
 #include "../components/world/WorldMapComponent.h"
 #include "../components/render/AutoOrderComponent.h"
 #include "../components/render/GlobalLightComponent.h"
+#include "../components/render/LightSourceComponent.h"
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
@@ -23,7 +25,7 @@ RenderSystem::RenderSystem(entt::registry &registry)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void RenderSystem::draw()
+void RenderSystem::draw(float deltaTime)
 {
     // Find the camera
     CameraComponent *cameraComponent = nullptr;
@@ -117,27 +119,58 @@ void RenderSystem::draw()
             }
         }
 
+        Light light(m_shader);
+        light.clean();
+        // global light
         {
             auto view = m_registry.view<GlobalLightComponent>();
             for (auto entity : view)
             {
                 auto &wnd = Window::getInstance();
                 auto &lightComponent = view.get<GlobalLightComponent>(entity);
+				
+                m_shader.setUniform("resolution", static_cast<float>(wnd.getWidth()), static_cast<float>(wnd.getHeight()));
 
-                Sprite sprite(lightComponent.lightMap);
-                sprite.setTextureRect(IntRect(0, 0, lightComponent.lightMap.getWidth(), lightComponent.lightMap.getHeight()));
-
-                auto transoform = Hierarchy::computeTransform({entity, &m_registry});
-
-                glm::vec2 origin(lightComponent.lightMap.getWidth() / 2, lightComponent.lightMap.getHeight() / 2);
-
-                sprite.setPosition(transoform.position);
-                sprite.setOrigin(origin);
-                sprite.setScale(glm::vec2(16.0f));
-
-                m_batch.draw(sprite, 9);
+                light.setColor(lightComponent.color);
+                light.setPosition(glm::vec2(wnd.getWidth() / 2.f, wnd.getHeight() / 2.f));
+                light.setIntensity(lightComponent.intensity);
+                light.setRadius(wnd.getHeight());
+                light.draw();
             }
         }
+
+		// light source
+		{
+			auto view = m_registry.view<LightSourceComponent>();
+
+			for (auto entity : view)
+			{
+				auto &wnd = Window::getInstance();
+                int w = wnd.getWidth();
+                int h = wnd.getHeight();
+				LightSourceComponent &lightSource = view.get<LightSourceComponent>(entity);
+
+             	auto transform = Hierarchy::computeTransform({entity, &m_registry});
+
+                glm::vec4 spacePos = cameraComponent->getProjectionMatrix() * (viewMatrix * glm::vec4(transform.position, 0.0f, 1.0f));
+                glm::vec3 ndcSpacePos = spacePos / spacePos.w;
+                glm::vec2 windowSpacePos = (((glm::vec2(ndcSpacePos) + 1.0f) / 2.0f) * glm::vec2(w, h) + 0.f);
+
+                if (windowSpacePos.x + lightSource.radius < 0 ||
+                    windowSpacePos.y + lightSource.radius < 0 ||
+                    windowSpacePos.x - lightSource.radius > w ||
+                    windowSpacePos.y - lightSource.radius > h)
+                {
+                    continue;
+                }
+
+                light.setColor(lightSource.color);
+                light.setPosition(windowSpacePos);
+                light.setIntensity(lightSource.intensity);
+                light.setRadius(lightSource.radius);
+                light.draw();
+			}
+		}
 
         // Text rendering
         {

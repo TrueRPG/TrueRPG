@@ -1,13 +1,14 @@
 #ifndef RPG_GLOBALLIGHTCOMPONENT_H
 #define RPG_GLOBALLIGHTCOMPONENT_H
 
+#include <glm/glm.hpp>
 #include "../../../client/graphics/Texture.h"
 
 struct GlobalLightComponent
 {
 	Texture lightMap;
-	glm::vec4 color{1.0f};
-	float brightness;
+	glm::vec3 color{1.0f};
+	float intensity;
 	bool dayNightCycleEnable{false};
 };
 
