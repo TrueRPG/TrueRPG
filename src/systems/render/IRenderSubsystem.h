@@ -17,6 +17,8 @@ public:
      * @param batch the batch
      */
     virtual void draw(SpriteBatch& batch) = 0;
+
+    virtual void update(float deltaTime) {};
 };
 
 #endif // RPG_IRENDERSUBSYSTEM_H

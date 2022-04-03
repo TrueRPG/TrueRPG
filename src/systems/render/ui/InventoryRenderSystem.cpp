@@ -4,12 +4,47 @@
 #include "../../../client/window/Window.h"
 #include "../../../components/world/InventoryComponent.h"
 #include "../../../components/world/ItemComponent.h"
+#include "../../../client/graphics/Text.h"
 
 InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry)
     : m_registry(registry)
 {
 }
 
+std::string ltrim(const std::string &s)
+{
+    size_t start = s.find_first_not_of(' ');
+    return (start == std::string::npos) ? "" : s.substr(start);
+}
+
+static std::string normalizeText(const std::string& text, size_t lineLength)
+{
+    std::string result;
+    for (size_t i = 0; i < text.length();) {
+        if (i != 0) result += "\n";
+
+        if (text.length() - i <= lineLength)
+        {
+            result += ltrim(text.substr(i, lineLength));
+            break;
+        }
+
+        size_t last = text.find_last_of(' ', i + lineLength);
+        if (last == std::string::npos)
+        {
+            result += ltrim(text.substr(i, lineLength));
+            i += lineLength;
+        }
+        else
+        {
+            result += ltrim(text.substr(i, last - i));
+            i = last;
+        }
+    }
+    return result;
+}
+
+// TODO: this method is too big
 void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 {
     glm::vec4 cellColor{0.6f, 0.6f, 0.6f, 1.f};
@@ -39,7 +74,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
         float indent = 10;
         float cellSize = 70;
         glm::ivec2 inventorySize(inventoryComponent.items.size(), inventoryComponent.items[0].size());
-        glm::vec2 menuSize(inventorySize * 80 + (int) indent);
+        glm::vec2 menuSize(inventorySize * 80 + (int)indent);
 
         // draw panel
         Sprite panel;
@@ -47,6 +82,8 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
         panel.setPosition(cameraTransform.position - menuSize / 2.f);
         panel.setColor(panelColor);
         batch.draw(panel, 100);
+
+        m_selectedEntity = Entity();
 
         for (int i = 0; i < inventorySize.x; i++)
         {
@@ -65,7 +102,8 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 if (m_draggedEntity && !window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
                 {
                     // the cell must be empty
-                    if (cell.getGlobalBounds().contains(cursor) && !inventoryComponent.items[i][inventorySize.y - j - 1])
+                    auto currentCellEntity = inventoryComponent.items[i][inventorySize.y - j - 1];
+                    if (cell.getGlobalBounds().contains(cursor) && (!currentCellEntity || currentCellEntity == m_draggedEntity))
                     {
                         inventoryComponent.items[m_itemLastPos.x][m_itemLastPos.y] = Entity();
                         inventoryComponent.items[i][inventorySize.y - j - 1] = m_draggedEntity;
@@ -92,6 +130,8 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                     {
                         // highlight the item
                         item.setColor({1.1f, 1.1f, 1.1f, 1.f});
+                        m_selectedEntity = itemEntity;
+
                         // TODO: hardcoded mouse button
                         if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
                         {
@@ -118,5 +158,42 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 }
             }
         }
+
+        // draw description panel
+        if (m_selectedEntity && m_descriptionTimer <= 0)
+        {
+            auto &itemComponent = m_selectedEntity.getComponent<ItemComponent>();
+
+            Text text(font, itemComponent.name + "\n" + normalizeText(itemComponent.description, 40));
+            FloatRect localBounds = text.getLocalBounds();
+            text.setPosition(cursor + glm::vec2(24, -localBounds.getHeight() - 24));
+
+            FloatRect textBounds = text.getGlobalBounds();
+            Sprite descriptionPanel;
+            descriptionPanel.setPosition(glm::vec2(textBounds.getLeft(), textBounds.getBottom()) - 10.f);
+            descriptionPanel.setScale(glm::vec2(textBounds.getWidth(), textBounds.getHeight()) + 20.f);
+            descriptionPanel.setColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.f));
+            batch.draw(descriptionPanel, 130);
+
+            text.draw(batch, 130);
+        }
+
+        if (prevCursor != cursor)
+        {
+            m_descriptionTimer = DESCRIPTION_TIMER;
+        }
+        prevCursor = cursor;
+    }
+}
+
+void InventoryRenderSystem::update(float deltaTime)
+{
+    if (m_descriptionTimer > 0)
+    {
+        m_descriptionTimer -= deltaTime;
+    }
+    else
+    {
+        m_descriptionTimer = 0;
     }
 }

@@ -25,6 +25,8 @@ public:
     }
 
     void draw(SpriteBatch& batch) override;
+
+    void update(float deltaTime) override;
 };
 
 #endif // RPG_UIRENDERSYSTEM_H

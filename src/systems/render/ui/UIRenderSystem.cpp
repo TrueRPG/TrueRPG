@@ -25,8 +25,16 @@ void UIRenderSystem::draw(SpriteBatch &batch)
     cursor = glm::vec2(-cursor.x, cursor.y); // change the direction of x-axis
     cursor = batch.getViewMatrix() * -glm::vec4(cursor, 0.f, 1.f); // convert it to world coords
 
-    for (auto &item : m_subsystems)
+    for (auto &system : m_subsystems)
     {
-        item->draw(batch, cursor);
+        system->draw(batch, cursor);
+    }
+}
+
+void UIRenderSystem::update(float deltaTime)
+{
+    for (auto &system : m_subsystems)
+    {
+        system->update(deltaTime);
     }
 }

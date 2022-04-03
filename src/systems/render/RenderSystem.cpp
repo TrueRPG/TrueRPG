@@ -42,9 +42,9 @@ void RenderSystem::draw()
     m_batch.setProjectionMatrix(cameraComponent.getProjectionMatrix());
     m_batch.begin();
 
-    for (auto &item : m_subsystems)
+    for (auto &system : m_subsystems)
     {
-        item->draw(m_batch);
+        system->draw(m_batch);
     }
 
     m_batch.end();
@@ -52,6 +52,10 @@ void RenderSystem::draw()
 
 void RenderSystem::update(float deltaTime)
 {
+    for (auto &system : m_subsystems)
+    {
+        system->update(deltaTime);
+    }
     draw();
 }
 

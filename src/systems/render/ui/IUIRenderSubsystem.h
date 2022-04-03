@@ -18,6 +18,8 @@ public:
      * @param cursor current cursor position
      */
     virtual void draw(SpriteBatch& batch, glm::vec2 cursor) = 0;
+
+    virtual void update(float deltaTime) {};
 };
 
 #endif // RPG_IUIRENDERSUBSYSTEM_H

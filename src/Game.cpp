@@ -127,14 +127,14 @@ Game::Game()
     Entity axeItem = m_scene.createEntity("axeItem");
     auto&axeComponent = axeItem.addComponent<ItemComponent>();
     axeComponent.name = "Axe";
-    axeComponent.description = "It's a very useful thing when you need to cut down trees or cut off some heads.";
+    axeComponent.description = "It's a very useful thing when you need to cut down trees or cut off some monster heads.";
     axeComponent.icon = m_baseTexture;
     axeComponent.iconRect = IntRect(163, 41, 24, 24);
 
     Entity keyItem = m_scene.createEntity("keyItem");
     auto& keyComponent = keyItem.addComponent<ItemComponent>();
     keyComponent.name = "Secret Key";
-    keyComponent.description = "Hmmm... What does it open?";
+    keyComponent.description = "Looks like a very old key. What does it open?";
     keyComponent.icon = m_baseTexture;
     keyComponent.iconRect = IntRect(227, 41, 24, 24);
 
