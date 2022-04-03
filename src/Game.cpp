@@ -125,16 +125,24 @@ Game::Game()
     // --------- Inventory ---------
     // Item
     Entity axeItem = m_scene.createEntity("axeItem");
-    auto& itemComponent = axeItem.addComponent<ItemComponent>();
-    itemComponent.name = "Axe";
-    itemComponent.description = "It's a very useful thing when you need to cut down trees or cut off some heads.";
-    itemComponent.icon = m_baseTexture;
-    itemComponent.iconRect = IntRect(163, 41, 24, 24);
+    auto&axeComponent = axeItem.addComponent<ItemComponent>();
+    axeComponent.name = "Axe";
+    axeComponent.description = "It's a very useful thing when you need to cut down trees or cut off some heads.";
+    axeComponent.icon = m_baseTexture;
+    axeComponent.iconRect = IntRect(163, 41, 24, 24);
+
+    Entity keyItem = m_scene.createEntity("keyItem");
+    auto& keyComponent = keyItem.addComponent<ItemComponent>();
+    keyComponent.name = "Secret Key";
+    keyComponent.description = "Hmmm... What does it open?";
+    keyComponent.icon = m_baseTexture;
+    keyComponent.iconRect = IntRect(227, 41, 24, 24);
 
     // Inventory
     auto& inventoryComponent = m_playerEntity.addComponent<InventoryComponent>();
     inventoryComponent.items = {6, std::vector<Entity>(4, Entity())};
     inventoryComponent.items[0][0] = axeItem;
+    inventoryComponent.items[1][0] = keyItem;
 
 
     // Attach sprite, sound, hp and camera to the player

@@ -64,7 +64,8 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 // place the dragged item
                 if (m_draggedEntity && !window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
                 {
-                    if (cell.getGlobalBounds().contains(cursor))
+                    // the cell must be empty
+                    if (cell.getGlobalBounds().contains(cursor) && !inventoryComponent.items[i][inventorySize.y - j - 1])
                     {
                         inventoryComponent.items[m_itemLastPos.x][m_itemLastPos.y] = Entity();
                         inventoryComponent.items[i][inventorySize.y - j - 1] = m_draggedEntity;
@@ -87,11 +88,6 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
                     item.setPosition(cellPos);
 
-                    if (itemEntity == m_draggedEntity)
-                    {
-                        item.setPosition(cursor - m_itemDelta);
-                    }
-
                     if (item.getGlobalBounds().contains(cursor) && !m_draggedEntity)
                     {
                         // highlight the item
@@ -110,7 +106,15 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                         item.setColor({1.f, 1.f, 1.f, 1.f});
                     }
 
-                    batch.draw(item, 110);
+                    if (itemEntity == m_draggedEntity)
+                    {
+                        item.setPosition(cursor - m_itemDelta);
+                        batch.draw(item, 120);
+                    }
+                    else
+                    {
+                        batch.draw(item, 110);
+                    }
                 }
             }
         }
