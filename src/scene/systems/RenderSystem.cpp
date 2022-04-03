@@ -25,7 +25,7 @@ RenderSystem::RenderSystem(entt::registry &registry)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void RenderSystem::draw(float deltaTime)
+void RenderSystem::draw()
 {
     // Find the camera
     CameraComponent *cameraComponent = nullptr;

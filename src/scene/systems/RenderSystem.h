@@ -13,7 +13,7 @@ class RenderSystem
 public:
     RenderSystem(entt::registry& registry);
 
-    void draw(float deltaTime);
+    void draw();
 
     void destroy();
 

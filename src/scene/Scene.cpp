@@ -31,7 +31,7 @@ void Scene::update(float deltaTime)
 {
     m_scriptSystem.update(deltaTime);
     m_physicsSystem.update(deltaTime);
-    m_renderSystem.draw(deltaTime);
+    m_renderSystem.draw();
     m_audioSystem.update();
 }
 
