@@ -34,10 +34,11 @@ vec3 genLightSource(LightSource light, vec2 fragCoord)
 void main()
 {
 	vec2 lightPos = resolution.xy / 2;
-	vec3 clr = genLightSource(globalLight, gl_FragCoord.xy);
+	vec3 clr = genLightSource(lightSources[0], gl_FragCoord.xy);
 
-	for (int i = 0; i < MAX_LIGHT_SOURCES; ++i)
+	for (int i = 1; i < MAX_LIGHT_SOURCES; ++i)
 	{
+	    if (lightSources[i].intensity <= 0) continue;
 		clr += genLightSource(lightSources[i], gl_FragCoord.xy);
 	}
 
