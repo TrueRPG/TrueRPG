@@ -19,6 +19,7 @@
 #include "scripts/BotScript.h"
 #include "scene/components/world/HpComponent.h"
 #include "scene/components/render/GlobalLightComponent.h"
+#include "scene/components/render/LightSourceComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -153,6 +154,11 @@ Game::Game()
     Entity botEntity = m_scene.createEntity("bot");
     botEntity.getComponent<TransformComponent>().position = glm::vec2(0.f, 5 * 64.f);
 
+    LightSourceComponent &botLight = botEntity.addComponent<LightSourceComponent>();
+    botLight.color = glm::vec3(0.75f, 0.05f, 0.5f);
+    botLight.intensity = 3.0f,
+    botLight.radius = 200.0f;
+
     Entity botSprite = m_scene.createEntity("sprite");
     auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(m_heroTexture);
     botRenderer.textureRect = IntRect(32, 96, 32, 32);
@@ -182,7 +188,8 @@ Game::Game()
 
     Entity globalLight = m_scene.createEntity("global_light");
     auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
-    globalLightComponent.brightness = 0.0f;
+    globalLightComponent.color = glm::vec3(40.f / 255, 38.f / 255, 58.f / 255);
+    globalLightComponent.intensity = 1.0f;
     auto &globalLightTransform = globalLight.getComponent<TransformComponent>();
     globalLightTransform.origin = glm::vec2(Window::getInstance().getWidth() / 2, Window::getInstance().getHeight() / 2);
 

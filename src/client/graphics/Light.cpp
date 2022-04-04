@@ -11,8 +11,8 @@ Light::Light(Shader &shader) : m_shader(shader), m_lightCount(0) {}
 void Light::draw()
 {
     if (m_lightCount >= MAX_LIGHT_SOURCES) return;
-    m_shader.setUniform("lightSources[" + std::to_string(m_lightCount) + "].color", m_color.r, m_color.g, m_color.b);
-    m_shader.setUniform("lightSources[" + std::to_string(m_lightCount) + "].pos", m_pos.x, m_pos.y);
+    m_shader.setUniform("lightSources[" + std::to_string(m_lightCount) + "].color", m_color);
+    m_shader.setUniform("lightSources[" + std::to_string(m_lightCount) + "].pos", m_pos);
     m_shader.setUniform("lightSources[" + std::to_string(m_lightCount) + "].intensity", m_intensity);
     m_shader.setUniform("lightSources[" + std::to_string(m_lightCount) + "].radius", m_radius);
     ++m_lightCount;
