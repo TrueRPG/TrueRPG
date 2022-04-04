@@ -6,7 +6,7 @@ Bitmap::Bitmap(int width, int height)
 		  m_height(height),
 		  m_pixels(width * height) { }
 
-const std::vector<Pixel> &Bitmap::getPixels() const
+const std::vector<Pixel> &Bitmap::getPixels() const noexcept
 {
 	return m_pixels;
 }
@@ -16,26 +16,26 @@ std::vector<unsigned char> Bitmap::getRawPixels() const
 	std::vector<unsigned char> res;
 	for (const auto &pixel : m_pixels)
 	{
-		res.emplace_back(pixel.R);
-		res.emplace_back(pixel.G);
-		res.emplace_back(pixel.B);
-		res.emplace_back(pixel.A);
+		res.emplace_back(pixel.r);
+		res.emplace_back(pixel.g);
+		res.emplace_back(pixel.b);
+		res.emplace_back(pixel.a);
 	}
 
 	return res;
 }
 
-int Bitmap::getWidth() const
+int Bitmap::getWidth() const noexcept
 {
 	return m_width;
 }
 
-int Bitmap::getHeight() const
+int Bitmap::getHeight() const noexcept
 {
 	return m_height;
 }
 
-int Bitmap::getChannels() const
+int Bitmap::getChannels() const noexcept
 {
 	return 4;
 }
