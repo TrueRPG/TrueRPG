@@ -3,6 +3,7 @@
 
 #include <GLFW/glfw3.h>
 #include "../scene/components/basic/HierarchyComponent.h"
+#include "../scene/components/render/GlobalLightComponent.h"
 
 class DebugInfoScript : public Script
 {
@@ -43,6 +44,10 @@ public:
 
         Entity playerEntity = getComponent<HierarchyComponent>().parent;
         auto &playerPosition = playerEntity.getComponent<TransformComponent>().position;
+
+        auto timeDay = playerEntity.getComponent<HierarchyComponent>().firstChild.getComponent<GlobalLightComponent>().time;
+
+        textRenderer.text += "\nTime: " + std::to_string(timeDay);
 
         textRenderer.text +=
                 "\nx: " + std::to_string(playerPosition.x / 64) + " y: " + std::to_string(playerPosition.y / 64);

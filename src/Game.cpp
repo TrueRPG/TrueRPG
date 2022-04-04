@@ -190,8 +190,7 @@ Game::Game()
     auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
     globalLightComponent.color = glm::vec3(40.f / 255, 38.f / 255, 58.f / 255);
     globalLightComponent.intensity = 1.0f;
-    auto &globalLightTransform = globalLight.getComponent<TransformComponent>();
-    globalLightTransform.origin = glm::vec2(Window::getInstance().getWidth() / 2, Window::getInstance().getHeight() / 2);
+    globalLightComponent.dayNightCycleEnable = true;
 
     Hierarchy::addChild(m_playerEntity, globalLight);
 }

@@ -15,7 +15,7 @@ private:
     float m_radius{};
     int m_lightCount;
 public:
-    Light(Shader &shader);
+    explicit Light(Shader &shader);
 
     void draw();
 

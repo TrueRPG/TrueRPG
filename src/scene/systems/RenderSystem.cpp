@@ -25,7 +25,7 @@ RenderSystem::RenderSystem(entt::registry &registry)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void RenderSystem::draw()
+void RenderSystem::draw(float deltaTime)
 {
     // Find the camera
     CameraComponent *cameraComponent = nullptr;
@@ -129,12 +129,20 @@ void RenderSystem::draw()
                 auto &wnd = Window::getInstance();
                 auto &lightComponent = view.get<GlobalLightComponent>(entity);
 				
-                m_shader.setUniform("resolution", static_cast<float>(wnd.getWidth()), static_cast<float>(wnd.getHeight()));
+                m_shader.setUniform("resolution", glm::vec2(wnd.getWidth(), wnd.getHeight()));
+
+                if (lightComponent.dayNightCycleEnable)
+                {
+                    lightComponent.time += static_cast<int>(deltaTime * 1000);
+                    lightComponent.time %= 24000;
+                }
 
                 light.setColor(lightComponent.color);
                 light.setPosition(glm::vec2(wnd.getWidth() / 2.f, wnd.getHeight() / 2.f));
                 light.setIntensity(lightComponent.intensity);
                 light.setRadius(wnd.getHeight());
+                m_shader.setUniform("dayTime", lightComponent.time);
+
                 light.draw();
             }
         }
@@ -146,15 +154,15 @@ void RenderSystem::draw()
 			for (auto entity : view)
 			{
 				auto &wnd = Window::getInstance();
-                int w = wnd.getWidth();
-                int h = wnd.getHeight();
+                float w = static_cast<float>(wnd.getWidth());
+                float h = static_cast<float>(wnd.getHeight());
 				LightSourceComponent &lightSource = view.get<LightSourceComponent>(entity);
 
              	auto transform = Hierarchy::computeTransform({entity, &m_registry});
 
                 glm::vec4 spacePos = cameraComponent->getProjectionMatrix() * (viewMatrix * glm::vec4(transform.position, 0.0f, 1.0f));
                 glm::vec3 ndcSpacePos = spacePos / spacePos.w;
-                glm::vec2 windowSpacePos = (((glm::vec2(ndcSpacePos) + 1.0f) / 2.0f) * glm::vec2(w, h) + 0.f);
+                glm::vec2 windowSpacePos = (((glm::vec2(ndcSpacePos) + 1.0f) / 2.0f) * glm::vec2(w, h));
 
                 if (windowSpacePos.x + lightSource.radius < 0 ||
                     windowSpacePos.y + lightSource.radius < 0 ||

@@ -10,6 +10,7 @@ in float TexIndex;
 uniform sampler2D textures[16];
 
 uniform vec2 resolution;
+uniform int dayTime;
 
 struct LightSource
 {
@@ -28,17 +29,24 @@ vec3 genLightSource(LightSource light, vec2 fragCoord)
 {
     float d = distance(fragCoord, light.pos);
     float a = max(0.0, 1.0 - d / light.radius);
-    return a * a * light.intensity * light.color;
+    float s = (abs(1.0 - (dayTime / 12000.0))) * light.intensity;
+    return a * a * s * light.color;
+}
+
+vec3 genGlobalLight(LightSource light, vec2 fragCoord)
+{
+    float s = (1.0 - abs(1.0 - (dayTime / 12000.0))) * light.intensity;
+    return genLightSource(light, fragCoord) + s;
 }
 
 void main()
 {
 	vec2 lightPos = resolution.xy / 2;
-	vec3 clr = genLightSource(lightSources[0], gl_FragCoord.xy);
+	vec3 clr = genGlobalLight(lightSources[0], gl_FragCoord.xy);
 
 	for (int i = 1; i < MAX_LIGHT_SOURCES; ++i)
 	{
-	    if (lightSources[i].intensity <= 0) continue;
+	    if (lightSources[i].intensity <= 0 || lightSources[i].radius <= 0) continue;
 		clr += genLightSource(lightSources[i], gl_FragCoord.xy);
 	}
 
