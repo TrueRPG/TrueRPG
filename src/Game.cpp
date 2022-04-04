@@ -76,6 +76,9 @@ Game::Game()
     Entity buttonEntity = m_scene.createEntity("button");
     buttonEntity.getComponent<TransformComponent>().position = {100.f, 100.f};
     auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
+    button.onClick = [] {
+        std::cout << "button was pressed!" << std::endl;
+    };
     buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
     Hierarchy::addChild(m_cameraEntity, buttonEntity);
 

@@ -31,14 +31,17 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
         if (sprite.getGlobalBounds().contains(cursor) && buttonComponent.enabled)
         {
+            sprite.setColor(highlightedColor);
             // TODO: hardcoded mouse button
             if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
             {
                 sprite.setColor(pressedColor);
+                pressed = true;
             }
-            else
+            if (!window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT) && pressed)
             {
-                sprite.setColor(highlightedColor);
+                pressed = false;
+                buttonComponent.onClick();
             }
         }
 

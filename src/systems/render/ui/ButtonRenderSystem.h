@@ -9,6 +9,8 @@ class ButtonRenderSystem : public IUIRenderSubsystem
 {
     entt::registry& m_registry;
 
+    bool pressed{false};
+
 public:
     ButtonRenderSystem(entt::registry& registry);
 
