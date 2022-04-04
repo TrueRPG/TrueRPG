@@ -18,17 +18,23 @@
     callIfCallable(UNIFORMTAG(3, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...) separate \
     callIfCallable(UNIFORMTAG(4, type), glGetUniformLocation(ID, val_name.c_str()), std::forward<Params>(params)...)
 
+#define callFuncsForVector(type, ID, separate) callIfCallable(UNIFORMTAG(1, type), glGetUniformLocation(ID, val_name.c_str()), 1, glm::value_ptr(std::forward<Params>(params)...)) separate \
+    callIfCallable(UNIFORMTAG(2, type), glGetUniformLocation(ID, val_name.c_str()), 1, glm::value_ptr(std::forward<Params>(params)...)) separate \
+    callIfCallable(UNIFORMTAG(3, type), glGetUniformLocation(ID, val_name.c_str()), 1, glm::value_ptr(std::forward<Params>(params)...)) separate \
+    callIfCallable(UNIFORMTAG(4, type), glGetUniformLocation(ID, val_name.c_str()), 1, glm::value_ptr(std::forward<Params>(params)...))
+
 #define callFuncsForMatrix(type, ID, separate) callIfCallable(UNIFORMTAG(type, 2fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate \
     callIfCallable(UNIFORMTAG(type, 3fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...)) separate  \
     callIfCallable(UNIFORMTAG(type, 4fv), glGetUniformLocation(ID, val_name.c_str()), 1, GL_FALSE, glm::value_ptr(std::forward<Params>(params)...))
 
 template <typename F, typename... S>
-constexpr void callIfCallable(F&& func, S&& ...args){
-    if constexpr (std::is_invocable_v<F, decltype(std::forward<S>(args))...>){
+static inline constexpr void callIfCallable(F&& func, S&& ...args)
+{
+    if constexpr (std::is_invocable_v<F, decltype(std::forward<S>(args))...>)
+    {
         std::invoke(std::forward<F>(func), std::forward<S>(args)...);
-    } else {
-        return;
     }
+    else return;
 }
 
 template<std::size_t N, typename T, typename... types>
@@ -58,22 +64,19 @@ public:
     template <typename ... Params>
     void setUniform(const std::string &val_name, Params... params)
     {
-        if constexpr (std::is_floating_point_v<get_<0, Params...>> || std::is_same_v<get_<0,Params...>, glm::vec3>) {
-            if constexpr (sizeof...(Params) > 1)
-            {
-                if constexpr (std::is_pointer_v<get_<1,Params...>>)
-                {
-                    callFuncs(fv, m_id, ;);
-                }
-                else { callFuncs(f, m_id, ;); }
-            }
-            else { callFuncs(f, m_id, ;); }
+        if constexpr (std::is_floating_point_v<get_<0, Params...>>)
+        {
+            callFuncs(f, m_id, ;);
         }
-        else if constexpr (std::is_integral_v<typename get_Nth_type<0,Params...>::type>)
+        else if constexpr (std::is_integral_v<get_<0,Params...>>)
         {
             if constexpr (sizeof...(Params) > 1)
             {
-                if constexpr (std::is_pointer_v<typename get_Nth_type<1, Params...>::type>)
+                if constexpr (std::is_same_v<get_<1, Params...>, float *>)
+                {
+                    callFuncs(fv, m_id, ;);
+                }
+                else if constexpr (std::is_pointer_v<get_<1, Params...>>)
                 {
                     callFuncs(iv, m_id, ;);
                 }
@@ -81,7 +84,14 @@ public:
             }
             else { callFuncs(i, m_id, ;); }
         }
-        else if constexpr (std::is_same_v<typename get_Nth_type<0, Params...>::type, glm::mat4>){
+        else if constexpr (std::is_same_v<get_<0, Params...>, glm::vec2> ||
+                           std::is_same_v<get_<0, Params...>, glm::vec3> ||
+                           std::is_same_v<get_<0, Params...>, glm::vec4>)
+        {
+            callFuncsForVector(fv, m_id, ;);
+        }
+        else if constexpr (std::is_same_v<get_<0, Params...>, glm::mat4>)
+        {
             callFuncsForMatrix(Matrix, m_id, ;);
         }
     }
@@ -100,8 +110,8 @@ private:
     static unsigned int compileShader(const std::string& path, unsigned int type);
 
     static void checkCompileErrors(unsigned int glHandelr, unsigned int status, 
-                                   void (*GLget)(unsigned int, unsigned int, int*),
-                                   void (*GLinfoLog)(unsigned int, int, int*, char*));
+        void (*GLget)(unsigned int, unsigned int, int*),
+        void (*GLinfoLog)(unsigned int, int, int*, char*));
 };
 
 #endif //RPG_SHADER_H

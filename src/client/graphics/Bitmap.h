@@ -5,10 +5,10 @@
 
 struct Pixel
 {
-	unsigned char R;
-	unsigned char G;
-	unsigned char B;
-	unsigned char A;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
 };
 
 /**
@@ -30,7 +30,7 @@ public:
 	 * 
 	 * @return const std::vector<Pixel>& 
 	 */
-	const std::vector<Pixel> &getPixels() const;
+	const std::vector<Pixel> &getPixels() const noexcept;
 
 	/**
 	 * @brief Get the byte vector of pixels
@@ -44,21 +44,21 @@ public:
 	 * 
 	 * @return int 
 	 */
-	int getWidth() const;
+	int getWidth() const noexcept;
 
 	/**
 	 * @brief Get the image height
 	 * 
 	 * @return int 
 	 */
-	int getHeight() const;
+	int getHeight() const noexcept;
 
 	/**
 	 * @brief Get the image channels
 	 * 
 	 * @return int 
 	 */
-	int getChannels() const;
+	int getChannels() const noexcept;
 
 	/**
 	 * @brief Get pixel of the image
