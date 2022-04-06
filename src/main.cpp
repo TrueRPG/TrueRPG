@@ -19,9 +19,20 @@ int main()
     // Game timer
     RTime time(0.0f, 0.0f, 0.0f);
 
+	constexpr float S_PER_TICK = 1.0f / 60.0f;
+	float tickDelta = 0;
     while (window.isOpen())
     {
-        game.update(time.getDeltaTime());
+		float deltaTime = time.getDeltaTime();
+		tickDelta += deltaTime / S_PER_TICK;
+
+		while (tickDelta >= 1.0)
+		{
+			game.fixedUpdate();
+			tickDelta--;
+		}
+
+        game.update(deltaTime);
         window.swapBuffers();
         window.pollEvents();
     }

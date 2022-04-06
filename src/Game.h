@@ -23,6 +23,7 @@ class Game
     Entity m_playerEntity;
 public:
     Game();
+	void fixedUpdate();
     void update(float deltaTime);
     void destroy();
 };

@@ -20,8 +20,10 @@ struct LightSource
 	float radius;
 };
 
+const float PI = 3.1415926538;
 const int MAX_LIGHT_SOURCES = 101;
 
+uniform float ambient;
 uniform LightSource globalLight;
 uniform LightSource lightSources[MAX_LIGHT_SOURCES];
 
@@ -29,14 +31,12 @@ vec3 genLightSource(LightSource light, vec2 fragCoord)
 {
     float d = distance(fragCoord, light.pos);
     float a = max(0.0, 1.0 - d / light.radius);
-    float s = (abs(1.0 - (dayTime / 12000.0))) * light.intensity;
-    return a * a * s * light.color;
+    return a * a * light.intensity * light.color;
 }
 
 vec3 genGlobalLight(LightSource light, vec2 fragCoord)
 {
-    float s = (1.0 - abs(1.0 - (dayTime / 12000.0))) * light.intensity;
-    return genLightSource(light, fragCoord) + s;
+    return genLightSource(light, fragCoord) + ambient;
 }
 
 void main()

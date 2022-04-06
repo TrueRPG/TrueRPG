@@ -25,6 +25,23 @@ RenderSystem::RenderSystem(entt::registry &registry)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void RenderSystem::fixedUpdate()
+{
+	{
+        auto view = m_registry.view<GlobalLightComponent>();
+        for (auto entity : view)
+        {
+            auto &lightComponent = view.get<GlobalLightComponent>(entity);
+
+            if (lightComponent.dayNightCycleEnable)
+            {
+                ++lightComponent.time;
+            }
+        }
+    }
+
+}
+
 void RenderSystem::draw(float deltaTime)
 {
     // Find the camera
@@ -121,6 +138,7 @@ void RenderSystem::draw(float deltaTime)
 
         Light light(m_shader);
         light.clean();
+		i32 time = 0;
         // global light
         {
             auto view = m_registry.view<GlobalLightComponent>();
@@ -131,17 +149,15 @@ void RenderSystem::draw(float deltaTime)
 				
                 m_shader.setUniform("resolution", glm::vec2(wnd.getWidth(), wnd.getHeight()));
 
-                if (lightComponent.dayNightCycleEnable)
-                {
-                    lightComponent.time += static_cast<int>(deltaTime * 1000);
-                    lightComponent.time %= 24000;
-                }
+				time = lightComponent.time % 24000;
+				float ambient = (glm::tanh(4 * glm::sin((time / 12000.f) * M_PI - M_PI / 2)) * 0.5f + 0.5f) * lightComponent.intensity; 
 
                 light.setColor(lightComponent.color);
                 light.setPosition(glm::vec2(wnd.getWidth() / 2.f, wnd.getHeight() / 2.f));
                 light.setIntensity(lightComponent.intensity);
                 light.setRadius(wnd.getHeight());
                 m_shader.setUniform("dayTime", lightComponent.time);
+				m_shader.setUniform("ambient", ambient);
 
                 light.draw();
             }
@@ -172,9 +188,11 @@ void RenderSystem::draw(float deltaTime)
                     continue;
                 }
 
+				float intensity = (-glm::tanh(4 * glm::sin((time / 12000.f) * M_PI - M_PI / 2)) * 0.5f + 0.5f) * lightSource.intensity;
+
                 light.setColor(lightSource.color);
                 light.setPosition(windowSpacePos);
-                light.setIntensity(lightSource.intensity);
+                light.setIntensity(intensity);
                 light.setRadius(lightSource.radius);
                 light.draw();
 			}

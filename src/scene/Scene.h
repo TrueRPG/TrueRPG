@@ -26,6 +26,8 @@ public:
 
     void destroyEntity(Entity entity);
 
+	void fixedUpdate();
+
     void update(float deltaTime);
 
     void destroy();

@@ -195,6 +195,11 @@ Game::Game()
     Hierarchy::addChild(m_playerEntity, globalLight);
 }
 
+void Game::fixedUpdate()
+{
+	m_scene.fixedUpdate();
+}
+
 void Game::update(float deltaTime)
 {
     m_scene.update(deltaTime);

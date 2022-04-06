@@ -27,6 +27,11 @@ void Scene::destroyEntity(Entity entity)
     m_registry.destroy(entity.m_entity);
 }
 
+void Scene::fixedUpdate()
+{
+	m_renderSystem.fixedUpdate();
+}
+
 void Scene::update(float deltaTime)
 {
     m_scriptSystem.update(deltaTime);
