@@ -15,12 +15,8 @@
 #include "../components/render/GlobalLightComponent.h"
 #include "../components/render/LightSourceComponent.h"
 
-#if defined(M_PI) || defined(M_PI_2)
-#undef M_PI
-#undef M_PI_2
-#define M_PI 3.14159265358979323846f	/* pi */
-#define M_PI_2 1.57079632679489661923f	/* pi/2 */
-#endif
+#define PI 3.14159265358979323846f	/* pi */
+#define PI_2 1.57079632679489661923f	/* pi/2 */
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
@@ -157,7 +153,7 @@ void RenderSystem::draw(float deltaTime)
                 m_shader.setUniform("resolution", glm::vec2(wnd.getWidth(), wnd.getHeight()));
 
 				time = lightComponent.time % 24000;
-				float ambient = (glm::tanh(4 * glm::sin((time / 12000.f) * M_PI - M_PI_2)) * 0.5f + 0.5f) * lightComponent.intensity;
+				float ambient = (glm::tanh(4 * glm::sin((time / 12000.f) * PI - PI_2)) * 0.5f + 0.5f) * lightComponent.intensity;
 
                 light.setColor(lightComponent.color);
                 light.setPosition(glm::vec2(wnd.getWidth() / 2.f, wnd.getHeight() / 2.f));
@@ -195,7 +191,7 @@ void RenderSystem::draw(float deltaTime)
                     continue;
                 }
 
-				float intensity = (-glm::tanh(4 * glm::sin((time / 12000.f) * M_PI - M_PI / 2)) * 0.5f + 0.5f) * lightSource.intensity;
+				float intensity = (-glm::tanh(4 * glm::sin((time / 12000.f) * PI - PI_2)) * 0.5f + 0.5f) * lightSource.intensity;
 
                 light.setColor(lightSource.color);
                 light.setPosition(windowSpacePos);
