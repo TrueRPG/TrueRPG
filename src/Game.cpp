@@ -1,23 +1,40 @@
 #include "Game.h"
 
-#include "scene/Entity.h"
-#include "scene/components/render/CameraComponent.h"
-#include "scene/components/basic/NativeScriptComponent.h"
-#include "scene/components/render/SpriteRendererComponent.h"
-#include "scene/components/render/TextRendererComponent.h"
-#include "scene/components/world/WorldMapComponent.h"
+#include "systems/script/ScriptSystem.h"
+#include "systems/physics/PhysicsSystem.h"
+#include "systems/render/RenderSystem.h"
+#include "systems/render/SpriteRenderSystem.h"
+#include "systems/render/WorldMapRenderSystem.h"
+#include "systems/render/ui/UIRenderSystem.h"
+#include "systems/render/ui/InventoryRenderSystem.h"
+#include "systems/render/ui/ButtonRenderSystem.h"
+#include "systems/render/TextRenderSystem.h"
+#include "systems/audio/AudioSystem.h"
 
-#include "scene/utils/Hierarchy.h"
+#include "scene/Entity.h"
+
+#include "components/render/CameraComponent.h"
+#include "components/script/NativeScriptComponent.h"
+#include "components/render/SpriteRendererComponent.h"
+#include "components/render/TextRendererComponent.h"
+#include "components/world/WorldMapComponent.h"
+#include "components/audio/AudioListenerComponent.h"
+#include "components/physics/RectColliderComponent.h"
+#include "components/physics/RigidbodyComponent.h"
+#include "components/render/AutoOrderComponent.h"
+#include "components/world/HpComponent.h"
+#include "components/render/ui/ButtonComponent.h"
+#include "components/world/ItemComponent.h"
+#include "components/world/InventoryComponent.h"
+
 #include "scripts/PlayerScript.h"
 #include "scripts/DebugInfoScript.h"
 #include "scripts/WorldMapScript.h"
-#include "scene/components/audio/AudioListenerComponent.h"
 #include "scripts/PumpkinScript.h"
-#include "scene/components/physics/RectColliderComponent.h"
-#include "scene/components/physics/RigidbodyComponent.h"
-#include "scene/components/render/AutoOrderComponent.h"
 #include "scripts/BotScript.h"
-#include "scene/components/world/HpComponent.h"
+#include "scripts/ButtonScript.h"
+
+#include "utils/Hierarchy.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -26,6 +43,23 @@ Game::Game()
           m_steps("../res/audio/steps.mp3"),
           m_music("../res/audio/music.mp3")
 {
+    // Add systems
+    m_scene.addSystem<ScriptSystem>();
+    m_scene.addSystem<PhysicsSystem>();
+
+    auto& renderSystem = m_scene.addSystem<RenderSystem>();
+    renderSystem.addSubsystem<WorldMapRenderSystem>();
+    renderSystem.addSubsystem<SpriteRenderSystem>();
+
+    auto& uiRenderSystem = renderSystem.addSubsystem<UIRenderSystem>();
+    uiRenderSystem.addSubsystem<ButtonRenderSystem>();
+    uiRenderSystem.addSubsystem<InventoryRenderSystem>();
+
+    renderSystem.addSubsystem<TextRenderSystem>();
+
+    m_scene.addSystem<AudioSystem>();
+
+    // Add entities
     Entity worldMapEntity = m_scene.createEntity("worldMap");
 
     auto &worldTransform = worldMapEntity.getComponent<TransformComponent>();
@@ -38,6 +72,15 @@ Game::Game()
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
 
+    // Button
+    Entity buttonEntity = m_scene.createEntity("button");
+    buttonEntity.getComponent<TransformComponent>().position = {100.f, 100.f};
+    auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
+    button.onClick = [] {
+        std::cout << "button was pressed!" << std::endl;
+    };
+    buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
+    Hierarchy::addChild(m_cameraEntity, buttonEntity);
 
     // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
@@ -80,6 +123,30 @@ Game::Game()
     hpRenderer.verticalAlign = VerticalAlign::Top;
     hpRenderer.layer = 10;
     m_playerEntity.addComponent<HpComponent>();
+
+
+    // --------- Inventory ---------
+    // Item
+    Entity axeItem = m_scene.createEntity("axeItem");
+    auto&axeComponent = axeItem.addComponent<ItemComponent>();
+    axeComponent.name = "Axe";
+    axeComponent.description = "It's a very useful thing when you need to cut down trees or cut off some monster heads.";
+    axeComponent.icon = m_baseTexture;
+    axeComponent.iconRect = IntRect(163, 41, 24, 24);
+
+    Entity keyItem = m_scene.createEntity("keyItem");
+    auto& keyComponent = keyItem.addComponent<ItemComponent>();
+    keyComponent.name = "Secret Key";
+    keyComponent.description = "Looks like a very old key. What does it open?";
+    keyComponent.icon = m_baseTexture;
+    keyComponent.iconRect = IntRect(227, 41, 24, 24);
+
+    // Inventory
+    auto& inventoryComponent = m_playerEntity.addComponent<InventoryComponent>();
+    inventoryComponent.items = {6, std::vector<Entity>(4, Entity())};
+    inventoryComponent.items[0][0] = axeItem;
+    inventoryComponent.items[1][0] = keyItem;
+
 
     // Attach sprite, sound, hp and camera to the player
     Hierarchy::addChild(m_playerEntity, spriteEntity);

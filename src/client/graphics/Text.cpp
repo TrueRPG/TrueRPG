@@ -81,7 +81,7 @@ FloatRect Text::getGlobalBounds() const
     return FloatRect(m_position.x - m_origin.x * m_scale.x,
                      m_position.y - m_origin.y * m_scale.y,
                      m_width * m_scale.x,
-                     m_width * m_scale.y);
+                     m_height * m_scale.y);
 }
 
 void Text::initSprites()

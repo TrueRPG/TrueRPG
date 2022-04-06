@@ -12,10 +12,10 @@ class Sprite
     glm::vec2 m_scale{1.f};
     glm::vec4 m_color{1.f};
     IntRect m_textureRect{0, 0, 0, 0};
-    Texture* m_texture;
+    Texture m_texture{Texture::createEmpty()};
 
 public:
-    Sprite() = default;
+    Sprite();
     Sprite(Texture& texture);
 
     glm::vec2 getPosition() const;
@@ -30,7 +30,7 @@ public:
     glm::vec4 getColor() const;
     void setColor(glm::vec4 color);
 
-    Texture& getTexture() const;
+    Texture getTexture() const;
 
     IntRect getTextureRect() const;
     void setTextureRect(const IntRect &rect);

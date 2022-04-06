@@ -40,6 +40,7 @@ Window::Window(int width, int height, const std::string &title) : m_keys(), onRe
     glfwSwapInterval(0); // It's useful to see max fps, so I turned off vsync
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, glfwKeyCallback);
+    glfwSetMouseButtonCallback(m_window, glfwMouseButtonCallback);
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
 
     glfwMakeContextCurrent(m_window);
@@ -90,20 +91,47 @@ bool Window::getKey(int key)
     return m_keys[key];
 }
 
-void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int actions, int mods)
+glm::vec2 Window::getCursorPosition()
+{
+    double x, y;
+    glfwGetCursorPos(m_window, &x, &y);
+    return {x, y};
+}
+
+bool Window::getMouseButton(int mouseButton)
+{
+    return m_mouseButtons[mouseButton];
+}
+
+void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
     if (key < 0) return;
 
-    win->m_onInput(key, actions);
+    win->m_onInput(key, action);
 
-    switch (actions)
+    switch (action)
     {
     case GLFW_PRESS:
         getInstance().m_keys[key] = true;
         break;
     case GLFW_RELEASE:
         getInstance().m_keys[key] = false;
+        break;
+    default:
+        break;
+    }
+}
+
+void Window::glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    switch (action)
+    {
+    case GLFW_PRESS:
+        getInstance().m_mouseButtons[button] = true;
+        break;
+    case GLFW_RELEASE:
+        getInstance().m_mouseButtons[button] = false;
         break;
     default:
         break;

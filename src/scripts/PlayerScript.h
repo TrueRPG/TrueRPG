@@ -4,9 +4,12 @@
 #include <vector>
 #include "../scene/Script.h"
 #include "../client/window/Window.h"
-#include "../scene/components/physics/RigidbodyComponent.h"
-#include "../scene/components/world/HpComponent.h"
+#include "../components/physics/RigidbodyComponent.h"
+#include "../components/world/HpComponent.h"
+#include "../components/world/InventoryComponent.h"
+#include "../utils/Hierarchy.h"
 
+// TODO: refactor
 class PlayerScript : public Script
 {
     float m_speed{1.3f};
@@ -24,6 +27,7 @@ class PlayerScript : public Script
     int m_frame{0};
 
     bool pressedK;
+    bool pressedI;
 
 public:
     void onCreate() override
@@ -59,6 +63,19 @@ public:
             pressedK = false;
             auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();
             renderer.color = glm::vec4(1.f);
+        }
+
+        // Inventory opening/closing
+        auto& inventory = getComponent<InventoryComponent>();
+
+        if (window.getKey(GLFW_KEY_I) && !pressedI)
+        {
+            inventory.shown = !inventory.shown;
+            pressedI = true;
+        }
+        else if (!window.getKey(GLFW_KEY_I))
+        {
+            pressedI = false;
         }
 
         auto &rigidbody = getComponent<RigidbodyComponent>();
