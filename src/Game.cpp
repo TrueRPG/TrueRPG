@@ -5,6 +5,7 @@
 #include "systems/render/RenderSystem.h"
 #include "systems/render/SpriteRenderSystem.h"
 #include "systems/render/WorldMapRenderSystem.h"
+#include "systems/render/LightRenderSystem.h"
 #include "systems/render/ui/UIRenderSystem.h"
 #include "systems/render/ui/InventoryRenderSystem.h"
 #include "systems/render/ui/ButtonRenderSystem.h"
@@ -26,6 +27,8 @@
 #include "components/render/ui/ButtonComponent.h"
 #include "components/world/ItemComponent.h"
 #include "components/world/InventoryComponent.h"
+#include "components/render/GlobalLightComponent.h"
+#include "components/render/LightSourceComponent.h"
 
 #include "scripts/PlayerScript.h"
 #include "scripts/DebugInfoScript.h"
@@ -50,6 +53,7 @@ Game::Game()
     auto& renderSystem = m_scene.addSystem<RenderSystem>();
     renderSystem.addSubsystem<WorldMapRenderSystem>();
     renderSystem.addSubsystem<SpriteRenderSystem>();
+    auto &foo = renderSystem.addSubsystem<LightRenderSystem>();
 
     auto& uiRenderSystem = renderSystem.addSubsystem<UIRenderSystem>();
     uiRenderSystem.addSubsystem<ButtonRenderSystem>();
@@ -95,6 +99,11 @@ Game::Game()
     m_playerEntity = m_scene.createEntity("player");
     auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
     m_playerEntity.addComponent<AudioListenerComponent>();
+
+    auto &playerLight = m_playerEntity.addComponent<LightSourceComponent>();
+    playerLight.color = glm::vec3(0.5, 0.3, 0.75);
+    playerLight.intensity = 3.0;
+    playerLight.radius = 200.0f;
 
     Entity spriteEntity = m_scene.createEntity("sprite");
     auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
@@ -165,6 +174,10 @@ Game::Game()
     pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
     pumpkinRenderer.layer = 0;
 
+    auto &pumpkinLight = pumpkinEntity.addComponent<LightSourceComponent>();
+    pumpkinLight.intensity = 2.0f;
+    pumpkinLight.radius = 150.0f;
+
     auto &pumpkinTransform = pumpkinEntity.getComponent<TransformComponent>();
     pumpkinTransform.position = glm::vec2(384.f - 32, 256.f - 32);
     pumpkinTransform.scale = glm::vec2(2.f, 2.f);
@@ -210,6 +223,11 @@ Game::Game()
     Entity botEntity = m_scene.createEntity("bot");
     botEntity.getComponent<TransformComponent>().position = glm::vec2(0.f, 5 * 64.f);
 
+    auto &botLight = botEntity.addComponent<LightSourceComponent>();
+    botLight.color = glm::vec3(0.75f, 0.05f, 0.5f);
+    botLight.intensity = 3.0f,
+    botLight.radius = 200.0f;
+
     Entity botSprite = m_scene.createEntity("sprite");
     auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(m_heroTexture);
     botRenderer.textureRect = IntRect(32, 96, 32, 32);
@@ -236,6 +254,17 @@ Game::Game()
     Hierarchy::addChild(botEntity, botNameEntity);
 
     botEntity.addComponent<NativeScriptComponent>().bind<BotScript>();
+
+    Entity globalLight = m_scene.createEntity("global_light");
+    auto &globalLightComponent = globalLight.addComponent<GlobalLightComponent>();
+    globalLightComponent.ambientColor = glm::vec3(40.f / 255, 38.f / 255, 58.f / 255);
+    globalLightComponent.intensity = 1.0f;
+    globalLightComponent.dayNightCycleEnable = true;
+}
+
+void Game::fixedUpdate()
+{
+    m_scene.fixedUpdate();
 }
 
 void Game::update(float deltaTime)

@@ -27,6 +27,8 @@ public:
 
     void create();
 
+    void fixedUpdate();
+
     void update(float deltaTime);
 
     void destroy();

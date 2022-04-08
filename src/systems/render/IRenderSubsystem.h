@@ -18,6 +18,8 @@ public:
      */
     virtual void draw(SpriteBatch& batch) = 0;
 
+    virtual void fixedUpdate() {};
+
     virtual void update(float deltaTime) {};
 };
 

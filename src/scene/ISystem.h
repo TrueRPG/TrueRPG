@@ -14,6 +14,8 @@ public:
      */
     virtual void create() {};
 
+    virtual void fixedUpdate() {};
+
     /**
      * Update the system.
      */

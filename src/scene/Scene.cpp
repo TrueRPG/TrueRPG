@@ -37,6 +37,14 @@ void Scene::create()
     }
 }
 
+void Scene::fixedUpdate()
+{
+    for (const auto systems : m_systems)
+    {
+        systems->fixedUpdate();
+    }
+}
+
 void Scene::update(float deltaTime)
 {
     for (const auto &system : m_systems)

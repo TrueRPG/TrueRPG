@@ -27,6 +27,7 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::draw()
 {
+
     // Find the first camera
     auto cameraView = m_registry.view<CameraComponent>();
     if (cameraView.empty()) return;
@@ -36,6 +37,7 @@ void RenderSystem::draw()
     glm::vec4 back = cameraComponent.background;
     glClearColor(back.r, back.g, back.b, back.a);
     glClear(GL_COLOR_BUFFER_BIT);
+    m_shader.setUniform("ambient", 1.0f);
 
     glm::mat4 viewMatrix = glm::translate(glm::mat4(1), glm::vec3(-cameraTransform.position, 0));
     m_batch.setViewMatrix(viewMatrix);
