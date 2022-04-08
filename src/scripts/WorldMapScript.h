@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "../scene/Script.h"
-#include "../scene/components/world/WorldMapComponent.h"
+#include "../components/world/WorldMapComponent.h"
 #include "../client/graphics/Rect.h"
 #include "../utils/OpenSimplexNoise.h"
 

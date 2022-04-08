@@ -36,6 +36,9 @@ public:
     void setData(const Bitmap &bitmap);
 
     static Texture create(const std::string &path, unsigned int type = GL_TEXTURE_2D);
+
+    static Texture createEmpty();
+
     static Texture create(const Bitmap &bitmap, unsigned int type = GL_TEXTURE_2D);
 };
 

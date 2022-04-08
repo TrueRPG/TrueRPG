@@ -40,6 +40,11 @@ public:
 
     operator bool() const { return m_entity != entt::null; }
 
+    bool operator==(const Entity &entity)
+    {
+        return m_entity == entity.m_entity;
+    }
+
     friend class Scene;
 };
 

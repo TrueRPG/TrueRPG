@@ -6,9 +6,9 @@
 #include <cassert>
 #include <algorithm>
 
-#include "Event/IEventHandler.hpp"
-#include "Event/HandlerPtr.hpp"
-#include "Event/Holder.hpp"
+#include "event/IEventHandler.hpp"
+#include "event/HandlerPtr.hpp"
+#include "event/Holder.hpp"
 
 template<typename T, typename ...Args>
 class FunctorEventHandler : public IEventHandler<Args...>

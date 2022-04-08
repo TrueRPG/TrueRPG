@@ -1,9 +1,16 @@
 #include "Sprite.h"
 
+Sprite::Sprite()
+    : m_textureRect(0, 0, 1, 1),
+      m_texture(Texture::createEmpty())
+{
+}
 
 Sprite::Sprite(Texture &texture)
-        : m_textureRect(0, 0, texture.getWidth(), texture.getHeight()),
-          m_texture(&texture) {}
+    : m_textureRect(0, 0, texture.getWidth(), texture.getHeight()),
+      m_texture(texture)
+{
+}
 
 glm::vec2 Sprite::getPosition() const
 {
@@ -45,9 +52,9 @@ void Sprite::setColor(glm::vec4 color)
     m_color = color;
 }
 
-Texture &Sprite::getTexture() const
+Texture Sprite::getTexture() const
 {
-    return *m_texture;
+    return m_texture;
 }
 
 IntRect Sprite::getTextureRect() const

@@ -16,7 +16,7 @@ class Text
     glm::vec2 m_position{};
     glm::vec2 m_origin{};
     glm::vec2 m_scale{};
-    glm::vec4 m_color;
+    glm::vec4 m_color{};
 
     float m_width;
     float m_height;

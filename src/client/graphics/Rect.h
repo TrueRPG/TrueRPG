@@ -26,6 +26,20 @@ public:
     inline T getHeight() const {
         return m_height;
     }
+
+    inline bool contains(glm::vec2 pos) const
+    {
+        return pos.x > m_left && pos.x < m_left + m_width &&
+               pos.y > m_bottom &&pos.y < m_bottom + m_height;
+    }
+
+    inline bool intersects(Rect<T> rect) const
+    {
+        return m_left < rect.m_left + rect.m_width &&
+               m_left + m_width > rect.m_left &&
+               m_bottom < rect.m_bottom + rect.m_height &&
+               m_bottom + m_height > rect.m_bottom;
+    }
 };
 
 template<typename T>

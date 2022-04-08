@@ -1,14 +1,17 @@
 #include "Scene.h"
 
 #include "Entity.h"
-#include "components/basic/HierarchyComponent.h"
-#include "components/basic/NameComponent.h"
+#include "../components/basic/HierarchyComponent.h"
+#include "../components/basic/NameComponent.h"
+#include "../components/basic/TransformComponent.h"
 
-Scene::Scene()
-        : m_scriptSystem(m_registry),
-          m_physicsSystem(m_registry),
-          m_renderSystem(m_registry),
-          m_audioSystem(m_registry) {}
+Scene::~Scene()
+{
+    for (const auto &system : m_systems)
+    {
+        delete system;
+    }
+}
 
 Entity Scene::createEntity(const std::string &name)
 {
@@ -23,26 +26,29 @@ Entity Scene::createEntity(const std::string &name)
 
 void Scene::destroyEntity(Entity entity)
 {
-    m_scriptSystem.destroyScript(entity.m_entity);
     m_registry.destroy(entity.m_entity);
 }
 
-void Scene::fixedUpdate()
+void Scene::create()
 {
-	m_renderSystem.fixedUpdate();
+    for (const auto &system : m_systems)
+    {
+        system->create();
+    }
 }
 
 void Scene::update(float deltaTime)
 {
-    m_scriptSystem.update(deltaTime);
-    m_physicsSystem.update(deltaTime);
-    m_renderSystem.draw(deltaTime);
-    m_audioSystem.update();
+    for (const auto &system : m_systems)
+    {
+        system->update(deltaTime);
+    }
 }
 
 void Scene::destroy()
 {
-    m_scriptSystem.destroy();
-    m_renderSystem.destroy();
-    m_audioSystem.destroy();
+    for (const auto &system : m_systems)
+    {
+        system->destroy();
+    }
 }

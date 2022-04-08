@@ -1,5 +1,5 @@
 #include "client/window/Window.h"
-#include "RTime.h"
+#include "utils/GameTimer.h"
 #include "Game.h"
 
 // Nobody is forgotten, nothing is forgotten
@@ -16,8 +16,7 @@ int main()
 
     Game game;
 
-    // Game timer
-    RTime time(0.0f, 0.0f, 0.0f);
+    GameTimer time(0.0f, 0.0f, 0.0f);
 
 	constexpr float S_PER_TICK = 1.0f / 60.0f;
 	float tickDelta = 0;
