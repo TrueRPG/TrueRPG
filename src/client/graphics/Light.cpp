@@ -6,7 +6,7 @@
 
 #define MAX_LIGHT_SOURCES 101
 
-Light::Light(Shader &shader) : m_shader(shader), m_lightCount(0) {}
+Light::Light(Shader shader) : m_shader(shader), m_lightCount(0) {}
 
 void Light::draw()
 {

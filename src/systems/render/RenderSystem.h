@@ -16,16 +16,6 @@ class RenderSystem : public ISystem
 
     std::vector<IRenderSubsystem *> m_subsystems;
 
-    template <typename T>
-    class hasSetShader
-    {
-    private:
-        template <typename C> static i8 test(decltype(&C::setShader));
-        template <typename C> static i32 test(...);
-    public:
-        static constexpr bool value = sizeof(test<T>(0)) == sizeof(i8);
-    };
-
 public:
     RenderSystem(entt::registry &registry);
 
@@ -35,11 +25,6 @@ public:
     decltype(auto) addSubsystem()
     {
         m_subsystems.push_back(new T(m_registry));
-        // TODO: temp solution. For generation light need a shader to set uniform
-        if constexpr (hasSetShader<T>::value)
-        {
-            reinterpret_cast<T *>(m_subsystems.back())->setShader(m_shader);
-        }
         return (T &)*m_subsystems.back();
     }
 

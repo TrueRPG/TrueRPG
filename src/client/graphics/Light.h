@@ -2,20 +2,19 @@
 #define RPG_SRC_CLIENT_GRAPHICS_LIGHT_H
 
 #include <glm/glm.hpp>
-
-class Shader;
+#include "Shader.h"
 
 class Light
 {
 private:
-    Shader &m_shader;
+    Shader m_shader;
     glm::vec3 m_color{};
     glm::vec2 m_pos{};
     float m_intensity{};
     float m_radius{};
     int m_lightCount;
 public:
-    explicit Light(Shader &shader);
+    explicit Light(Shader shader);
 
     void draw();
 

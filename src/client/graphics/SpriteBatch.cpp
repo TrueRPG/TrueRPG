@@ -245,6 +245,11 @@ void SpriteBatch::setViewMatrix(glm::mat4 viewMat)
     m_shader.setUniform("view", viewMat);
 }
 
+Shader SpriteBatch::getShader()
+{
+    return m_shader;
+}
+
 void SpriteBatch::destroy()
 {
     m_vao.destroy();

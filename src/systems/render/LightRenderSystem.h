@@ -12,7 +12,6 @@ class LightRenderSystem : public IRenderSubsystem
 {
 private:
     entt::registry &m_registry;
-    Shader m_shader;
     // TODO: time filed can be definitely in world/game state for cycle
     i32 m_time;
 public:
@@ -20,11 +19,8 @@ public:
 
     void draw(SpriteBatch &batch) override;
     void fixedUpdate() override;
-
-    void setShader(Shader shader);
-
 private:
-    void drawGlobalLight(Light &light);
+    void drawGlobalLight(Light &light, SpriteBatch &batch);
     void drawLightSources(Light &light, SpriteBatch &batch);
 };
 

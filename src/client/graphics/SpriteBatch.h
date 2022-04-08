@@ -73,6 +73,8 @@ public:
 
     void setViewMatrix(glm::mat4 viewMat);
 
+    Shader getShader();
+
     void destroy();
 
 };

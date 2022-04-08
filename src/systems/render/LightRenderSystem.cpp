@@ -11,16 +11,13 @@
 
 LightRenderSystem::LightRenderSystem(entt::registry &registry)
     : m_registry(registry),
-      m_shader(),
       m_time(0) {}
 
 void LightRenderSystem::draw(SpriteBatch &batch)
 {
-    if (m_shader.getId() == 0) return;
+    Light light(batch.getShader());
 
-    Light light(m_shader);
-
-    drawGlobalLight(light);
+    drawGlobalLight(light, batch);
     drawLightSources(light, batch);
 }
 
@@ -39,12 +36,7 @@ void LightRenderSystem::fixedUpdate()
     }
 }
 
-void LightRenderSystem::setShader(Shader shader)
-{
-    m_shader = std::move(shader);
-}
-
-void LightRenderSystem::drawGlobalLight(Light &light)
+void LightRenderSystem::drawGlobalLight(Light &light, SpriteBatch &batch)
 {
     auto globalLightView = m_registry.view<GlobalLightComponent>();
     if (globalLightView.empty()) return;
@@ -60,8 +52,8 @@ void LightRenderSystem::drawGlobalLight(Light &light)
     light.setPosition(glm::vec2(wnd.getWidth() / 2.f, wnd.getHeight() / 2.f));
     light.setRadius(wnd.getHeight());
     light.setIntensity(globalLight.intensity);
-    m_shader.setUniform("dayTime", globalLight.time);
-    m_shader.setUniform("ambient", ambient);
+    batch.getShader().setUniform("dayTime", globalLight.time);
+    batch.getShader().setUniform("ambient", ambient);
 
     light.draw();
 }
