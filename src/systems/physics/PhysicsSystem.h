@@ -10,6 +10,8 @@ class PhysicsSystem : public ISystem
 public:
     PhysicsSystem(entt::registry& registry);
 
+    void fixedUpdate() override;
+
     void update(float deltaTime) override;
 };
 

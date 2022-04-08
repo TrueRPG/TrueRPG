@@ -13,6 +13,7 @@ class LightRenderSystem : public IRenderSubsystem
 private:
     entt::registry &m_registry;
     Shader m_shader;
+    // TODO: time filed can be definitely in world/game state for cycle
     i32 m_time;
 public:
     explicit LightRenderSystem(entt::registry &registry);

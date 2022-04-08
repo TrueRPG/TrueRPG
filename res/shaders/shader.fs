@@ -55,6 +55,7 @@ void main()
     //int index = int(TexIndex);
     //FragColor = texture(textures[index], TexCoord) * Color;
     // So we have to do this scary thing 👍
+    // TODO: rework this method for light creation. Other textures are sometimes possible under the assumed index
     int index = int(TexIndex);
     switch (index) {
         case 0:

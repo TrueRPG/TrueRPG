@@ -12,7 +12,7 @@
 // TODO: refactor
 class PlayerScript : public Script
 {
-    float m_speed{1.3f};
+    float m_speed{4.f};
 
     Entity m_spriteEntity{};
     Entity m_stepsEntity{};
@@ -107,7 +107,7 @@ public:
             m_currentAnimation = 1;
         }
 
-        rigidbody.velocity = glm::vec2(movement) * m_speed * 200.f;
+        rigidbody.velocity = glm::vec2(movement) * m_speed;
 
         // Animation magic
         auto &renderer = m_spriteEntity.getComponent<SpriteRendererComponent>();

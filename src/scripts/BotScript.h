@@ -10,7 +10,7 @@ enum BotState
 
 class BotScript : public Script
 {
-    float m_speed{1.3f};
+    float m_speed{4.f};
 
     Entity m_spriteEntity{};
 
@@ -51,7 +51,7 @@ public:
         }
         else if (m_currentState == WALK)
         {
-            rigidbody.velocity = glm::vec2(m_dir) * m_speed * 200.f;
+            rigidbody.velocity = glm::vec2(m_dir) * m_speed;
             if (m_time > m_walkTime) {
                 m_currentState = IDLE;
                 m_time = 0.f;

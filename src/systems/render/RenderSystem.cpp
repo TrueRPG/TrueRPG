@@ -52,6 +52,14 @@ void RenderSystem::draw()
     m_batch.end();
 }
 
+void RenderSystem::fixedUpdate()
+{
+    for (auto &system : m_subsystems)
+    {
+        system->fixedUpdate();
+    }
+}
+
 void RenderSystem::update(float deltaTime)
 {
     for (auto &system : m_subsystems)

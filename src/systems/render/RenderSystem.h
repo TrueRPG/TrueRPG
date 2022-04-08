@@ -35,6 +35,7 @@ public:
     decltype(auto) addSubsystem()
     {
         m_subsystems.push_back(new T(m_registry));
+        // TODO: temp solution. For generation light need a shader to set uniform
         if constexpr (hasSetShader<T>::value)
         {
             reinterpret_cast<T *>(m_subsystems.back())->setShader(m_shader);
@@ -43,6 +44,8 @@ public:
     }
 
     void draw();
+
+    void fixedUpdate() override;
 
     void update(float deltaTime) override;
 
