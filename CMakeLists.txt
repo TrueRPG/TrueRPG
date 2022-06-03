@@ -8,6 +8,10 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
+option(TRUERPG_USE_SYSTEM_GLFW "Use system GLFW installation" OFF)
+option(TRUERPG_USE_SYSTEM_GLM "Use system GLM installation" OFF)
+option(TRUERPG_USE_SYSTEM_FREETYPE "Use system freetype installation" OFF)
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.h" "src/*.hpp")
 
@@ -20,14 +24,36 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 #endif()
 
 add_subdirectory(libs/glad)
-add_subdirectory(libs/glfw)
+
+if(NOT TRUERPG_USE_SYSTEM_GLFW)
+  add_subdirectory(libs/glfw)
+else()
+  find_package(glfw3 REQUIRED)
+endif()
+
 find_package(OpenGL REQUIRED)
 add_subdirectory(libs/stb_image)
-add_subdirectory(libs/glm)
-add_subdirectory(libs/freetype)
+
+if(NOT TRUERPG_USE_SYSTEM_GLM)
+  add_subdirectory(libs/glm)
+else()
+  find_package(glm REQUIRED)
+endif()
+
+if(NOT TRUERPG_USE_SYSTEM_FREETYPE)
+  add_subdirectory(libs/freetype)
+else()
+  find_package(Freetype REQUIRED)
+  target_include_directories(${PROJECT_NAME} PRIVATE ${FREETYPE_INCLUDE_DIRS})
+endif()
+
 add_subdirectory(libs/miniaudio)
 add_subdirectory(libs/entt)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image glm freetype miniaudio entt)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt)
+if(NOT TRUERPG_USE_SYSTEM_GLM)
+  set(PROJECT_LIBS ${PROJECT_LIBS} glm)
+endif()
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
+install(TARGETS ${PROJECT_NAME})
