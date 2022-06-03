@@ -52,7 +52,7 @@ add_subdirectory(libs/entt)
 
 set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt)
 if(NOT TRUERPG_USE_SYSTEM_GLM)
-  set(PROJECT_LIBS "${PROJECT_LIBS} glm")
+  set(PROJECT_LIBS ${PROJECT_LIBS} glm)
 endif()
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
