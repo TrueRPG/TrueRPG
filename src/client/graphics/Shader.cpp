@@ -20,6 +20,23 @@ void Shader::destroy()
     m_id = 0;
 }
 
+template<typename F1, typename F2>
+void checkCompileErrors(unsigned int glHandel, unsigned int status,
+                                    F1 GLget,
+                                    F2 GLinfoLog)
+{
+    char infoLog[1024];
+    int success;
+
+    GLget(glHandel, status, &success);
+
+    if(!success)
+    {
+        GLinfoLog(glHandel, 1024, nullptr, infoLog);
+        std::cout << "ERROR::SHADER: \n\t" << infoLog << std::endl;
+    }
+}
+
 Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath)
 {
     unsigned int shaderProgram = 0;
@@ -80,18 +97,3 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
     return shader;
 }
 
-void Shader::checkCompileErrors(unsigned int glHandel, unsigned int status,
-                                    void (*GLget)(unsigned int, unsigned int, int*),
-                                    void (*GLinfoLog)(unsigned int, int, int*, char*))
-{
-    char infoLog[1024];
-    int success;
-
-    GLget(glHandel, status, &success);
-
-    if(!success)
-    {
-        GLinfoLog(glHandel, 1024, nullptr, infoLog);
-        std::cout << "ERROR::SHADER: \n\t" << infoLog << std::endl;
-    }
-}
