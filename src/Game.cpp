@@ -68,7 +68,6 @@ Game::Game()
     auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
     worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
 
-
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
 
@@ -89,7 +88,6 @@ Game::Game()
     auto &fpsTransform = debugInfoEntity.getComponent<TransformComponent>();
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
-
 
     // Create the player
     m_playerEntity = m_scene.createEntity("player");
@@ -124,7 +122,6 @@ Game::Game()
     hpRenderer.layer = 10;
     m_playerEntity.addComponent<HpComponent>();
 
-
     // --------- Inventory ---------
     // Item
     Entity axeItem = m_scene.createEntity("axeItem");
@@ -147,7 +144,6 @@ Game::Game()
     inventoryComponent.items[0][0] = axeItem;
     inventoryComponent.items[1][0] = keyItem;
 
-
     // Attach sprite, sound, hp and camera to the player
     Hierarchy::addChild(m_playerEntity, spriteEntity);
     Hierarchy::addChild(m_playerEntity, stepsSoundEntity);
@@ -157,7 +153,6 @@ Game::Game()
 
     // Bind the script to the player
     m_playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
-
 
     // Musical pumpkin
     Entity pumpkinEntity = m_scene.createEntity("pumpkin");
@@ -186,7 +181,6 @@ Game::Game()
 
     pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
 
-
     // Barrels
     Entity barrels[3];
 
@@ -204,7 +198,6 @@ Game::Game()
         barrels[i].addComponent<RectColliderComponent>().size = glm::vec2(64, 32);
         auto &order = barrels[i].addComponent<AutoOrderComponent>();
     }
-
 
     // Bot
     Entity botEntity = m_scene.createEntity("bot");
