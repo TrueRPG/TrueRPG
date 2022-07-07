@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 AudioDevice::AudioDevice() : m_userData({m_sources, m_mutex})
 {
