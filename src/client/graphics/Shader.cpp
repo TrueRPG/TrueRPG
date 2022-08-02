@@ -68,7 +68,6 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
     shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try
     {
-        // Открываем файлы
         // Open the file
         shaderFile.open(path);
         std::stringstream shaderStream;

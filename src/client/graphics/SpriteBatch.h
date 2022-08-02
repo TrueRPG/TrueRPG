@@ -65,6 +65,8 @@ public:
 
     void draw(const Sprite &sprite, int layer = 0, int order = 0);
 
+    void setShader(Shader shader);
+
     glm::mat4 getProjectionMatrix();
 
     void setProjectionMatrix(glm::mat4 projMat);

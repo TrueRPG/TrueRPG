@@ -221,6 +221,11 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
             });
 }
 
+void SpriteBatch::setShader(Shader shader)
+{
+    m_shader = shader;
+}
+
 glm::mat4 SpriteBatch::getProjectionMatrix()
 {
     return m_projMat;
@@ -244,7 +249,6 @@ void SpriteBatch::setViewMatrix(glm::mat4 viewMat)
     m_shader.use();
     m_shader.setUniform("view", viewMat);
 }
-
 void SpriteBatch::destroy()
 {
     m_vao.destroy();

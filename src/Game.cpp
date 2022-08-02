@@ -35,6 +35,7 @@
 #include "scripts/ButtonScript.h"
 
 #include "utils/Hierarchy.h"
+#include "systems/render/PointLightRenderSystem.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -47,15 +48,20 @@ Game::Game()
     m_scene.addSystem<ScriptSystem>();
     m_scene.addSystem<PhysicsSystem>();
 
+    // Render systems
     auto& renderSystem = m_scene.addSystem<RenderSystem>();
     renderSystem.addSubsystem<WorldMapRenderSystem>();
     renderSystem.addSubsystem<SpriteRenderSystem>();
 
-    auto& uiRenderSystem = renderSystem.addSubsystem<UIRenderSystem>();
+    // Light systems
+    // TODO: add ambient light
+    renderSystem.addLightSubsystem<PointLightRenderSystem>();
+
+    // UI systems
+    auto& uiRenderSystem = renderSystem.addUiSubsystem<UIRenderSystem>();
     uiRenderSystem.addSubsystem<ButtonRenderSystem>();
     uiRenderSystem.addSubsystem<InventoryRenderSystem>();
-
-    renderSystem.addSubsystem<TextRenderSystem>();
+    renderSystem.addUiSubsystem<TextRenderSystem>();
 
     m_scene.addSystem<AudioSystem>();
 
