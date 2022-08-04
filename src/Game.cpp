@@ -36,6 +36,7 @@
 
 #include "utils/Hierarchy.h"
 #include "systems/render/PointLightRenderSystem.h"
+#include "components/render/PoinLightComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -128,6 +129,11 @@ Game::Game()
     hpRenderer.layer = 10;
     m_playerEntity.addComponent<HpComponent>();
 
+    auto &playerLight = m_playerEntity.addComponent<PointLightComponent>();
+    playerLight.color = glm::vec3(0.25f, 0, 0.5f);
+    playerLight.radius = 500.f;
+    playerLight.intensity = 2.0f;
+
     // --------- Inventory ---------
     // Item
     Entity axeItem = m_scene.createEntity("axeItem");
@@ -173,6 +179,11 @@ Game::Game()
 
     auto &musicComponent = pumpkinEntity.addComponent<AudioSourceComponent>(m_music);
     musicComponent.volume = 1.0f;
+
+    auto &pumpkinLight = pumpkinEntity.addComponent<PointLightComponent>();
+    pumpkinLight.color = glm::vec3(0.0, 1.0, 0.0);
+    pumpkinLight.radius = 200.f;
+    pumpkinLight.intensity = 1.0f;
 
     // Text setup for the pumpkin
     Entity pumpkinTextEntity = m_scene.createEntity("text");
