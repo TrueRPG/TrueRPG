@@ -24,7 +24,7 @@ void PointLightRenderSystem::draw()
 
         auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
-        m_shader.setUniform("light.pos", transformComponent.position + pointLightComponent.posOffset);
+        m_shader.setUniform("light.pos", transformComponent.position);
         m_shader.setUniform("light.color", pointLightComponent.color);
         m_shader.setUniform("light.radius", pointLightComponent.radius);
         m_shader.setUniform("light.intensity", pointLightComponent.intensity);

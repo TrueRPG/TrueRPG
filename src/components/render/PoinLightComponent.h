@@ -5,7 +5,6 @@
 
 struct PointLightComponent
 {
-    glm::vec2 posOffset;
     glm::vec3 color;
 
     float radius;
