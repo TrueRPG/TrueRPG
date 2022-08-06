@@ -1,6 +1,6 @@
 #include "StringKeyMapper.h"
 
-#include <bits/stdc++.h>
+#include <algorithm>
 
 Key StringKeyMapper::map(std::string key)
 {
