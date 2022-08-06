@@ -13,7 +13,7 @@ private:
     unsigned int m_target{};
 public:
     Buffer() = default;
-    Buffer(unsigned int);
+    Buffer(unsigned int target);
 
     void bind() const;
     void unbind() const;

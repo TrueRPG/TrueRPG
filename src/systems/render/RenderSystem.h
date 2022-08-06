@@ -66,7 +66,6 @@ public:
 
 private:
     void createGBuffer(int width, int height);
-    void drawQuad();
 };
 
 #endif // RPG_RENDERSYSTEM_H

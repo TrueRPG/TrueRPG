@@ -5,13 +5,16 @@
 #include "entt.hpp"
 #include "ILightRenderSubsystem.h"
 
+#include "../../client/graphics/Quad.h"
+
 class PointLightRenderSystem : public ILightRenderSubsystem
 {
     entt::registry& m_registry;
     Shader m_shader;
-
+    Quad m_quad;
 public:
-    PointLightRenderSystem(entt::registry& registry);
+    explicit PointLightRenderSystem(entt::registry& registry);
+    ~PointLightRenderSystem() override;
 
     void draw() override;
 

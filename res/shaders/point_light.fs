@@ -11,8 +11,8 @@ struct Light {
     vec2 pos;
     vec3 color;
 
-    float linear;
-    float quadratic;
+    float radius;
+    float intensity;
 };
 
 uniform Light light;
@@ -23,9 +23,9 @@ void main() {
     vec2 fragPos = texture(gPosition, texCoords).rg;
     vec3 diffuse = texture(gAlbedoSpec, texCoords).rgb;
 
-    float distance = length(light.pos - fragPos);
-    float attenuation = 1.0 / (1.0 + light.linear * distance + light.quadratic * distance * distance);
-    diffuse *= attenuation;
+    float distance = distance(fragPos, light.pos);
+    float attenuation = max(0.0, 1.0 - distance / light.radius);
+    diffuse *= (attenuation * attenuation * light.intensity * light.color);
 
     FragColor = vec4(diffuse, 1);
 }

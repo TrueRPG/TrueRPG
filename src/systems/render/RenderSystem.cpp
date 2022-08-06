@@ -67,6 +67,7 @@ void RenderSystem::draw()
     // Lighting pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the g-buffer's content
     glClearColor(0.f, 0.f, 0.f, 1.f);
     glClear(GL_COLOR_BUFFER_BIT);
+    glBlendFunc(GL_ONE, GL_ONE);
     for (auto &system : m_lightSubsystems)
     {
         Shader lightShader = system->getShader();
@@ -80,8 +81,6 @@ void RenderSystem::draw()
         glBindTexture(GL_TEXTURE_2D, m_gBuffer.gAlbedoSpec);
 
         system->draw();
-
-        drawQuad();
     }
 
     // UI pass
@@ -89,6 +88,8 @@ void RenderSystem::draw()
     m_batch.setProjectionMatrix(cameraComponent.getProjectionMatrix());
     m_batch.setShader(m_uiShader);
     m_batch.begin();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     for (auto &system : m_uiSubsystems)
     {
@@ -159,31 +160,4 @@ void RenderSystem::createGBuffer(int width, int height)
         printf("Framebuffer not complete!");
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void RenderSystem::drawQuad()
-{
-    static unsigned int quad_vao = 0;
-    static unsigned int quad_vbo;
-
-    if (quad_vao == 0) {
-        float quad_vertices[] = {
-            -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-            1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-            1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-        };
-        glGenVertexArrays(1, &quad_vao);
-        glGenBuffers(1, &quad_vbo);
-        glBindVertexArray(quad_vao);
-        glBindBuffer(GL_ARRAY_BUFFER, quad_vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices), &quad_vertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) 0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *) (3 * sizeof(float)));
-    }
-    glBindVertexArray(quad_vao);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glBindVertexArray(0);
 }
