@@ -130,8 +130,8 @@ Game::Game()
     m_playerEntity.addComponent<HpComponent>();
 
     auto &playerLight = m_playerEntity.addComponent<PointLightComponent>();
-    playerLight.color = glm::vec3(0.25f, 0, 0.5f);
-    playerLight.radius = 500.f;
+    playerLight.color = glm::vec3(0.25f, 0.25f, 0.4f);
+    playerLight.radius = 800.f;
     playerLight.intensity = 2.0f;
 
     // --------- Inventory ---------
@@ -181,7 +181,7 @@ Game::Game()
     musicComponent.volume = 1.0f;
 
     auto &pumpkinLight = pumpkinEntity.addComponent<PointLightComponent>();
-    pumpkinLight.color = glm::vec3(0.0, 1.0, 0.0);
+    pumpkinLight.color = glm::vec3(1.0, 0.5, 0.0);
     pumpkinLight.radius = 200.f;
     pumpkinLight.intensity = 1.0f;
 

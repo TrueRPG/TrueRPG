@@ -6,9 +6,6 @@ in vec2 texCoords;
 
 uniform sampler2D gPosition;
 uniform sampler2D gAlbedoSpec;
-uniform mat4 proj;
-uniform mat4 view;
-uniform vec2 windowSize;
 
 struct Light {
     vec2 pos;
