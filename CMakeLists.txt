@@ -49,8 +49,9 @@ endif()
 
 add_subdirectory(libs/miniaudio)
 add_subdirectory(libs/entt)
+add_subdirectory(libs/yaml-cpp)
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp)
 if(NOT TRUERPG_USE_SYSTEM_GLM)
   set(PROJECT_LIBS ${PROJECT_LIBS} glm)
 endif()

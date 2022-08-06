@@ -6,6 +6,7 @@
 #include "../components/world/WorldMapComponent.h"
 #include "../client/graphics/Rect.h"
 #include "../utils/OpenSimplexNoise.h"
+#include "../client/Engine.h"
 
 #define DEBUG_SEED 2
 
@@ -92,7 +93,7 @@ public:
 
     void onUpdate(float deltaTime) override
     {
-        Window &window = Window::getInstance();
+        IWindow &window = Engine::getWindow();
         float radius = std::max(window.getWidth(), window.getHeight()) / 2;
         float scale = std::max(m_worldTransform->scale.x, m_worldTransform->scale.y);
         m_worldMap->renderRadius = radius / (scale * m_worldMap->tileSize) + 3;

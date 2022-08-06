@@ -1,15 +1,8 @@
-#include "Window.h"
+#include "GlfwWindow.h"
 
 #include <iostream>
-#include <cassert>
 
-Window& Window::getInstance(int width, int height, const std::string& title)
-{
-    static Window window(width, height, title);
-    return window;
-}
-
-Window::Window(int width, int height, const std::string &title) : m_keys(), onResize(m_onResize), onInput(m_onInput)
+GlfwWindow::GlfwWindow(int width, int height, const std::string &title) : m_keys()
 {
     glfwInit();
 
@@ -46,66 +39,67 @@ Window::Window(int width, int height, const std::string &title) : m_keys(), onRe
     glfwMakeContextCurrent(m_window);
 }
 
-bool Window::isOpen() const
+bool GlfwWindow::isOpen() const
 {
     return !glfwWindowShouldClose(m_window);
 }
 
-void Window::close() const
+void GlfwWindow::close() const
 {
     glfwSetWindowShouldClose(m_window, GL_TRUE);
 }
 
-void Window::destroy() const
+void GlfwWindow::destroy() const
 {
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }
 
-void Window::swapBuffers() const noexcept
+void GlfwWindow::swapBuffers() const
 {
     glfwSwapBuffers(m_window);
 }
 
-void Window::pollEvents() const
+void GlfwWindow::pollEvents() const
 {
     glfwPollEvents();
 }
 
-int Window::getWidth() const
+int GlfwWindow::getWidth() const
 {
     int width;
     glfwGetWindowSize(m_window, &width, nullptr);
     return width;
 }
 
-int Window::getHeight() const
+int GlfwWindow::getHeight() const
 {
     int height;
     glfwGetWindowSize(m_window, nullptr, &height);
     return height;
 }
 
-bool Window::getKey(int key)
+bool GlfwWindow::getKey(Key key)
 {
-    return m_keys[key];
+    int glfwKey = m_glfwKeyMapper.map(key);
+    return m_keys[glfwKey];
 }
 
-glm::vec2 Window::getCursorPosition()
+glm::vec2 GlfwWindow::getCursorPosition()
 {
     double x, y;
     glfwGetCursorPos(m_window, &x, &y);
     return {x, y};
 }
 
-bool Window::getMouseButton(int mouseButton)
+bool GlfwWindow::getMouseButton(int mouseButton)
 {
     return m_mouseButtons[mouseButton];
 }
 
-void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+void GlfwWindow::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    auto *win = static_cast<GlfwWindow *>(glfwGetWindowUserPointer(window));
     if (key < 0) return;
 
     win->m_onInput(key, action);
@@ -113,33 +107,44 @@ void Window::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int acti
     switch (action)
     {
     case GLFW_PRESS:
-        getInstance().m_keys[key] = true;
+        win->m_keys[key] = true;
         break;
     case GLFW_RELEASE:
-        getInstance().m_keys[key] = false;
+        win->m_keys[key] = false;
         break;
     default:
         break;
     }
 }
 
-void Window::glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+void GlfwWindow::glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+    auto *win = static_cast<GlfwWindow *>(glfwGetWindowUserPointer(window));
     switch (action)
     {
     case GLFW_PRESS:
-        getInstance().m_mouseButtons[button] = true;
+        win->m_mouseButtons[button] = true;
         break;
     case GLFW_RELEASE:
-        getInstance().m_mouseButtons[button] = false;
+        win->m_mouseButtons[button] = false;
         break;
     default:
         break;
     }
 }
 
-void Window::glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height)
+void GlfwWindow::glfwFramebufferSizeCallback(GLFWwindow *window, int width, int height)
 {
-    auto *win = static_cast<Window *>(glfwGetWindowUserPointer(window));
+    auto *win = static_cast<GlfwWindow *>(glfwGetWindowUserPointer(window));
     win->m_onResize(width, height);
+}
+
+IWindow::ResizeEvent::IType &GlfwWindow::getOnResize()
+{
+    return m_onResize;
+}
+
+IWindow::InputEvent::IType &GlfwWindow::getOnInput()
+{
+    return m_onInput;
 }

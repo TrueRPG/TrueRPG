@@ -1,5 +1,5 @@
-#include "client/window/Window.h"
 #include "utils/GameTimer.h"
+#include "client/Engine.h"
 #include "Game.h"
 
 // Nobody is forgotten, nothing is forgotten
@@ -12,7 +12,7 @@
 int main()
 {
     // Create a window
-    auto &window = Window::getInstance(1280, 720, "TRUE RPG");
+    auto &window = Engine::getWindow(1280, 720, "TRUE RPG");
 
     Game game;
 

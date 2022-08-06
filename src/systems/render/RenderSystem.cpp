@@ -1,11 +1,11 @@
 #include "RenderSystem.h"
 
 #include "glm/ext/matrix_transform.hpp"
-#include "../../client/window/Window.h"
 #include "../../components/render/CameraComponent.h"
 #include "../../components/basic/HierarchyComponent.h"
 #include "../../utils/Hierarchy.h"
 #include "../../components/world/WorldMapComponent.h"
+#include "../../client/Engine.h"
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
@@ -13,8 +13,8 @@ RenderSystem::RenderSystem(entt::registry &registry)
           m_uiShader(Shader::createShader("../res/shaders/ui.vs", "../res/shaders/ui.fs")),
           m_batch(m_shader, 30000)
 {
-    auto& window = Window::getInstance();
-    window.onResize += createEventHandler(*this, &RenderSystem::resize);
+    auto& window = Engine::getWindow();
+    window.getOnResize() += createEventHandler(*this, &RenderSystem::resize);
     createGBuffer(window.getWidth(), window.getHeight());
 }
 

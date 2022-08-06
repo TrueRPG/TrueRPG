@@ -3,8 +3,8 @@
 
 #include <cstddef>
 #include <vector>
-#include <glad/gl.h>
 #include "IGLObject.h"
+#include "Graphics.h"
 
 class Buffer : public IGLObject
 {

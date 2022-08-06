@@ -2,7 +2,7 @@
 #define RPG_TEXTURE_H
 
 #include <string>
-#include <glad/gl.h>
+#include "Graphics.h"
 #include "IGLObject.h"
 
 class Bitmap;

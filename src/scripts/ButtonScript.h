@@ -2,15 +2,15 @@
 #define RPG_BUTTONSCRIPT_H
 
 #include "../scene/Script.h"
-#include "../client/window/Window.h"
 #include "../components/render/ui/ButtonComponent.h"
+#include "../client/Engine.h"
 
 class ButtonScript : public Script
 {
 public:
     void onUpdate(float deltaTime)
     {
-        Window& window = Window::getInstance();
+        IWindow & window = Engine::getWindow();
 
         auto& button = getComponent<ButtonComponent>();
         auto& transform = getComponent<TransformComponent>();

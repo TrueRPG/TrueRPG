@@ -1,7 +1,7 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "CameraComponent.h"
 
-#include "../../client/window/Window.h"
+#include "../../client/Engine.h"
 
 glm::mat4 CameraComponent::getProjectionMatrix() const
 {
@@ -12,10 +12,10 @@ glm::mat4 CameraComponent::getProjectionMatrix() const
 
 float CameraComponent::getWidth() const
 {
-    return (float) Window::getInstance().getWidth() / zoom;
+    return (float)Engine::getWindow().getWidth() / zoom;
 }
 
 float CameraComponent::getHeight() const
 {
-    return (float) Window::getInstance().getHeight() / zoom;
+    return (float)Engine::getWindow().getHeight() / zoom;
 }

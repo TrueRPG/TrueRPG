@@ -4,10 +4,10 @@
 #include "../scene/Script.h"
 #include <glm/glm.hpp>
 #include "../utils/Hierarchy.h"
-#include "../client/window/Window.h"
 #include "../components/basic/TransformComponent.h"
 #include "../components/render/TextRendererComponent.h"
 #include "../components/audio/AudioSourceComponent.h"
+#include "../client/Engine.h"
 
 class PumpkinScript : public Script
 {
@@ -29,7 +29,7 @@ public:
         static float t = 0;
         t += 5 * deltaTime;
 
-        Window &window = Window::getInstance();
+        IWindow &window = Engine::getWindow();
 
         auto &textTransform = m_textEntity.getComponent<TransformComponent>();
         textTransform.position.y = 5 * std::sin(t) + 32;
@@ -43,7 +43,7 @@ public:
         if (glm::distance(pumpkinTransform.position, playerTransform.position) < 64.f)
         {
             textRenderer.text = "Press [E]";
-            if (window.getKey(GLFW_KEY_E))
+            if (window.getKey(Key::E))
             {
                 audioSource.play();
             }

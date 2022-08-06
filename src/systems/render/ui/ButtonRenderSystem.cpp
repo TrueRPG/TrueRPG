@@ -1,9 +1,10 @@
 #include "ButtonRenderSystem.h"
 
-#include "../../../client/window/Window.h"
 #include "../../../components/render/ui/ButtonComponent.h"
 #include "../../../utils/Hierarchy.h"
 #include "../../../client/graphics/Text.h"
+#include "../../../client/Engine.h"
+#include "GLFW/glfw3.h"
 
 ButtonRenderSystem::ButtonRenderSystem(entt::registry& registry)
     : m_registry(registry)
@@ -16,7 +17,7 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
     glm::vec4 highlightedColor{0.7f, 0.7f, 0.7f, 1.f};
     glm::vec4 pressedColor{0.5f, 0.5f, 0.5f, 1.f};
 
-    Window &window = Window::getInstance();
+    IWindow &window = Engine::getWindow();
     auto view = m_registry.view<ButtonComponent>();
     for (auto entity : view)
     {

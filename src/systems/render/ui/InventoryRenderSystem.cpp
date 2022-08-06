@@ -1,10 +1,12 @@
 #include "InventoryRenderSystem.h"
+
 #include "../../../components/render/CameraComponent.h"
 #include "../../../utils/Hierarchy.h"
-#include "../../../client/window/Window.h"
 #include "../../../components/world/InventoryComponent.h"
 #include "../../../components/world/ItemComponent.h"
 #include "../../../client/graphics/Text.h"
+#include "../../../client/Engine.h"
+#include "GLFW/glfw3.h"
 
 InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry)
     : m_registry(registry)
@@ -54,7 +56,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
     auto cameraEntity = m_registry.view<CameraComponent>()[0];
     auto cameraTransform = Hierarchy::computeTransform({cameraEntity, &m_registry});
 
-    Window &window = Window::getInstance();
+    IWindow &window = Engine::getWindow();
     auto view = m_registry.view<InventoryComponent>();
 
     // we can show only one inventory, so find the first one

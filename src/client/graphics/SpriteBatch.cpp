@@ -1,6 +1,6 @@
 #include "SpriteBatch.h"
 
-#include <glad/gl.h>
+#include "Graphics.h"
 #include <numeric>
 
 SpriteBatch::SpriteBatch(Shader shader, int maxSprites)

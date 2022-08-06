@@ -1,7 +1,7 @@
 #include "Texture.h"
 
 #include <iostream>
-#include <glad/gl.h>
+#include "Graphics.h"
 #include <stb_image.h>
 
 #include "Bitmap.h"

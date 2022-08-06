@@ -37,6 +37,8 @@
 #include "utils/Hierarchy.h"
 #include "systems/render/PointLightRenderSystem.h"
 #include "components/render/PoinLightComponent.h"
+#include "systems/player/PlayerSystem.h"
+#include "components/player/PlayerComponent.h"
 
 Game::Game()
         : m_font("../res/fonts/vt323.ttf", 32),
@@ -46,6 +48,7 @@ Game::Game()
           m_music("../res/audio/music.mp3")
 {
     // Add systems
+    m_scene.addSystem<PlayerSystem>();
     m_scene.addSystem<ScriptSystem>();
     m_scene.addSystem<PhysicsSystem>();
 
@@ -115,6 +118,10 @@ Game::Game()
     auto &stepsComponent = stepsSoundEntity.addComponent<AudioSourceComponent>(m_steps);
     stepsComponent.volume = 0.25f;
     stepsComponent.loop = true;
+
+    auto &playerComponent = m_playerEntity.addComponent<PlayerComponent>();
+    playerComponent.sprite = spriteEntity;
+    playerComponent.steps = stepsSoundEntity;
 
     auto &playerCollider = m_playerEntity.addComponent<RectColliderComponent>();
     playerCollider.offset = glm::vec2(-16, 0);

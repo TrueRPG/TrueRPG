@@ -1,4 +1,4 @@
-#include "GLFW/glfw3.h"
+#include "../client/graphics/Graphics.h"
 
 #define MAX_DELTA_TIME 0.4
 
