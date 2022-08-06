@@ -25,9 +25,6 @@ void main() {
     // Retrieve data from g-buffer
     vec2 fragPos = texture(gPosition, texCoords).rg;
     vec3 diffuse = texture(gAlbedoSpec, texCoords).rgb;
-    vec4 spacePos = proj * (view * vec4(light.pos, 0, 1));
-    vec3 ndcSpacePos = spacePos.xyz / spacePos.w;
-    vec2 windowSpacePos = ((ndcSpacePos.xy + 1) / 2) * windowSize;
 
     float distance = distance(fragPos, light.pos);
     float attenuation = max(0.0, 1.0 - distance / light.radius);

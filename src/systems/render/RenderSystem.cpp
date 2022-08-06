@@ -74,9 +74,6 @@ void RenderSystem::draw()
         lightShader.use();
         lightShader.setUniform("gPosition", 0);
         lightShader.setUniform("gAlbedoSpec", 1);
-        lightShader.setUniform("proj", cameraComponent.getProjectionMatrix());
-        lightShader.setUniform("view", viewMatrix);
-        lightShader.setUniform("windowSize", Window::getInstance().getWidth(), Window::getInstance().getHeight());
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_gBuffer.gPosition);
