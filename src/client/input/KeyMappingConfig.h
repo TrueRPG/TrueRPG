@@ -4,6 +4,7 @@
 #include <string>
 #include "Key.h"
 #include "StringKeyMapper.h"
+#include "yaml-cpp/yaml.h"
 
 class KeyMappingConfig
 {
@@ -35,6 +36,9 @@ public:
     Key getOpenInventoryKey();
     Key getUseKey();
     Key getHitYourselfKey();
+
+private:
+    Key getIfDefined(YAML::Node node, const std::string& name);
 };
 
 #endif // RPG_KEYMAPPINGCONFIG_H

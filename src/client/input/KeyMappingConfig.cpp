@@ -5,16 +5,16 @@ KeyMappingConfig::KeyMappingConfig(std::string configPath)
 {
     YAML::Node keyMappingNode = YAML::LoadFile(configPath);
 
-    m_exit = m_stringKeyMapper.map(keyMappingNode["exit"].as<std::string>());
+    m_exit = getIfDefined(keyMappingNode, "exit");
 
-    m_moveUp = m_stringKeyMapper.map(keyMappingNode["moveUp"].as<std::string>());
-    m_moveDown = m_stringKeyMapper.map(keyMappingNode["moveDown"].as<std::string>());
-    m_moveLeft = m_stringKeyMapper.map(keyMappingNode["moveLeft"].as<std::string>());
-    m_moveRight = m_stringKeyMapper.map(keyMappingNode["moveRight"].as<std::string>());
+    m_moveUp = getIfDefined(keyMappingNode, "moveUp");
+    m_moveDown = getIfDefined(keyMappingNode, "moveDown");
+    m_moveLeft = getIfDefined(keyMappingNode, "moveLeft");
+    m_moveRight = getIfDefined(keyMappingNode, "moveRight");
 
-    m_openInventory = m_stringKeyMapper.map(keyMappingNode["openInventory"].as<std::string>());
-    m_use = m_stringKeyMapper.map(keyMappingNode["use"].as<std::string>());
-    m_hitYourself = m_stringKeyMapper.map(keyMappingNode["hitYourself"].as<std::string>());
+    m_openInventory = getIfDefined(keyMappingNode, "openInventory");
+    m_use = getIfDefined(keyMappingNode, "use");
+    m_hitYourself = getIfDefined(keyMappingNode, "hitYourself");
 }
 
 Key KeyMappingConfig::getExitKey()
@@ -55,4 +55,16 @@ Key KeyMappingConfig::getUseKey()
 Key KeyMappingConfig::getHitYourselfKey()
 {
     return m_hitYourself;
+}
+
+Key KeyMappingConfig::getIfDefined(YAML::Node node, const std::string& name)
+{
+    if (node[name].IsDefined())
+    {
+        return m_stringKeyMapper.map(node[name].as<std::string>());
+    }
+    else
+    {
+        return Key::Unknown;
+    }
 }
