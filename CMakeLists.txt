@@ -50,8 +50,8 @@ endif()
 add_subdirectory(libs/miniaudio)
 add_subdirectory(libs/entt)
 
-set(YAML_CPP_BUILD_TOOLS OFF)
-set(YAML_CPP_BUILD_TESTS OFF)
+option(YAML_CPP_BUILD_TOOLS OFF)
+option(YAML_CPP_BUILD_TESTS OFF)
 add_subdirectory(libs/yaml-cpp)
 
 set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp)
