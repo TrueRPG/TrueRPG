@@ -4,7 +4,7 @@
 #include <string>
 #include "Key.h"
 #include "StringKeyMapper.h"
-#include "yaml-cpp/yaml.h"
+#include <yaml-cpp/yaml.h>
 
 class KeyMappingConfig
 {

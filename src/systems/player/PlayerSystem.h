@@ -3,7 +3,6 @@
 
 #include "../../scene/ISystem.h"
 #include "entt.hpp"
-#include "yaml-cpp/yaml.h"
 #include "../../client/input/IMapper.h"
 #include "../../client/input/StringKeyMapper.h"
 #include "../../client/input/KeyMappingConfig.h"
