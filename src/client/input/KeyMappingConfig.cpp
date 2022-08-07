@@ -1,5 +1,4 @@
 #include "KeyMappingConfig.h"
-#include "yaml-cpp/yaml.h"
 
 KeyMappingConfig::KeyMappingConfig(std::string configPath)
 {
