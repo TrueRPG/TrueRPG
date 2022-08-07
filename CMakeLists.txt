@@ -50,7 +50,7 @@ endif()
 add_subdirectory(libs/miniaudio)
 add_subdirectory(libs/entt)
 
-option(YAML_MSVC_SHARED_RT ON)
+option(YAML_MSVC_SHARED_RT OFF)
 option(YAML_CPP_BUILD_TOOLS OFF)
 option(YAML_CPP_BUILD_TESTS OFF)
 add_subdirectory(libs/yaml-cpp)
