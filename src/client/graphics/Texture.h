@@ -3,11 +3,10 @@
 
 #include <string>
 #include "Graphics.h"
-#include "IGLObject.h"
 
 class Bitmap;
 
-class Texture : public IGLObject
+class Texture
 {
 private:
     unsigned int m_id{};
@@ -23,9 +22,9 @@ public:
 
     void unbind() const;
 
-    unsigned int getId() const noexcept override;
+    unsigned int getId() const noexcept;
 
-    void destroy() override;
+    void destroy();
 
     std::string getPath() const;
 

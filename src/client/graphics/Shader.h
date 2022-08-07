@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "IGLObject.h"
 
 #include <string>
 #include <iostream>
@@ -53,7 +52,7 @@ template<std::size_t N, typename... Args>
 using get_ = typename get_Nth_type<N, Args...>::type;
 
 
-class Shader : public IGLObject
+class Shader
 {
 private:
     unsigned int m_id{};
@@ -99,9 +98,9 @@ public:
     // Activate the shader
     void use() const;
 
-    unsigned int getId() const noexcept override;
+    unsigned int getId() const noexcept;
 
-    void destroy() override;
+    void destroy();
 
     static Shader createShader(const std::string& vertexPath, const std::string& fragmentPath);
 

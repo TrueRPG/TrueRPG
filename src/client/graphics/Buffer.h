@@ -3,10 +3,9 @@
 
 #include <cstddef>
 #include <vector>
-#include "IGLObject.h"
 #include "Graphics.h"
 
-class Buffer : public IGLObject
+class Buffer
 {
 private:
     unsigned int m_id{};
@@ -17,7 +16,7 @@ public:
 
     void bind() const;
     void unbind() const;
-    void destroy() override;
+    void destroy();
 
     void setData(const void* data, size_t size, unsigned int usage) const;
     void setSubData(const void* data, GLintptr offset, size_t size) const;
@@ -34,7 +33,7 @@ public:
         glNamedBufferSubData(m_id, offset, data.size() * sizeof(T), data.data());
     }
 
-    unsigned int getId() const override;
+    unsigned int getId() const;
     unsigned int getTarget() const;
 };
 
