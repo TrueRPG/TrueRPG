@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Game.h"
 
 #include "systems/script/ScriptSystem.h"

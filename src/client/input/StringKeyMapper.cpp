@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "StringKeyMapper.h"
 
 #include <algorithm>

@@ -22,6 +22,7 @@ file(GLOB_RECURSE HEADERS "src/*.h" "src/*.hpp")
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
 #if(NOT WIN32)
 #    # it doesn't work on Windows with mingw
 #    target_compile_options(${PROJECT_NAME} PRIVATE -fno-omit-frame-pointer -fsanitize=address)

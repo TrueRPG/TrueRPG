@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "Font.h"
 
 #include <ft2build.h>

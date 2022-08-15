@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "KeyMappingConfig.h"
 
 KeyMappingConfig::KeyMappingConfig(std::string configPath)

@@ -1,3 +1,4 @@
+#include "../pch.h"
 #include "Hierarchy.h"
 
 #include "../components/basic/HierarchyComponent.h"

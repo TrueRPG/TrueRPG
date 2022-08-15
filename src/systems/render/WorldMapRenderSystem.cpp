@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "WorldMapRenderSystem.h"
 
 #include "../../components/world/WorldMapComponent.h"

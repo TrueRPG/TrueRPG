@@ -1,3 +1,4 @@
+#include "../../../pch.h"
 #include "InventoryRenderSystem.h"
 
 #include "../../../components/render/CameraComponent.h"

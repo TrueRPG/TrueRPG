@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "PointLightRenderSystem.h"
 
 #include "../../components/render/PoinLightComponent.h"
