@@ -1,6 +1,7 @@
 #ifndef RPG_BOTSCRIPT_H
 #define RPG_BOTSCRIPT_H
 
+#include "../components/render/SpriteAnimatorComponent.h"
 #include <glm/gtc/random.hpp>
 
 enum BotState

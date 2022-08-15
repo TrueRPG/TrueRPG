@@ -1,6 +1,6 @@
 #include "Animation.h"
 
-#include "../components/SpriteAnimatorComponent.h"
+#include "../components/render/SpriteAnimatorComponent.h"
 
 SpriteAnimator Animation::createAnimator(const std::function<void(SpriteAnimatorBuilder &)>& setup)
 {

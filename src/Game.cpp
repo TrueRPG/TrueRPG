@@ -10,10 +10,10 @@
 #include "systems/render/ui/InventoryRenderSystem.h"
 #include "systems/render/ui/ButtonRenderSystem.h"
 #include "systems/render/TextRenderSystem.h"
+#include "systems/render/SpriteAnimatorSystem.h"
 #include "systems/audio/AudioSystem.h"
 
 #include "scene/Entity.h"
-#include "scene/utils/Animation.h"
 
 #include "components/render/CameraComponent.h"
 #include "components/script/NativeScriptComponent.h"
@@ -37,10 +37,10 @@
 #include "scripts/ButtonScript.h"
 
 #include "utils/Hierarchy.h"
+#include "utils/Animation.h"
 #include "systems/render/PointLightRenderSystem.h"
 #include "components/render/PoinLightComponent.h"
 #include "systems/player/PlayerSystem.h"
-#include "systems/SpriteAnimatorSystem.h"
 #include "components/player/PlayerComponent.h"
 
 Game::Game()

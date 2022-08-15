@@ -1,9 +1,10 @@
 #ifndef RPG_SPRITEANIMATORSYSTEM_H
 #define RPG_SPRITEANIMATORSYSTEM_H
 
-#include <entt.hpp>
+#include "entt.hpp"
+#include "../../scene/ISystem.h"
 
-class SpriteAnimatorSystem
+class SpriteAnimatorSystem : public ISystem
 {
     entt::registry &m_registry;
 

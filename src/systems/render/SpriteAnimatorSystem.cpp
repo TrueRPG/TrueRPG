@@ -1,9 +1,10 @@
+#include "../../pch.h"
 #include "SpriteAnimatorSystem.h"
 
 #include <algorithm>
 
-#include "../components/SpriteRendererComponent.h"
-#include "../components/SpriteAnimatorComponent.h"
+#include "../../components/render/SpriteRendererComponent.h"
+#include "../../components/render/SpriteAnimatorComponent.h"
 
 SpriteAnimatorSystem::SpriteAnimatorSystem(entt::registry &registry) : m_registry(registry)
 {
@@ -13,8 +14,12 @@ void SpriteAnimatorSystem::update(float deltaTime)
 {
     auto view = m_registry.view<SpriteRendererComponent, SpriteAnimatorComponent>();
 
-    for (auto [entity, rendererComponent, animatorComponent] : view.each())
+    for (auto viewElement : view.each())
     {
+        auto entity = std::get<0>(viewElement);
+        auto rendererComponent = std::get<1>(viewElement);
+        auto animatorComponent = std::get<2>(viewElement);
+        
         // Handle transitions
 
         auto transitionConditionMet = [&](SpriteAnimatorTransition *t) {

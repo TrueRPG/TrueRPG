@@ -1,8 +1,8 @@
 #ifndef RPG_ANIMATION_HPP
 #define RPG_ANIMATION_HPP
 
-#include "../Entity.h"
-#include "../components/SpriteAnimatorComponent.h"
+#include "../scene/Entity.h"
+#include "../components/render/SpriteAnimatorComponent.h"
 
 class Animation
 {
