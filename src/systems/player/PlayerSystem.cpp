@@ -10,7 +10,7 @@
 // TODO: refactor
 PlayerSystem::PlayerSystem(entt::registry &registry)
     : m_registry(registry),
-      m_keyMappingConfig("../res/configs/key-mapping.yml")
+      m_keyMappingConfig(TRUERPG_RES_DIR "/configs/key-mapping.yml")
 {
 }
 

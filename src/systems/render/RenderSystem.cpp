@@ -9,8 +9,8 @@
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
-          m_shader(Shader::createShader("../res/shaders/g_buffer.vs", "../res/shaders/g_buffer.fs")),
-          m_uiShader(Shader::createShader("../res/shaders/ui.vs", "../res/shaders/ui.fs")),
+          m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/g_buffer.vs", TRUERPG_RES_DIR "/shaders/g_buffer.fs")),
+          m_uiShader(Shader::createShader(TRUERPG_RES_DIR "/shaders/ui.vs", TRUERPG_RES_DIR "/shaders/ui.fs")),
           m_batch(m_shader, 30000)
 {
     auto& window = Engine::getWindow();

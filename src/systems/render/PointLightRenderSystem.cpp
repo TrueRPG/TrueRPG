@@ -5,7 +5,7 @@
 
 PointLightRenderSystem::PointLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
-      m_shader(Shader::createShader("../res/shaders/point_light.vs", "../res/shaders/point_light.fs")),
+      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/point_light.vs", TRUERPG_RES_DIR "/shaders/point_light.fs")),
       m_quad()
 { }
 
