@@ -1,4 +1,7 @@
-include(ccache.cmake)
+if(NOT TRUERPG_DISABLE_CCACHE)
+	set(CMAKE_C_COMPILER_LAUNCHER "ccache")
+	set(CMAKE_CXX_COMPILER_LAUNCHER "ccache")
+endif()
 
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
