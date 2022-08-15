@@ -10,6 +10,7 @@ class ButtonRenderSystem : public IUIRenderSubsystem
     entt::registry& m_registry;
 
     bool pressed{false};
+    bool hovered{false};
 
 public:
     ButtonRenderSystem(entt::registry& registry);
