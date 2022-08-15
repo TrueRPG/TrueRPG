@@ -14,6 +14,7 @@ struct ButtonComponent
     ButtonComponent(Font *font, std::string text = "Button");
 
     std::function<void()> onClick;
+    std::function<void(bool hovered)> onHover;
 };
 
 #endif // RPG_BUTTONCOMPONENT_H
