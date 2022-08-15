@@ -110,7 +110,10 @@ Game::Game()
     m_characterAnimator = Animation::createAnimator([](SpriteAnimatorBuilder &builder) {
         auto velocity = builder.parameter("velocity", SpriteAnimatorParameterType::Vec2);
 
-        auto idle = builder.node("idle", {{{32, 96, 32, 32}}});
+        auto idleLeft = builder.node("idleLeft", {{{32, 64, 32, 32}}});
+        auto idleRight = builder.node("idleRight", {{{32, 32, 32, 32}}});
+        auto idleUp = builder.node("idleUp", {{{32, 96, 32, 32}}});
+        auto idleDown = builder.node("idleDown", {{{32, 0, 32, 32}}});
         auto walkLeft =
             builder.node("walkLeft", {{{0, 64, 32, 32}, 0.1f}, {{32, 64, 32, 32}, 0.1f}, {{64, 64, 32, 32}, 0.1f}});
         auto walkRight =
@@ -120,19 +123,31 @@ Game::Game()
         auto walkDown =
             builder.node("walkDown", {{{0, 0, 32, 32}, 0.1f}, {{32, 0, 32, 32}, 0.1f}, {{64, 0, 32, 32}, 0.1f}});
 
-        builder.entry().transition(idle, [](auto) { return true; });
+        builder.entry().transition(idleUp, [](auto) { return true; });
 
-        idle.transition(walkLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x < 0; });
-        walkLeft.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x >= 0; });
+        idleLeft.transition(walkLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x < 0; });
+        idleLeft.transition(walkRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x > 0; });
+        idleLeft.transition(walkDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y > 0; });
+        idleLeft.transition(walkUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y < 0; });
+        walkLeft.transition(idleLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x >= 0; });
 
-        idle.transition(walkRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x > 0; });
-        walkRight.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x <= 0; });
+        idleRight.transition(walkRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x > 0; });
+        idleRight.transition(walkLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x < 0; });
+        idleRight.transition(walkDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y < 0; });
+        idleRight.transition(walkUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y > 0; });
+        walkRight.transition(idleRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x <= 0; });
 
-        idle.transition(walkDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y > 0; });
-        walkDown.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y <= 0; });
+        idleDown.transition(walkDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y > 0; });
+        idleDown.transition(walkUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y < 0; });
+        idleDown.transition(walkLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x < 0; });
+        idleDown.transition(walkRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x > 0; });
+        walkDown.transition(idleDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y <= 0; });
 
-        idle.transition(walkUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y < 0; });
-        walkUp.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y >= 0; });
+        idleUp.transition(walkUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y < 0; });
+        idleUp.transition(walkDown, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y > 0; });
+        idleUp.transition(walkLeft, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x > 0; });
+        idleUp.transition(walkRight, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).x < 0; });
+        walkUp.transition(idleUp, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y >= 0; });
     });
 
     // Create the player
