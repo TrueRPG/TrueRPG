@@ -92,6 +92,9 @@ Game::Game()
     button.onClick = [] {
         std::cout << "button was pressed!" << std::endl;
     };
+    button.onHover = [](bool hovered) {
+        std::cout << "button is " << (hovered ? "hovered" : "not hovered") << std::endl;
+    };
     buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
     Hierarchy::addChild(m_cameraEntity, buttonEntity);
 
