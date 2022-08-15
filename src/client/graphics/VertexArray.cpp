@@ -1,5 +1,7 @@
+#include "../../pch.h"
 #include "VertexArray.h"
-#include <glad/gl.h>
+
+#include "Graphics.h"
 
 VertexArray::VertexArray()
 {

@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "StreamAudioClip.h"
 #include "AudioDevice.h"
 
@@ -11,7 +12,7 @@ std::string StreamAudioClip::getPath() const
 
 void StreamAudioClip::createDecoder(ma_decoder *decoder, ma_decoder_config* config) const
 {
-    // если я правильно понял, оно по дефолту работает как нужно
+    // If I get it correctly, it works by default as we need
     ma_decoder_init_file(m_path.c_str(), config, decoder);
 }
 

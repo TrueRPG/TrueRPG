@@ -1,32 +1,79 @@
+#include "pch.h"
 #include "Game.h"
 
-#include "scene/Entity.h"
-#include "scene/components/CameraComponent.h"
-#include "scene/components/NativeScriptComponent.h"
-#include "scene/components/SpriteRendererComponent.h"
-#include "scene/components/TextRendererComponent.h"
-#include "scene/components/WorldMapComponent.h"
+#include "systems/script/ScriptSystem.h"
+#include "systems/physics/PhysicsSystem.h"
+#include "systems/render/RenderSystem.h"
+#include "systems/render/SpriteRenderSystem.h"
+#include "systems/render/WorldMapRenderSystem.h"
+#include "systems/render/ui/UIRenderSystem.h"
+#include "systems/render/ui/InventoryRenderSystem.h"
+#include "systems/render/ui/ButtonRenderSystem.h"
+#include "systems/render/TextRenderSystem.h"
+#include "systems/audio/AudioSystem.h"
 
-#include "scene/utils/Hierarchy.h"
+#include "scene/Entity.h"
 #include "scene/utils/Animation.h"
+
+#include "components/render/CameraComponent.h"
+#include "components/script/NativeScriptComponent.h"
+#include "components/render/SpriteRendererComponent.h"
+#include "components/render/TextRendererComponent.h"
+#include "components/world/WorldMapComponent.h"
+#include "components/audio/AudioListenerComponent.h"
+#include "components/physics/RectColliderComponent.h"
+#include "components/physics/RigidbodyComponent.h"
+#include "components/render/AutoOrderComponent.h"
+#include "components/world/HpComponent.h"
+#include "components/render/ui/ButtonComponent.h"
+#include "components/world/ItemComponent.h"
+#include "components/world/InventoryComponent.h"
+
 #include "scripts/PlayerScript.h"
-#include "scripts/TextScript.h"
 #include "scripts/DebugInfoScript.h"
 #include "scripts/WorldMapScript.h"
-#include "scene/components/AudioListenerComponent.h"
 #include "scripts/PumpkinScript.h"
-#include "scene/components/RectColliderComponent.h"
-#include "scene/components/RigidbodyComponent.h"
-#include "scene/components/AutoOrderComponent.h"
 #include "scripts/BotScript.h"
+#include "scripts/ButtonScript.h"
+
+#include "utils/Hierarchy.h"
+#include "systems/render/PointLightRenderSystem.h"
+#include "components/render/PoinLightComponent.h"
+#include "systems/player/PlayerSystem.h"
+#include "systems/SpriteAnimatorSystem.h"
+#include "components/player/PlayerComponent.h"
 
 Game::Game()
-        : m_font("../res/fonts/vt323.ttf", 32),
-          m_heroTexture(Texture::create("../res/textures/hero.png")),
-          m_baseTexture(Texture::create("../res/textures/base.png")),
-          m_steps("../res/audio/steps.mp3"),
-          m_music("../res/audio/music.mp3")
+        : m_font(TRUERPG_RES_DIR "/fonts/vt323.ttf", 32),
+          m_heroTexture(Texture::create(TRUERPG_RES_DIR "/textures/hero.png")),
+          m_baseTexture(Texture::create(TRUERPG_RES_DIR "/textures/base.png")),
+          m_steps(TRUERPG_RES_DIR "/audio/steps.mp3"),
+          m_music(TRUERPG_RES_DIR "/audio/music.mp3")
 {
+    // Add systems
+    m_scene.addSystem<PlayerSystem>();
+    m_scene.addSystem<ScriptSystem>();
+    m_scene.addSystem<PhysicsSystem>();
+    m_scene.addSystem<SpriteAnimatorSystem>();
+
+    // Render systems
+    auto& renderSystem = m_scene.addSystem<RenderSystem>();
+    renderSystem.addSubsystem<WorldMapRenderSystem>();
+    renderSystem.addSubsystem<SpriteRenderSystem>();
+
+    // Light systems
+    // TODO: add ambient light
+    renderSystem.addLightSubsystem<PointLightRenderSystem>();
+
+    // UI systems
+    auto& uiRenderSystem = renderSystem.addUiSubsystem<UIRenderSystem>();
+    uiRenderSystem.addSubsystem<ButtonRenderSystem>();
+    uiRenderSystem.addSubsystem<InventoryRenderSystem>();
+    renderSystem.addUiSubsystem<TextRenderSystem>();
+
+    m_scene.addSystem<AudioSystem>();
+
+    // Add entities
     Entity worldMapEntity = m_scene.createEntity("worldMap");
 
     auto &worldTransform = worldMapEntity.getComponent<TransformComponent>();
@@ -35,25 +82,20 @@ Game::Game()
     auto &worldMap = worldMapEntity.addComponent<WorldMapComponent>();
     worldMapEntity.addComponent<NativeScriptComponent>().bind<WorldMapScript>(m_baseTexture, m_playerEntity);
 
-
     m_cameraEntity = m_scene.createEntity("camera");
     m_cameraEntity.addComponent<CameraComponent>();
 
+    // Button
+    Entity buttonEntity = m_scene.createEntity("button");
+    buttonEntity.getComponent<TransformComponent>().position = {100.f, 100.f};
+    auto &button = buttonEntity.addComponent<ButtonComponent>(&m_font, "test");
+    button.onClick = [] {
+        std::cout << "button was pressed!" << std::endl;
+    };
+    buttonEntity.addComponent<NativeScriptComponent>().bind<ButtonScript>();
+    Hierarchy::addChild(m_cameraEntity, buttonEntity);
 
-    // Создание текста
-    Entity textEntity = m_scene.createEntity("text");
-    auto &textRenderer = textEntity.addComponent<TextRendererComponent>(&m_font, "True RPG!\n Welcome!");
-
-    // Некоторые настройки текста для примера
-    textRenderer.horizontalAlign = HorizontalAlign::Center;
-    textRenderer.verticalAlign = VerticalAlign::Top;
-    textRenderer.layer = 10;
-
-    // Биндим скрипт к энтити и передаем туда камеру
-    textEntity.addComponent<NativeScriptComponent>().bind<TextScript>(m_cameraEntity);
-
-
-    // Создание fps счетчика
+    // Create an FPS counter
     Entity debugInfoEntity = m_scene.createEntity("debugInfo");
     auto &debugText = debugInfoEntity.addComponent<TextRendererComponent>(&m_font, "");
     debugText.layer = 10;
@@ -61,7 +103,7 @@ Game::Game()
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
 
-    // Создание анимации
+    // Create animation
     m_characterAnimator = Animation::createAnimator([](SpriteAnimatorBuilder &builder) {
         auto velocity = builder.parameter("velocity", SpriteAnimatorParameterType::Vec2);
 
@@ -90,7 +132,7 @@ Game::Game()
         walkUp.transition(idle, [=](const auto &storage) { return velocity.get<glm::vec2>(storage).y >= 0; });
     });
 
-    // Создание игрока
+    // Create the player
     m_playerEntity = m_scene.createEntity("player");
     auto &playerTransform = m_playerEntity.getComponent<TransformComponent>();
     m_playerEntity.addComponent<AudioListenerComponent>();
@@ -111,23 +153,61 @@ Game::Game()
     stepsComponent.volume = 0.25f;
     stepsComponent.loop = true;
 
+    auto &playerComponent = m_playerEntity.addComponent<PlayerComponent>();
+    playerComponent.sprite = spriteEntity;
+    playerComponent.steps = stepsSoundEntity;
+
     auto &playerCollider = m_playerEntity.addComponent<RectColliderComponent>();
     playerCollider.offset = glm::vec2(-16, 0);
     playerCollider.size = glm::vec2(32, 32);
     m_playerEntity.addComponent<RigidbodyComponent>();
 
-    // Крепим к игроку спрайт, звук, текст и камеру
+    // HP
+    auto hpEntity = m_scene.createEntity("hp");
+    auto &hpRenderer = hpEntity.addComponent<TextRendererComponent>(&m_font, "HP: 100");
+    hpRenderer.horizontalAlign = HorizontalAlign::Right;
+    hpRenderer.verticalAlign = VerticalAlign::Top;
+    hpRenderer.layer = 10;
+    m_playerEntity.addComponent<HpComponent>();
+
+    auto &playerLight = m_playerEntity.addComponent<PointLightComponent>();
+    playerLight.color = glm::vec3(0.25f, 0.25f, 0.4f);
+    playerLight.radius = 800.f;
+    playerLight.intensity = 2.0f;
+
+    // --------- Inventory ---------
+    // Item
+    Entity axeItem = m_scene.createEntity("axeItem");
+    auto&axeComponent = axeItem.addComponent<ItemComponent>();
+    axeComponent.name = "Axe";
+    axeComponent.description = "It's a very useful thing when you need to cut down trees or cut off some monster heads.";
+    axeComponent.icon = m_baseTexture;
+    axeComponent.iconRect = IntRect(163, 41, 24, 24);
+
+    Entity keyItem = m_scene.createEntity("keyItem");
+    auto& keyComponent = keyItem.addComponent<ItemComponent>();
+    keyComponent.name = "Secret Key";
+    keyComponent.description = "Looks like a very old key. What does it open?";
+    keyComponent.icon = m_baseTexture;
+    keyComponent.iconRect = IntRect(227, 41, 24, 24);
+
+    // Inventory
+    auto& inventoryComponent = m_playerEntity.addComponent<InventoryComponent>();
+    inventoryComponent.items = {6, std::vector<Entity>(4, Entity())};
+    inventoryComponent.items[0][0] = axeItem;
+    inventoryComponent.items[1][0] = keyItem;
+
+    // Attach sprite, sound, hp and camera to the player
     Hierarchy::addChild(m_playerEntity, spriteEntity);
     Hierarchy::addChild(m_playerEntity, stepsSoundEntity);
-    Hierarchy::addChild(m_playerEntity, textEntity);
+    Hierarchy::addChild(m_playerEntity, hpEntity);
     Hierarchy::addChild(m_playerEntity, debugInfoEntity);
     Hierarchy::addChild(m_playerEntity, m_cameraEntity);
 
-    // Биндим скрипт к игроку
+    // Bind the script to the player
     m_playerEntity.addComponent<NativeScriptComponent>().bind<PlayerScript>();
 
-
-    // Музыкальная тыква
+    // Musical pumpkin
     Entity pumpkinEntity = m_scene.createEntity("pumpkin");
     auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(m_baseTexture);
     pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
@@ -141,7 +221,12 @@ Game::Game()
     auto &musicComponent = pumpkinEntity.addComponent<AudioSourceComponent>(m_music);
     musicComponent.volume = 1.0f;
 
-    // Настройка текста тыквы
+    auto &pumpkinLight = pumpkinEntity.addComponent<PointLightComponent>();
+    pumpkinLight.color = glm::vec3(1.0, 0.5, 0.0);
+    pumpkinLight.radius = 200.f;
+    pumpkinLight.intensity = 1.0f;
+
+    // Text setup for the pumpkin
     Entity pumpkinTextEntity = m_scene.createEntity("text");
     auto &pumpkinTextRenderer = pumpkinTextEntity.addComponent<TextRendererComponent>(&m_font);
     pumpkinTextRenderer.horizontalAlign = HorizontalAlign::Center;
@@ -153,7 +238,6 @@ Game::Game()
     Hierarchy::addChild(pumpkinEntity, pumpkinTextEntity);
 
     pumpkinEntity.addComponent<NativeScriptComponent>().bind<PumpkinScript>(m_playerEntity);
-
 
     // Barrels
     Entity barrels[3];
@@ -172,7 +256,6 @@ Game::Game()
         barrels[i].addComponent<RectColliderComponent>().size = glm::vec2(64, 32);
         auto &order = barrels[i].addComponent<AutoOrderComponent>();
     }
-
 
     // Bot
     Entity botEntity = m_scene.createEntity("bot");

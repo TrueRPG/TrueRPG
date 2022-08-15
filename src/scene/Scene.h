@@ -2,6 +2,7 @@
 #define RPG_SCENE_H
 
 #include <entt.hpp>
+
 #include "../client/graphics/SpriteBatch.h"
 
 #include "systems/ScriptSystem.h"
@@ -9,24 +10,30 @@
 #include "systems/AudioSystem.h"
 #include "systems/PhysicsSystem.h"
 #include "systems/SpriteAnimatorSystem.h"
+#include "ISystem.h"
 
 class Entity;
 
 class Scene
 {
     entt::registry m_registry;
+    std::vector<ISystem*> m_systems;
 
-    ScriptSystem m_scriptSystem;
-    PhysicsSystem m_physicsSystem;
-    RenderSystem m_renderSystem;
-    AudioSystem m_audioSystem;
-    SpriteAnimatorSystem m_spriteAnimatorSystem;
 public:
-    Scene();
+    ~Scene();
 
     Entity createEntity(const std::string& name = "");
 
     void destroyEntity(Entity entity);
+
+    template<typename T>
+    decltype(auto) addSystem()
+    {
+        m_systems.push_back(new T(m_registry));
+        return (T&)*m_systems.back();
+    }
+
+    void create();
 
     void update(float deltaTime);
 

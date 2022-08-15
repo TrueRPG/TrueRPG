@@ -1,7 +1,11 @@
+# IDE projects
 .idea
 .vscode
-/bin
-/build
-/cmake-build-debug
+.cache
 .vs
+
+# Binaries
+/bin
+/*build*
+
 compile_flags.txt

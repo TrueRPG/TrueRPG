@@ -1,0 +1,8 @@
+exit: Esc
+moveUp: W
+moveDown: S
+moveLeft: A
+moveRight: D
+openInventory: I
+use: E
+hitYourself: K

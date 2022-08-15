@@ -6,8 +6,8 @@
 #include "IAudioClip.h"
 
 /**
- * Класс аудио-клипа, который кэширует весь аудио-файл.
- * Данную реализацию лучше использовать для коротких звуков.
+ * This class caches an audio clip in memory.
+ * It's better to use for short audio files.
  */
 class CachedAudioClip : public IAudioClip
 {
@@ -15,10 +15,11 @@ class CachedAudioClip : public IAudioClip
     std::vector<char> m_data;
 
 public:
+
     /**
-     * Создать аудио-клип.
+     * Create an audio clip.
      *
-     * @param path путь до файла
+     * @param path the file path
      */
     CachedAudioClip(const std::string &path);
 

@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "Font.h"
 
 #include <ft2build.h>
@@ -6,7 +7,7 @@
 Font::Font(const std::string &path, int size)
         : m_path(path), m_size(size)
 {
-    // TODO: инициализацию надо бы куда-то вынести
+    // TODO: We need to put this initialisation somewhere else
     FT_Library freetype;
     if (FT_Init_FreeType(&freetype))
     {
@@ -22,7 +23,7 @@ Font::Font(const std::string &path, int size)
     }
     FT_Set_Pixel_Sizes(face, 0, size);
 
-    // Вычисляем размеры атласа с глифами
+    // Compute the size of the glyph atlas
     FT_GlyphSlot glyph = face->glyph;
     int width = 0;
     int height = 0;
@@ -39,7 +40,7 @@ Font::Font(const std::string &path, int size)
         height = std::max(height, (int) glyph->bitmap.rows);
     }
 
-    // Так как мы узнали ширину и высоту, то можем заранее создать текстуру для всех глифов
+    // We know the width and height already, so we can create a texture for all glyphs
     unsigned int textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
@@ -54,19 +55,20 @@ Font::Font(const std::string &path, int size)
     glTextureStorage2D(textureId, 1, GL_RGBA8, width, height);
 
     // Загружаем глифы в текстуру
+    // Load glyphs into the created texture
     int x = 0;
     for (int i = 32; i < 128; i++)
     {
         if (FT_Load_Char(face, i, FT_LOAD_RENDER) || !glyph->bitmap.buffer)
         {
-            // Иногда могут не загрузиться какие-то глифы (например, такое может быть на винде),
-            // поэтому просто пропускаем такие случаи.
+            // Sometimes some glyphs can't be loaded (it often happens on Windows),
+            // so we just skip such cases
             continue;
         }
 
         fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows);
 
-        // уOffset нужен, чтобы разместить наши символы на одной линии
+        // we need уOffset to place the symbols on the one line
         glTextureSubImage2D(textureId, 0, x, 0, glyph->bitmap.width, glyph->bitmap.rows,
                             GL_RGBA, GL_UNSIGNED_BYTE, &m_pixelBuffer[0]);
 
@@ -79,7 +81,7 @@ Font::Font(const std::string &path, int size)
 
     m_texture = Texture(textureId, path, width, height);
 
-    // Уничтожаем все это безобразие
+    // Destroy all this rubbish
     FT_Done_Face(face);
     FT_Done_FreeType(freetype);
 }
@@ -109,8 +111,8 @@ void Font::destroy()
     m_texture.destroy();
 }
 
-// Выглядит жутко, но похожую штуку увидал в SFML. У нас особо нет выбора,
-// потому что хочется переиспользовать уже имеющийся шейдер, а freetype умеет только в один канал.
+// Looks scary, but I found the similar thing in SFML code.
+// We don't have a choice, because it's better to reuse our shaders, but freetype can work only with one channel.
 void Font::fillPixelBuffer(const unsigned char *buffer, size_t width, size_t height)
 {
     m_pixelBuffer.resize(width * height * 4);
@@ -118,7 +120,7 @@ void Font::fillPixelBuffer(const unsigned char *buffer, size_t width, size_t hei
     {
         for (unsigned int x = 0; x < width; ++x)
         {
-            // Делаем белый цвет по умолчанию, альфу забиваем тем, что нам дал freetype
+            // Make white the default colour, and put the data from freetype into the alpha channel
             std::size_t index = x + y * width;
             m_pixelBuffer[index * 4 + 0] = 255;
             m_pixelBuffer[index * 4 + 1] = 255;

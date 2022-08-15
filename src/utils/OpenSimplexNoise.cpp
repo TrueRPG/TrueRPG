@@ -1,3 +1,4 @@
+#include "../pch.h"
 #include "OpenSimplexNoise.h"
 #include <cmath>
 #include <ctime>
@@ -33,14 +34,13 @@ void OpenSimplexNoise::initContext(SimplexCtx& ctx, u64 seed)
         source[i] = i;
     }
 
-    for (i32 i = PSIZE; i >= 0; i--)
+    for (i32 i = PSIZE - 1; i >= 0; i--)
     {
         seed = seed * 6364136223846793005L + 1442695040888963407L;
         i32 r = static_cast<i32>((seed + 31) % (i + 1));
         if (r < 0)
-        {
             r += (i + 1);
-        }
+        
         ctx.m_perm[i] = source[r];
         source[r] = source[i];
     }

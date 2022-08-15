@@ -12,58 +12,58 @@
 #define CHANNELS 2
 #define SAMPLE_RATE 48000
 
-// Структурка для передачи данных в callback декодера
+// The structure for passing data into the decoder callback function
 struct UserData
 {
     std::unordered_map<AudioSource *, ma_decoder> &sources;
     std::mutex &mutex;
 };
 
-/**
- * Сущность аудио-девайса.
- * Может воспроизводить звуки, миксовать их между собой.
- * В идеале, аудио-девайс должен быть один на всю игру.
- */
+ /**
+  * Audio device class.
+  * It can play sounds and mix them with each other.
+  * Ideally, there should be only one audio device for the entire game.
+  */
 class AudioDevice
 {
 private:
     ma_device m_device{};
 
-    // Мапа с аудио-сурсами является разделяемым ресурсом,
-    // т.к. воспроизведение звука выполняется в отдельном потоке.
-    // Нужно быть осторожным при работе с ней
+    // This audio source map is a shared resource,
+    // because sounds must be played in a separate thread.
+    // So be careful with this.
     std::unordered_map<AudioSource *, ma_decoder> m_sources;
 
     std::mutex m_mutex;
 
-    // Это мы будем передавать в callback декодера
+    // This data we want to pass into the decoder callback function
     UserData m_userData;
 
 public:
 
     /**
-     * Создать аудио-девайс.
+     * Create an audio device.
      */
     AudioDevice();
 
     ~AudioDevice();
 
     /**
-     * Добавить аудио-сурс.
+     * Add an audio source.
      *
-     * @param source аудио-сурс
+     * @param source the audio source
      */
     void add(AudioSource &source);
 
     /**
-     * Удалить аудио-сурс.
+     * Remove an audio source.
      *
-     * @param source аудио-сурс
+     * @param source the audio source
      */
     void remove(AudioSource &source);
 
     /**
-     * Очистить девайс.
+     * Clear the device.
      */
     void clear();
 

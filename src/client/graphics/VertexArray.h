@@ -1,9 +1,7 @@
 #ifndef RPG_VERTEX_ARRAY_H
 #define RPG_VERTEX_ARRAY_H
 
-#include "IGLObject.h"
-
-class VertexArray final : public IGLObject
+class VertexArray final
 {
 private:
     unsigned int m_id{};
@@ -13,9 +11,9 @@ public:
     void bind();
     void unbind();
 
-    void destroy() override;
+    void destroy();
 
-    unsigned int getId() const override;
+    unsigned int getId() const;
 };
 
 

@@ -1,40 +1,13 @@
+#include "../../pch.h"
 #include "Shader.h"
+#include <fstream>
+#include <sstream>
 
-Shader::Shader(unsigned int id) : m_id(id) { }
+Shader::Shader(unsigned int m_id) : m_id(m_id) { }
 
 void Shader::use() const
 {
     glUseProgram(m_id);
-}
-
-void Shader::setUniform(const std::string &name, bool value) const
-{
-    glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
-}
-
-void Shader::setUniform(const std::string &name, int value) const
-{
-    glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
-}
-
-void Shader::setUniform(const std::string &name, float value) const
-{
-    glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
-}
-
-void Shader::setUniform(const std::string &name, const glm::vec3 &vec) const
-{
-    glUniform3f(glGetUniformLocation(m_id, name.c_str()), vec.x, vec.y, vec.z);
-}
-
-void Shader::setUniform(const std::string &name, const glm::mat4& mat) const
-{
-    glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
-}
-
-void Shader::setUniform(const std::string &name, const int arr[], int size) const
-{
-    glUniform1iv(glGetUniformLocation(m_id, name.c_str()), size, arr);
 }
 
 unsigned int Shader::getId() const noexcept
@@ -46,6 +19,23 @@ void Shader::destroy()
 {
     glDeleteProgram(m_id);
     m_id = 0;
+}
+
+template<typename F1, typename F2>
+void checkCompileErrors(unsigned int glHandel, unsigned int status,
+                                    F1 GLget,
+                                    F2 GLinfoLog)
+{
+    char infoLog[1024];
+    int success;
+
+    GLget(glHandel, status, &success);
+
+    if(!success)
+    {
+        GLinfoLog(glHandel, 1024, nullptr, infoLog);
+        std::cout << "ERROR::SHADER: \n\t" << infoLog << std::endl;
+    }
 }
 
 Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath)
@@ -79,17 +69,17 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
     shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try
     {
-        // Открываем файлы
+        // Open the file
         shaderFile.open(path);
         std::stringstream shaderStream;
 
-        // Читаем содержимое файловых буферов
+        // Read the contents of file buffers
         shaderStream << shaderFile.rdbuf();
 
-        // Закрываем файлы
+        // Close the file
         shaderFile.close();
 
-        // Конвертируем в строковую переменную данные из потока
+        // Convert data from the stream into a string
         shaderCode = shaderStream.str();
     }
     catch (std::ifstream::failure &e)
@@ -107,18 +97,3 @@ unsigned int Shader::compileShader(const std::string& path, unsigned int type)
     return shader;
 }
 
-void Shader::checkCompileErrors(unsigned int glHandel, unsigned int status,
-                                    void (*GLget)(unsigned int, unsigned int, int*),
-                                    void (*GLinfoLog)(unsigned int, int, int*, char*))
-{
-    char infoLog[1024];
-    int success;
-
-    GLget(glHandel, status, &success);
-
-    if(!success)
-    {
-        GLinfoLog(glHandel, 1024, nullptr, infoLog);
-        std::cout << "ERROR::SHADER: \n\t" << infoLog << std::endl;
-    }
-}

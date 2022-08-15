@@ -2,16 +2,17 @@
 #define RPG_TEXTURE_H
 
 #include <string>
-#include <glad/gl.h>
-#include "IGLObject.h"
+#include "Graphics.h"
 
-class Texture : public IGLObject
+class Bitmap;
+
+class Texture
 {
 private:
     unsigned int m_id{};
-    std::string m_path; // Путь до файла
-    int m_width{}; // Ширина текстуры
-    int m_height{}; // Высота текстуры
+    std::string m_path; // The file path
+    int m_width{}; // The width of the texture
+    int m_height{}; // The height of the texture
 
 public:
     Texture();
@@ -21,9 +22,9 @@ public:
 
     void unbind() const;
 
-    unsigned int getId() const noexcept override;
+    unsigned int getId() const noexcept;
 
-    void destroy() override;
+    void destroy();
 
     std::string getPath() const;
 
@@ -32,6 +33,10 @@ public:
     int getHeight() const;
 
     static Texture create(const std::string &path, unsigned int type = GL_TEXTURE_2D);
+
+    static Texture createEmpty();
+
+    static Texture create(const Bitmap &bitmap, unsigned int type = GL_TEXTURE_2D);
 };
 
 

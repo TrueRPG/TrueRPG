@@ -7,7 +7,7 @@
 #include "AudioState.h"
 
 /**
- * Класс аудио-сурса. Содержит в себе необходимую для воспроизведения конфигурацию.
+ * Audio source class. Contains the necessary configuration to play audio.
  */
 class AudioSource
 {
@@ -24,87 +24,88 @@ class AudioSource
 public:
 
     /**
-     * Создать аудио-сурс.
-     * @param audioClip аудио-клип
+     * Create an audio source.
+     *
+     * @param audioClip the audio clip
      */
     AudioSource(IAudioClip &audioClip);
 
     /**
-     * Получить аудио-клип.
+     * Get the audio clip.
      *
-     * @return аудио-клип
+     * @return the audio clip
      */
     IAudioClip &getAudioClip() const;
 
     /**
-     * Получить текущее состояние.
+     * Get the current state.
      *
-     * @return состояние
+     * @return the current state
      */
     AudioState getState() const;
 
     /**
-     * Начать воспроизведение.
+     * Play the audio clip.
      */
     void play();
 
     /**
-     * Поставить на паузу.
+     * Pause the audio clip.
      */
     void pause();
 
     /**
-     * Остановить воспроизведение.
+     * Stop the audio clip.
      */
     void stop();
 
     /**
-     * Получить громкость.
-     * 0.f - без звука
+     * Get the volume of the sound.
+     * 0.f - no sound
      * 1.f - 100%
      *
-     * @return громкость
+     * @return the volume
      */
     float getVolume() const;
 
     /**
-     * Задать громкость.
-     * 0.f - без звука
+     * Set the volume of the sound.
+     * 0.f - no sound
      * 1.f - 100%
      *
-     * @param volume громкость
+     * @param volume the volume
      */
     void setVolume(float volume);
 
     /**
-     * Получить панорамирование.
-     * -1.f - лево
-     * 1.f - право
+     * Get the panning of the sound.
+     * -1.f - left
+     * 1.f - right
      *
-     * @return панорамирование
+     * @return the panning
      */
     float getPan() const;
 
     /**
-     * Задать панорамирование.
-     * -1.f - лево
-     * 1.f - право
+     * Set the panning of the sound.
+     * -1.f - left
+     * 1.f - right
      *
-     * @param pan панорамирование
+     * @param pan the panning
      */
     void setPan(float pan);
 
     /**
-     * Зациклен ли аудио-сурс.
+     * Is the audio source is looped?
      *
-     * @return зациклен или нет
+     * @return true if it's looped and false otherwise
      */
     bool isLoop() const;
 
     /**
-     * Зациклить аудио-сурс.
+     * Make a loop .
      *
-     * @param loop зациклить или нет
+     * @param loop make a loop or not
      */
     void setLoop(bool loop);
 };

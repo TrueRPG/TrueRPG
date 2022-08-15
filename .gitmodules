@@ -7,3 +7,6 @@
 [submodule "libs/freetype"]
 	path = libs/freetype
 	url = https://github.com/freetype/freetype
+[submodule "libs/yaml-cpp"]
+	path = libs/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp

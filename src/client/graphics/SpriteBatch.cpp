@@ -1,6 +1,7 @@
+#include "../../pch.h"
 #include "SpriteBatch.h"
 
-#include <glad/gl.h>
+#include "Graphics.h"
 #include <numeric>
 
 SpriteBatch::SpriteBatch(Shader shader, int maxSprites)
@@ -90,7 +91,7 @@ void SpriteBatch::end()
 
     int *ids = new int[m_texturesSize];
     std::iota(ids, ids + m_texturesSize, 0);
-    m_shader.setUniform("textures", ids, m_texturesSize);
+    m_shader.setUniform("textures", m_texturesSize, ids);
 
     m_shader.setUniform("model", glm::mat4(1));
 
@@ -143,7 +144,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
     glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin() * sprite.getScale();
     IntRect rect = sprite.getTextureRect();
 
-    Texture &texture = sprite.getTexture();
+    Texture texture = sprite.getTexture();
 
     int i;
     for (i = 0; i < m_texturesSize; i++)
@@ -221,18 +222,34 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
             });
 }
 
+void SpriteBatch::setShader(Shader shader)
+{
+    m_shader = shader;
+}
+
+glm::mat4 SpriteBatch::getProjectionMatrix()
+{
+    return m_projMat;
+}
+
 void SpriteBatch::setProjectionMatrix(glm::mat4 projMat)
 {
+    m_projMat = projMat;
     m_shader.use();
     m_shader.setUniform("projection", projMat);
 }
 
+glm::mat4 SpriteBatch::getViewMatrix()
+{
+    return m_viewMat;
+}
+
 void SpriteBatch::setViewMatrix(glm::mat4 viewMat)
 {
+    m_viewMat = viewMat;
     m_shader.use();
     m_shader.setUniform("view", viewMat);
 }
-
 void SpriteBatch::destroy()
 {
     m_vao.destroy();

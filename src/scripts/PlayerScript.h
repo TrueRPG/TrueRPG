@@ -3,98 +3,37 @@
 
 #include <vector>
 #include "../scene/Script.h"
-#include "../client/window/Window.h"
-#include "../scene/components/RigidbodyComponent.h"
+#include "../components/physics/RigidbodyComponent.h"
+#include "../components/world/HpComponent.h"
+#include "../components/world/InventoryComponent.h"
+#include "../utils/Hierarchy.h"
+#include "../client/Engine.h"
+#include "GLFW/glfw3.h"
 
+// TODO: refactor
 class PlayerScript : public Script
 {
-    float m_speed{1.3f};
-
-    Entity m_spriteEntity{};
-    Entity m_stepsEntity{};
-
-    std::vector<int> m_inputStack;
+    Entity m_cameraEntity{};
+    Entity m_hpEntity{};
 
 public:
     void onCreate() override
     {
-        m_spriteEntity = Hierarchy::find(getEntity(), "sprite");
-        m_stepsEntity = Hierarchy::find(getEntity(), "stepsSound");
+        m_cameraEntity = Hierarchy::find(getEntity(), "camera");
+        m_hpEntity = Hierarchy::find(getEntity(), "hp");
     }
 
     void onUpdate(float deltaTime) override
     {
-        Window &window = Window::getInstance();
+        auto &textTransform = m_hpEntity.getComponent<TransformComponent>();
+        auto &cameraComponent = m_cameraEntity.getComponent<CameraComponent>();
 
-        // Пока поместил выход из игры сюда
-        if (window.getKey(GLFW_KEY_ESCAPE))
-        {
-            window.close();
-        }
+        textTransform.position = glm::vec2(cameraComponent.getWidth() / 2, cameraComponent.getHeight() / 2);
+        textTransform.scale = glm::vec2(1 / cameraComponent.zoom);
 
-        auto &rigidbody = getComponent<RigidbodyComponent>();
-        auto &stepsSound = m_stepsEntity.getComponent<AudioSourceComponent>();
-        auto &animator = m_spriteEntity.getComponent<SpriteAnimatorComponent>();
-
-        updateInput();
-        int currentKey = m_inputStack.empty() ? -1 : m_inputStack.back();
-
-        // Управление
-        glm::ivec2 movement(0);
-        if (currentKey == GLFW_KEY_W)
-        {
-            movement = glm::ivec2(0, 1);
-        }
-        if (currentKey == GLFW_KEY_A)
-        {
-            movement = glm::ivec2(-1, 0);
-        }
-        if (currentKey == GLFW_KEY_S)
-        {
-            movement = glm::ivec2(0, -1);
-        }
-        if (currentKey == GLFW_KEY_D)
-        {
-            movement = glm::ivec2(1, 0);
-        }
-
-        rigidbody.velocity = glm::vec2(movement) * m_speed * 200.f;
-
-        animator.parameterStorage.at("velocity") = rigidbody.velocity;
-
-        if (movement == glm::ivec2(0.f))
-        {
-            stepsSound.pause();
-        }
-        else
-        {
-            stepsSound.play();
-        }
-    }
-
-private:
-    void updateInput()
-    {
-        Window &window = Window::getInstance();
-
-        int keys[] = {GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D};
-
-        for (const auto &key : keys)
-        {
-            if (window.getKey(key))
-            {
-                if (std::find(m_inputStack.begin(), m_inputStack.end(), key) == m_inputStack.end())
-                {
-                    m_inputStack.push_back(key);
-                }
-            }
-            else
-            {
-                auto newEnd = std::remove_if(m_inputStack.begin(), m_inputStack.end(),
-                                          [key](const int &k){return k == key;});
-                m_inputStack.erase(newEnd, m_inputStack.end());
-            }
-        }
+        auto &hpComponent = getComponent<HpComponent>();
+        auto &textRenderer = m_hpEntity.getComponent<TextRendererComponent>();
+        textRenderer.text = "HP: " + std::to_string(hpComponent.value);
     }
 };
 

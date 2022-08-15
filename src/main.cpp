@@ -1,30 +1,27 @@
-#include "client/window/Window.h"
-#include "RTime.h"
+#include "pch.h"
+#include "utils/GameTimer.h"
+#include "client/Engine.h"
 #include "Game.h"
 
-// Никто не забыт, ничто не забыто
+// Nobody is forgotten, nothing is forgotten
 
 // D.E.L.E.T.E.D
 // summonDestructor3000 
 // 2021-2021
-// Покойся с миром
+// Rest in peace
 
 int main()
 {
-    // Создание окна
-    auto &window = Window::getInstance(1280, 720, "TRUE RPG");
+    // Create a window
+    auto &window = Engine::getWindow(1280, 720, "TRUE RPG");
 
     Game game;
 
-    // Game timer
-    RTime time(0.0f, 0.0f, 0.0f);
+    GameTimer time(0.0f, 0.0f, 0.0f);
 
     while (window.isOpen())
     {
         game.update(time.getDeltaTime());
-
-        // Обмен содержимым front- и back- буферов.
-        // Отслеживание событий ввода/вывода (была ли нажата/отпущена кнопка, перемещен курсор мыши и т.п.)
         window.swapBuffers();
         window.pollEvents();
     }
