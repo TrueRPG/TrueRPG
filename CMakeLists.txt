@@ -13,6 +13,10 @@ option(TRUERPG_USE_SYSTEM_GLM "Use system GLM installation" OFF)
 option(TRUERPG_USE_SYSTEM_FREETYPE "Use system freetype installation" OFF)
 option(TRUERPG_USE_SYSTEM_YAMLCPP "Use system yaml-cpp installation" OFF)
 
+if(NOT TRUERPG_RES_DIR_PREFIX)
+	set(TRUERPG_RES_DIR_PREFIX "..")
+endif()
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.h" "src/*.hpp")
 
@@ -67,3 +71,11 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} ${PROJECT_LIBS})
 install(TARGETS ${PROJECT_NAME})
+
+# Install the resources into TRUERPG_RES_DIR_PREFIX if it is customized
+if(NOT TRUERPG_RES_DIR_PREFIX STREQUAL "..")
+	install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${TRUERPG_RES_DIR_PREFIX})
+endif()
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	-DTRUERPG_RES_DIR="${TRUERPG_RES_DIR_PREFIX}res")

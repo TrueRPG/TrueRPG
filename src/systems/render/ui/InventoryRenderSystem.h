@@ -18,7 +18,7 @@ class InventoryRenderSystem : public IUIRenderSubsystem
     glm::ivec2 m_itemLastPos;
     glm::vec2 m_itemDelta;
 
-    Font font{"../res/fonts/vt323.ttf", 32};
+    Font font{TRUERPG_RES_DIR "/fonts/vt323.ttf", 32};
 
     glm::vec2 prevCursor{};
     float m_descriptionTimer{DESCRIPTION_TIMER};

@@ -41,11 +41,11 @@
 #include "components/player/PlayerComponent.h"
 
 Game::Game()
-        : m_font("../res/fonts/vt323.ttf", 32),
-          m_heroTexture(Texture::create("../res/textures/hero.png")),
-          m_baseTexture(Texture::create("../res/textures/base.png")),
-          m_steps("../res/audio/steps.mp3"),
-          m_music("../res/audio/music.mp3")
+        : m_font(TRUERPG_RES_DIR "/fonts/vt323.ttf", 32),
+          m_heroTexture(Texture::create(TRUERPG_RES_DIR "/textures/hero.png")),
+          m_baseTexture(Texture::create(TRUERPG_RES_DIR "/textures/base.png")),
+          m_steps(TRUERPG_RES_DIR "/audio/steps.mp3"),
+          m_music(TRUERPG_RES_DIR "/audio/music.mp3")
 {
     // Add systems
     m_scene.addSystem<PlayerSystem>();
