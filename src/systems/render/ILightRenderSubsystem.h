@@ -17,6 +17,8 @@ public:
     virtual void update(float deltaTime) {};
 
     virtual Shader& getShader() = 0;
+
+    virtual void destroy() {};
 };
 
 #endif // RPG_ILIGHTRENDERSUBSYSTEM_H

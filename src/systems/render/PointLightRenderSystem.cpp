@@ -10,11 +10,6 @@ PointLightRenderSystem::PointLightRenderSystem(entt::registry &registry)
       m_quad()
 { }
 
-PointLightRenderSystem::~PointLightRenderSystem()
-{
-    m_quad.destroy();
-}
-
 void PointLightRenderSystem::draw()
 {
     auto view = m_registry.view<PointLightComponent>();
@@ -39,4 +34,9 @@ void PointLightRenderSystem::draw()
 Shader& PointLightRenderSystem::getShader()
 {
     return m_shader;
+}
+
+void PointLightRenderSystem::destroy()
+{
+    m_quad.destroy();
 }

@@ -119,6 +119,18 @@ void RenderSystem::update(float deltaTime)
 
 void RenderSystem::destroy()
 {
+    for (auto &system : m_subsystems)
+    {
+        system->destroy();
+    }
+    for (auto &system : m_lightSubsystems)
+    {
+        system->destroy();
+    }
+    for (auto &system : m_uiSubsystems)
+    {
+        system->destroy();
+    }
     m_batch.destroy();
     m_shader.destroy();
     m_uiShader.destroy();

@@ -19,6 +19,8 @@ public:
     virtual void draw(SpriteBatch& batch) = 0;
 
     virtual void update(float deltaTime) {};
+
+    virtual void destroy() {};
 };
 
 #endif // RPG_IRENDERSUBSYSTEM_H

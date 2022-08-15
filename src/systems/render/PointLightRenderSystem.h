@@ -14,11 +14,12 @@ class PointLightRenderSystem : public ILightRenderSubsystem
     Quad m_quad;
 public:
     explicit PointLightRenderSystem(entt::registry& registry);
-    ~PointLightRenderSystem() override;
 
     void draw() override;
 
     Shader& getShader() override;
+
+    void destroy() override;
 };
 
 #endif // RPG_POINTLIGHTRENDERSYSTEM_H
