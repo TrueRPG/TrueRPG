@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "Bitmap.h"
 #include <cassert>
 

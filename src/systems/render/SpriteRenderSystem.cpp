@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "SpriteRenderSystem.h"
 
 #include "../../components/render/SpriteRendererComponent.h"

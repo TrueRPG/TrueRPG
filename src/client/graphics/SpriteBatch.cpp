@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "SpriteBatch.h"
 
 #include "Graphics.h"

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "utils/GameTimer.h"
 #include "client/Engine.h"
 #include "Game.h"

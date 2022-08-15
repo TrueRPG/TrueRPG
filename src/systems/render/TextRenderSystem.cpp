@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "TextRenderSystem.h"
 
 #include "../../components/render/TextRendererComponent.h"

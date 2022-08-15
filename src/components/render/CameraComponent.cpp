@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "CameraComponent.h"
 
