@@ -2,6 +2,14 @@
 #define RPG_SCENE_H
 
 #include <entt.hpp>
+
+#include "../client/graphics/SpriteBatch.h"
+
+#include "../systems/script/ScriptSystem.h"
+#include "../systems/render/RenderSystem.h"
+#include "../systems/render/SpriteAnimatorSystem.h"
+#include "../systems/audio/AudioSystem.h"
+#include "../systems/physics/PhysicsSystem.h"
 #include "ISystem.h"
 
 class Entity;
