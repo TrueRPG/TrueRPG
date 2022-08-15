@@ -33,6 +33,10 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
 
         if (sprite.getGlobalBounds().contains(cursor) && buttonComponent.enabled)
         {
+            if (!hovered)
+            {
+                buttonComponent.onHover(hovered = true);
+            }
             sprite.setColor(highlightedColor);
             // TODO: hardcoded mouse button
             if (window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
@@ -45,6 +49,10 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 pressed = false;
                 buttonComponent.onClick();
             }
+        }
+        else if (hovered)
+        {
+            buttonComponent.onHover(hovered = false);
         }
 
         batch.draw(sprite, 100);
