@@ -18,12 +18,14 @@ class PlayerScript : public Script
 {
     Entity m_cameraEntity{};
     Entity m_hpEntity{};
+    Entity m_spriteEntity{};
 
 public:
     void onCreate() override
     {
         m_cameraEntity = Hierarchy::find(getEntity(), "camera");
         m_hpEntity = Hierarchy::find(getEntity(), "hp");
+        m_spriteEntity = Hierarchy::find(getEntity(), "sprite");
     }
 
     void onUpdate(float deltaTime) override
@@ -37,6 +39,11 @@ public:
         auto &hpComponent = getComponent<HpComponent>();
         auto &textRenderer = m_hpEntity.getComponent<TextRendererComponent>();
         textRenderer.text = "HP: " + std::to_string(hpComponent.value);
+
+        // animator
+        auto &animator = m_spriteEntity.getComponent<SpriteAnimatorComponent>();
+        auto &rigidbody = getComponent<RigidbodyComponent>();
+        animator.parameterStorage.at("velocity") = rigidbody.velocity;
     }
 };
 
