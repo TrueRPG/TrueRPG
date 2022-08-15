@@ -1,7 +1,5 @@
 #include "Animation.h"
 
-#include "../components/render/SpriteAnimatorComponent.h"
-
 SpriteAnimator Animation::createAnimator(const std::function<void(SpriteAnimatorBuilder &)>& setup)
 {
     SpriteAnimatorBuilder builder;
@@ -30,4 +28,3 @@ void Animation::addAnimator(Entity entity, const SpriteAnimator *animator)
     animatorComponent.activeAnimation.frame.index = 0;
     animatorComponent.activeAnimation.frame.time = 0;
 }
-

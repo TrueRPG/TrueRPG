@@ -16,9 +16,8 @@ void SpriteAnimatorSystem::update(float deltaTime)
 
     for (auto viewElement : view.each())
     {
-        auto entity = std::get<0>(viewElement);
-        auto rendererComponent = std::get<1>(viewElement);
-        auto animatorComponent = std::get<2>(viewElement);
+        auto& rendererComponent = std::get<1>(viewElement);
+        auto& animatorComponent = std::get<2>(viewElement);
         
         // Handle transitions
 
