@@ -5,7 +5,7 @@
 
 struct ClockComponent
 {
-    Clock clock;
+    Clock clock{};
     float clockSpeed{100};
 };
 
