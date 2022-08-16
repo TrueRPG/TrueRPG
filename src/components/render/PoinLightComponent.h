@@ -1,7 +1,7 @@
 #ifndef RPG_SRC_COMPONENTS_RENDER_POINLIGHTCOMPONENT_H
 #define RPG_SRC_COMPONENTS_RENDER_POINLIGHTCOMPONENT_H
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 struct PointLightComponent
 {

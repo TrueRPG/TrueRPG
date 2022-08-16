@@ -12,7 +12,7 @@ public:
 
     float getSeconds() const;
 
-    Clock& operator+= (float time);
+    Clock& operator+=(float time);
 };
 
 #endif // RPG_CLOCK_H
