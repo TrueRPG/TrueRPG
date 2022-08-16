@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "../../components/render/SpriteRendererComponent.h"
-#include "../../components/render/SpriteAnimatorComponent.h"
+#include "../../components/animation/SpriteAnimatorComponent.h"
 
 SpriteAnimatorSystem::SpriteAnimatorSystem(entt::registry &registry) : m_registry(registry)
 {

@@ -10,7 +10,7 @@
 #include "systems/render/ui/InventoryRenderSystem.h"
 #include "systems/render/ui/ButtonRenderSystem.h"
 #include "systems/render/TextRenderSystem.h"
-#include "systems/render/SpriteAnimatorSystem.h"
+#include "systems/animation/SpriteAnimatorSystem.h"
 #include "systems/audio/AudioSystem.h"
 
 #include "scene/Entity.h"

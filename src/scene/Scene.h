@@ -7,7 +7,7 @@
 
 #include "../systems/script/ScriptSystem.h"
 #include "../systems/render/RenderSystem.h"
-#include "../systems/render/SpriteAnimatorSystem.h"
+#include "../systems/animation/SpriteAnimatorSystem.h"
 #include "../systems/audio/AudioSystem.h"
 #include "../systems/physics/PhysicsSystem.h"
 #include "ISystem.h"

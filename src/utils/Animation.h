@@ -2,7 +2,7 @@
 #define RPG_ANIMATION_HPP
 
 #include "../scene/Entity.h"
-#include "../components/render/SpriteAnimatorComponent.h"
+#include "../components/animation/SpriteAnimatorComponent.h"
 
 class Animation
 {

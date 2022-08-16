@@ -8,7 +8,7 @@
 #include "../components/world/InventoryComponent.h"
 #include "../components/render/CameraComponent.h"
 #include "../components/render/TextRendererComponent.h"
-#include "../components/render/SpriteAnimatorComponent.h"
+#include "../components/animation/SpriteAnimatorComponent.h"
 #include "../utils/Hierarchy.h"
 #include "../client/Engine.h"
 #include "GLFW/glfw3.h"
