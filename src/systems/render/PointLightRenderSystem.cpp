@@ -1,7 +1,7 @@
 #include "../../pch.h"
 #include "PointLightRenderSystem.h"
 
-#include "../../components/render/PoinLightComponent.h"
+#include "../../components/render/PointLightComponent.h"
 #include "../../utils/Hierarchy.h"
 
 PointLightRenderSystem::PointLightRenderSystem(entt::registry &registry)
