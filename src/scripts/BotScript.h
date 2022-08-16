@@ -4,7 +4,7 @@
 #include "../scene/Script.h"
 #include "../utils/Hierarchy.h"
 #include "../components/physics/RigidbodyComponent.h"
-#include "../components/render/SpriteAnimatorComponent.h"
+#include "../components/animation/SpriteAnimatorComponent.h"
 #include <glm/gtc/random.hpp>
 
 enum BotState
