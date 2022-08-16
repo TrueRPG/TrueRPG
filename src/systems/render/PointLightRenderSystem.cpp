@@ -25,8 +25,6 @@ void PointLightRenderSystem::draw()
         m_shader.setUniform("light.radius", pointLightComponent.radius);
         m_shader.setUniform("light.intensity", pointLightComponent.intensity);
 
-        m_shader.setUniform("viewPos", glm::vec2(0));
-
         m_quad.draw();
     }
 }

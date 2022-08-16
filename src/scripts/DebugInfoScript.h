@@ -3,10 +3,12 @@
 
 #include <GLFW/glfw3.h>
 #include "../components/basic/HierarchyComponent.h"
+#include "../components/world/ClockComponent.h"
 
 class DebugInfoScript : public Script
 {
     Entity m_cameraEntity;
+    Entity m_clockEntity;
 
     float m_currentTime{0.f};
     int m_frameCount{0};
@@ -14,8 +16,10 @@ class DebugInfoScript : public Script
     int m_fps{0};
 
 public:
-    explicit DebugInfoScript(Entity cameraEntity)
-            : m_cameraEntity(cameraEntity) {}
+    explicit DebugInfoScript(Entity cameraEntity, Entity clockEntity)
+        : m_cameraEntity(cameraEntity),
+          m_clockEntity(clockEntity)
+    {}
 
     void onUpdate(float deltaTime)
     {
@@ -40,6 +44,8 @@ public:
 
         auto &textRenderer = getComponent<TextRendererComponent>();
         textRenderer.text = "FPS: " + std::to_string(m_fps);
+
+        textRenderer.text += "\ntime: " + m_clockEntity.getComponent<ClockComponent>().clock.toString();
 
         Entity playerEntity = getComponent<HierarchyComponent>().parent;
         auto &playerPosition = playerEntity.getComponent<TransformComponent>().position;
