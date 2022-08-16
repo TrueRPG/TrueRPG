@@ -27,9 +27,9 @@ git clone --recurse-submodules https://github.com/TrueRPG/TrueRPG
 - [x] Replace custom math library with GLM
 - [x] Add ECS
 - [x] Collision detection
-- [ ] New animation system
+- [x] New animation system
 - [x] Sound
-- [ ] Day and night cycle
+- [x] Day and night cycle
 - [ ] Dungeon generator
 - [ ] Weapons
 - [ ] Enemies
