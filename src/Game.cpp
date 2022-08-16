@@ -39,7 +39,7 @@
 #include "utils/Hierarchy.h"
 #include "utils/Animation.h"
 #include "systems/render/PointLightRenderSystem.h"
-#include "components/render/PoinLightComponent.h"
+#include "components/render/PointLightComponent.h"
 #include "systems/player/PlayerSystem.h"
 #include "components/player/PlayerComponent.h"
 #include "systems/render/GlobalLightRenderSystem.h"
