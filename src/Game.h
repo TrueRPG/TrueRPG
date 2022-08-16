@@ -21,6 +21,7 @@ class Game
 
     Scene m_scene;
 
+    Entity m_clockEntity;
     Entity m_cameraEntity;
     Entity m_playerEntity;
 public:

@@ -42,6 +42,9 @@
 #include "components/render/PoinLightComponent.h"
 #include "systems/player/PlayerSystem.h"
 #include "components/player/PlayerComponent.h"
+#include "systems/render/GlobalLightRenderSystem.h"
+#include "components/world/ClockComponent.h"
+#include "systems/ClockSystem.h"
 
 Game::Game()
         : m_font(TRUERPG_RES_DIR "/fonts/vt323.ttf", 32),
@@ -51,6 +54,7 @@ Game::Game()
           m_music(TRUERPG_RES_DIR "/audio/music.mp3")
 {
     // Add systems
+    m_scene.addSystem<ClockSystem>();
     m_scene.addSystem<PlayerSystem>();
     m_scene.addSystem<ScriptSystem>();
     m_scene.addSystem<PhysicsSystem>();
@@ -62,7 +66,7 @@ Game::Game()
     renderSystem.addSubsystem<SpriteRenderSystem>();
 
     // Light systems
-    // TODO: add ambient light
+    renderSystem.addLightSubsystem<GlobalLightRenderSystem>();
     renderSystem.addLightSubsystem<PointLightRenderSystem>();
 
     // UI systems
@@ -74,6 +78,9 @@ Game::Game()
     m_scene.addSystem<AudioSystem>();
 
     // Add entities
+    m_clockEntity = m_scene.createEntity("globalClock");
+    m_clockEntity.addComponent<ClockComponent>();
+
     Entity worldMapEntity = m_scene.createEntity("worldMap");
 
     auto &worldTransform = worldMapEntity.getComponent<TransformComponent>();
@@ -104,7 +111,7 @@ Game::Game()
     debugText.layer = 10;
     auto &fpsTransform = debugInfoEntity.getComponent<TransformComponent>();
     fpsTransform.scale = glm::vec2(0.8f, 0.8f);
-    debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity);
+    debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity, m_clockEntity);
 
     // Create animation
     m_characterAnimator = Animation::createAnimator([](SpriteAnimatorBuilder &builder) {
@@ -187,11 +194,6 @@ Game::Game()
     hpRenderer.verticalAlign = VerticalAlign::Top;
     hpRenderer.layer = 10;
     m_playerEntity.addComponent<HpComponent>();
-
-    auto &playerLight = m_playerEntity.addComponent<PointLightComponent>();
-    playerLight.color = glm::vec3(0.25f, 0.25f, 0.4f);
-    playerLight.radius = 800.f;
-    playerLight.intensity = 2.0f;
 
     // --------- Inventory ---------
     // Item
