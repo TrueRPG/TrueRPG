@@ -44,17 +44,21 @@
 #include "components/player/PlayerComponent.h"
 #include "systems/render/GlobalLightRenderSystem.h"
 #include "components/world/ClockComponent.h"
-#include "systems/ClockSystem.h"
+#include "systems/world/ClockSystem.h"
+#include "components/world/EnvironmentComponent.h"
+#include "systems/world/EnvironmentSystem.h"
 
 Game::Game()
-        : m_font(TRUERPG_RES_DIR "/fonts/vt323.ttf", 32),
-          m_heroTexture(Texture::create(TRUERPG_RES_DIR "/textures/hero.png")),
-          m_baseTexture(Texture::create(TRUERPG_RES_DIR "/textures/base.png")),
-          m_steps(TRUERPG_RES_DIR "/audio/steps.mp3"),
-          m_music(TRUERPG_RES_DIR "/audio/music.mp3")
+    : m_font(TRUERPG_RES_DIR "/fonts/vt323.ttf", 32),
+      m_heroTexture(Texture::create(TRUERPG_RES_DIR "/textures/hero.png")),
+      m_baseTexture(Texture::create(TRUERPG_RES_DIR "/textures/base.png")),
+      m_steps(TRUERPG_RES_DIR "/audio/steps.mp3"),
+      m_music(TRUERPG_RES_DIR "/audio/music.mp3"),
+      m_night(TRUERPG_RES_DIR "/audio/night.wav")
 {
     // Add systems
     m_scene.addSystem<ClockSystem>();
+    m_scene.addSystem<EnvironmentSystem>();
     m_scene.addSystem<PlayerSystem>();
     m_scene.addSystem<ScriptSystem>();
     m_scene.addSystem<PhysicsSystem>();
@@ -200,6 +204,15 @@ Game::Game()
     torch.radius = 400.f;
     torch.intensity = 1.0f;
     torch.enabled = false;
+
+    Entity nightAmbient = m_scene.createEntity("nightAmbient");
+    auto &nightAudio = nightAmbient.addComponent<AudioSourceComponent>(m_night);
+    nightAudio.loop = true;
+    nightAudio.global = true;
+
+    Entity environment = m_scene.createEntity("environment");
+    auto &environmentComponent = environment.addComponent<EnvironmentComponent>();
+    environmentComponent.nightAudio = nightAmbient;
 
     // --------- Inventory ---------
     // Item

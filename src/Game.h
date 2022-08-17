@@ -18,6 +18,7 @@ class Game
 
     StreamAudioClip m_steps;
     StreamAudioClip m_music;
+    StreamAudioClip m_night;
 
     Scene m_scene;
 

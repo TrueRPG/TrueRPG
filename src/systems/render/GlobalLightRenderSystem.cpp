@@ -16,7 +16,7 @@ void GlobalLightRenderSystem::draw()
     auto clockView = m_registry.view<ClockComponent>();
     if (clockView.empty()) return;
 
-    auto clock = m_registry.view<ClockComponent>()[0];
+    auto clock = clockView[0];
 
     auto &clockComponent = m_registry.get<ClockComponent>(clock);
     float seconds = clockComponent.clock.getSeconds();

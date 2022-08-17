@@ -38,16 +38,21 @@ void AudioSystem::update(float deltaTime)
     {
         auto &audioSourceComponent = view.get<AudioSourceComponent>(entity);
 
-        // Compute the source's coordinates
-        auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
-        glm::vec2 sourcePosition = transformComponent.position;
+        float volumeFactor = 1.f;
+        float panFactor = 0.f;
+        if (!audioSourceComponent.global)
+        {
+            // Compute the source's coordinates
+            auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
+            glm::vec2 sourcePosition = transformComponent.position;
 
-        // Calculate the volume
-        float volumeFactor = 1.f - glm::distance(listenerPosition, sourcePosition) / audioSourceComponent.maxDistance;
-        volumeFactor = std::clamp(volumeFactor, 0.f, 1.f);
+            // Calculate the volume
+            volumeFactor = 1.f - glm::distance(listenerPosition, sourcePosition) / audioSourceComponent.maxDistance;
+            volumeFactor = std::clamp(volumeFactor, 0.f, 1.f);
 
-        // Calculate the panning
-        float panFactor = (sourcePosition - listenerPosition).x / audioSourceComponent.maxDistance * 2.f;
+            // Calculate the panning
+            panFactor = (sourcePosition - listenerPosition).x / audioSourceComponent.maxDistance * 2.f;
+        }
 
         auto* audioSource = m_audioSourceRegistry[entity];
         audioSource->setVolume(audioSourceComponent.volume * volumeFactor);

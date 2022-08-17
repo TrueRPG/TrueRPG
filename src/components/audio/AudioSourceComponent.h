@@ -17,6 +17,7 @@ struct AudioSourceComponent
     float volume{1.f};
     float pan{0.f};
     bool loop{false};
+    bool global{false};
 
     float maxDistance{2000.f};
 
