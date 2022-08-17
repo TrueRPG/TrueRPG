@@ -1,3 +1,4 @@
+#include "../pch.h"
 #include "Animation.h"
 
 SpriteAnimator Animation::createAnimator(const std::function<void(SpriteAnimatorBuilder &)>& setup)
