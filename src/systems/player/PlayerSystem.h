@@ -22,8 +22,9 @@ class PlayerSystem : public ISystem
     int m_currentAnimation{3};
     int m_frame{0};
 
-    bool m_pressedHit;
-    bool m_pressedOpenInventory;
+    bool m_pressedHit{false};
+    bool m_pressedInventory{false};
+    bool m_torchPressed{false};
 
 public:
     PlayerSystem(entt::registry &registry);
@@ -35,10 +36,11 @@ public:
 private:
     void hittingLogic(entt::entity entity);
     void inventoryLogic(entt::entity entity);
+    void torchLogic(entt::entity entity);
     glm::ivec2 computeMovement(Key currentKey);
     void updateInput();
-    void doAnimation(Entity sprite, glm::ivec2 movement, float deltaTime);
-    void doSound(glm::ivec2 movement, AudioSourceComponent& audioSourceComponent);
+    void playAnimation(Entity sprite, glm::ivec2 movement, float deltaTime);
+    void playSound(glm::ivec2 movement, AudioSourceComponent& audioSourceComponent);
 };
 
 #endif // RPG_PLAYERSYSTEM_H

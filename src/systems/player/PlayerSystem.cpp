@@ -7,6 +7,7 @@
 #include "../../components/render/SpriteRendererComponent.h"
 #include "../../components/world/HpComponent.h"
 #include "../../components/world/InventoryComponent.h"
+#include "../../components/render/PointLightComponent.h"
 
 // TODO: refactor
 PlayerSystem::PlayerSystem(entt::registry &registry)
@@ -40,6 +41,11 @@ void PlayerSystem::update(float deltaTime)
             inventoryLogic(entity);
         }
 
+        if (m_registry.all_of<PointLightComponent>(entity))
+        {
+            torchLogic(entity);
+        }
+
         updateInput();
         Key currentKey = m_inputStack.empty() ? Key::Unknown : m_inputStack.back();
 
@@ -53,12 +59,12 @@ void PlayerSystem::update(float deltaTime)
 
         if (player.sprite && player.sprite.hasComponent<SpriteRendererComponent>())
         {
-            doAnimation(player.sprite, movement, deltaTime);
+            playAnimation(player.sprite, movement, deltaTime);
         }
 
         if (player.steps && player.steps.hasComponent<AudioSourceComponent>())
         {
-            doSound(movement, player.steps.getComponent<AudioSourceComponent>());
+            playSound(movement, player.steps.getComponent<AudioSourceComponent>());
         }
     }
 }
@@ -69,7 +75,9 @@ void PlayerSystem::hittingLogic(entt::entity entity)
 
     auto &player = m_registry.get<PlayerComponent>(entity);
 
-    if (window.getKey(Key::K) && !m_pressedHit)
+    Key key = m_keyMappingConfig.getHitYourselfKey();
+
+    if (window.getKey(key) && !m_pressedHit)
     {
         auto &hpComponent = m_registry.get<HpComponent>(entity);
         hpComponent.value -= 10;
@@ -81,7 +89,7 @@ void PlayerSystem::hittingLogic(entt::entity entity)
             renderer.color = glm::vec4(1.f, 0.f, 0.f, 1.f);
         }
     }
-    if (!window.getKey(Key::K))
+    if (!window.getKey(key))
     {
         m_pressedHit = false;
         if (player.sprite && player.sprite.hasComponent<SpriteRendererComponent>())
@@ -96,17 +104,37 @@ void PlayerSystem::inventoryLogic(entt::entity entity)
 {
     IWindow &window = Engine::getWindow();
 
+    Key key = m_keyMappingConfig.getInventoryKey();
+
     // Inventory opening/closing
     auto& inventory = m_registry.get<InventoryComponent>(entity);
 
-    if (window.getKey(Key::I) && !m_pressedOpenInventory)
+    if (window.getKey(key) && !m_pressedInventory)
     {
         inventory.shown = !inventory.shown;
-        m_pressedOpenInventory = true;
+        m_pressedInventory = true;
     }
-    else if (!window.getKey(Key::I))
+    else if (!window.getKey(key))
     {
-        m_pressedOpenInventory = false;
+        m_pressedInventory = false;
+    }
+}
+
+void PlayerSystem::torchLogic(entt::entity entity)
+{
+    IWindow &window = Engine::getWindow();
+    auto& torch = m_registry.get<PointLightComponent>(entity);
+
+    Key key = m_keyMappingConfig.getTorchKey();
+
+    if (window.getKey(key) && !m_torchPressed)
+    {
+        torch.enabled = !torch.enabled;
+        m_torchPressed = true;
+    }
+    else if (!window.getKey(key))
+    {
+        m_torchPressed = false;
     }
 }
 
@@ -164,7 +192,7 @@ void PlayerSystem::updateInput()
     }
 }
 
-void PlayerSystem::doAnimation(Entity sprite, glm::ivec2 movement, float deltaTime)
+void PlayerSystem::playAnimation(Entity sprite, glm::ivec2 movement, float deltaTime)
 {
     auto &renderer = sprite.getComponent<SpriteRendererComponent>();
 
@@ -187,15 +215,15 @@ void PlayerSystem::doAnimation(Entity sprite, glm::ivec2 movement, float deltaTi
     }
 }
 
-void PlayerSystem::doSound(glm::ivec2 movement, AudioSourceComponent& stepsSound)
+void PlayerSystem::playSound(glm::ivec2 movement, AudioSourceComponent&audioSourceComponent)
 {
     if (movement == glm::ivec2(0.f))
     {
-        stepsSound.pause();
+        audioSourceComponent.pause();
     }
     else
     {
-        stepsSound.play();
+        audioSourceComponent.play();
     }
 }
 

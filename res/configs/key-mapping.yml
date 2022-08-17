@@ -3,6 +3,7 @@ moveUp: W
 moveDown: S
 moveLeft: A
 moveRight: D
-openInventory: I
-use: E
+inventory: I
+use: E # we don't use it yet
 hitYourself: K
+torch: T

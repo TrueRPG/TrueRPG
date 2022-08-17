@@ -195,6 +195,12 @@ Game::Game()
     hpRenderer.layer = 10;
     m_playerEntity.addComponent<HpComponent>();
 
+    auto &torch = m_playerEntity.addComponent<PointLightComponent>();
+    torch.color = glm::vec3(0.7f, 0.5f, 0.2f);
+    torch.radius = 400.f;
+    torch.intensity = 1.0f;
+    torch.enabled = false;
+
     // --------- Inventory ---------
     // Item
     Entity axeItem = m_scene.createEntity("axeItem");

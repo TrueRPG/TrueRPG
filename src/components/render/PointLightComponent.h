@@ -9,6 +9,8 @@ struct PointLightComponent
 
     float radius;
     float intensity;
+
+    bool enabled{true};
 };
 
 #endif // RPG_SRC_COMPONENTS_RENDER_POINLIGHTCOMPONENT_H

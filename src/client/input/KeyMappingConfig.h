@@ -17,9 +17,10 @@ private:
     Key m_moveLeft;
     Key m_moveRight;
 
-    Key m_openInventory;
+    Key m_inventory;
     Key m_use;
     Key m_hitYourself;
+    Key m_torch;
 
     StringKeyMapper m_stringKeyMapper;
 
@@ -33,9 +34,10 @@ public:
     Key getMoveLeftKey();
     Key getMoveRightKey();
 
-    Key getOpenInventoryKey();
+    Key getInventoryKey();
     Key getUseKey();
     Key getHitYourselfKey();
+    Key getTorchKey();
 
 private:
     Key getIfDefined(YAML::Node node, const std::string& name);

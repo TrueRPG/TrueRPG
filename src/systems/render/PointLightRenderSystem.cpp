@@ -18,6 +18,11 @@ void PointLightRenderSystem::draw()
     {
         auto &pointLightComponent = view.get<PointLightComponent>(entity);
 
+        if (!pointLightComponent.enabled)
+        {
+            continue;
+        }
+
         auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
         m_shader.setUniform("light.pos", transformComponent.position);

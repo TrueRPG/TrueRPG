@@ -12,9 +12,10 @@ KeyMappingConfig::KeyMappingConfig(std::string configPath)
     m_moveLeft = getIfDefined(keyMappingNode, "moveLeft");
     m_moveRight = getIfDefined(keyMappingNode, "moveRight");
 
-    m_openInventory = getIfDefined(keyMappingNode, "openInventory");
+    m_inventory = getIfDefined(keyMappingNode, "inventory");
     m_use = getIfDefined(keyMappingNode, "use");
     m_hitYourself = getIfDefined(keyMappingNode, "hitYourself");
+    m_torch = getIfDefined(keyMappingNode, "torch");
 }
 
 Key KeyMappingConfig::getExitKey()
@@ -42,9 +43,9 @@ Key KeyMappingConfig::getMoveRightKey()
     return m_moveRight;
 }
 
-Key KeyMappingConfig::getOpenInventoryKey()
+Key KeyMappingConfig::getInventoryKey()
 {
-    return m_openInventory;
+    return m_inventory;
 }
 
 Key KeyMappingConfig::getUseKey()
@@ -55,6 +56,11 @@ Key KeyMappingConfig::getUseKey()
 Key KeyMappingConfig::getHitYourselfKey()
 {
     return m_hitYourself;
+}
+
+Key KeyMappingConfig::getTorchKey()
+{
+    return m_torch;
 }
 
 Key KeyMappingConfig::getIfDefined(YAML::Node node, const std::string& name)

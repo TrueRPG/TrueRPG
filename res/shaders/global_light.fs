@@ -14,7 +14,7 @@ void main() {
     vec2 fragPos = texture(gPosition, texCoords).rg;
     vec3 diffuse = texture(gAlbedoSpec, texCoords).rgb;
 
-    diffuse *= mix(vec3(0.05, 0.05, 0.25), vec3(1), brightness);
+    diffuse *= mix(vec3(0.1, 0.1, 0.25), vec3(1), brightness);
 
     FragColor = vec4(diffuse, 1);
 }
