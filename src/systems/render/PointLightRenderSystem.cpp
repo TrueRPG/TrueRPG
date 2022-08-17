@@ -3,6 +3,8 @@
 
 #include "../../components/render/PointLightComponent.h"
 #include "../../utils/Hierarchy.h"
+#include "../../components/world/ClockComponent.h"
+#include "../../utils/DayNightCycle.h"
 
 PointLightRenderSystem::PointLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
@@ -25,10 +27,23 @@ void PointLightRenderSystem::draw()
 
         auto transformComponent = Hierarchy::computeTransform({entity, &m_registry});
 
+        float intensity = pointLightComponent.intensity;
+
+        auto clockView = m_registry.view<ClockComponent>();
+        if (!clockView.empty())
+        {
+            auto clock = m_registry.view<ClockComponent>()[0];
+            auto &clockComponent = m_registry.get<ClockComponent>(clock);
+            float seconds = clockComponent.clock.getSeconds();
+
+            float sunBrightness = DayNightCycle::computeSunBrightness(seconds);
+            intensity *= (1 - sunBrightness);
+        }
+
         m_shader.setUniform("light.pos", transformComponent.position);
         m_shader.setUniform("light.color", pointLightComponent.color);
         m_shader.setUniform("light.radius", pointLightComponent.radius);
-        m_shader.setUniform("light.intensity", pointLightComponent.intensity);
+        m_shader.setUniform("light.intensity", intensity);
 
         m_quad.draw();
     }

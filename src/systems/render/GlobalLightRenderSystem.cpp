@@ -1,8 +1,8 @@
 #include "../../pch.h"
-#include <iomanip>
 
 #include "GlobalLightRenderSystem.h"
 #include "../../components/world/ClockComponent.h"
+#include "../../utils/DayNightCycle.h"
 
 GlobalLightRenderSystem::GlobalLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
@@ -21,9 +21,7 @@ void GlobalLightRenderSystem::draw()
     auto &clockComponent = m_registry.get<ClockComponent>(clock);
     float seconds = clockComponent.clock.getSeconds();
 
-    // the formula of the day-night cycle:
-    // brightness = (tanh(10 * sin(pi / 43200 * (x - 23000)) + 3.2) + 1) / 2
-    float brightness = (std::tanh(10.f * std::sin(glm::pi<float>() / 43200.f * (seconds - 23000.f)) + 3.2f) + 1.f) / 2.f;
+    float brightness = DayNightCycle::computeSunBrightness(seconds);
 
     m_shader.setUniform("brightness", brightness);
     m_quad.draw();
