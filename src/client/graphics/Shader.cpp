@@ -61,7 +61,7 @@ Shader Shader::createShader(const std::string& vertexPath, const std::string& fr
 
 unsigned int Shader::compileShader(const std::string& path, unsigned int type)
 {
-    std::fstream shaderFile;
+    std::ifstream shaderFile;
     std::string shaderCode;
     unsigned int shader = 0;
     const char* sCode = nullptr;
