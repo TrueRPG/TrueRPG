@@ -54,7 +54,7 @@ Game::Game()
       m_baseTexture(Texture::create(TRUERPG_RES_DIR "/textures/base.png")),
       m_steps(TRUERPG_RES_DIR "/audio/steps.mp3"),
       m_music(TRUERPG_RES_DIR "/audio/music.mp3"),
-      m_night(TRUERPG_RES_DIR "/audio/night.wav")
+      m_night(TRUERPG_RES_DIR "/audio/night.mp3")
 {
     // Add systems
     m_scene.addSystem<ClockSystem>();
