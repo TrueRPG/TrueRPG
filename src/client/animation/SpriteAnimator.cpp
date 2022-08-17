@@ -1,3 +1,4 @@
+#include "../../pch.h"
 #include "SpriteAnimator.h"
 
 SpriteAnimatorBuilder::SpriteAnimatorBuilder()
