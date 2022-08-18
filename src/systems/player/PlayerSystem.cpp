@@ -140,6 +140,10 @@ void PlayerSystem::torchLogic(entt::entity entity)
 
 glm::ivec2 PlayerSystem::computeMovement(Key currentKey)
 {
+    if (currentKey == Key::Unknown)
+    {
+        return {0, 0};
+    }
     if (currentKey == m_keyMappingConfig.getMoveUpKey())
     {
         m_currentAnimation = 0;
