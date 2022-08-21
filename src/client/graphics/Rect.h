@@ -1,6 +1,8 @@
 #ifndef RPG_RECT_H
 #define RPG_RECT_H
 
+#include <yaml-cpp/yaml.h>
+
 template <typename T>
 class Rect {
 private:
@@ -67,5 +69,27 @@ constexpr Rect<T> operator*(const Rect<T>& rect, T2 value)
 
 using IntRect = Rect<int>;
 using FloatRect = Rect<float>;
+
+namespace YAML
+{
+
+template <typename T> struct convert<Rect<T>>
+{
+    static bool decode(const Node &node, Rect<T> &rhs)
+    {
+        if (!node.IsSequence() || node.size() != 4)
+        {
+            return false;
+        }
+
+        rhs.setLeft(node[0].as<T>());
+        rhs.setBottom(node[1].as<T>());
+        rhs.setWidth(node[2].as<T>());
+        rhs.setHeight(node[3].as<T>());
+        return true;
+    }
+};
+
+}
 
 #endif //RPG_RECT_H
