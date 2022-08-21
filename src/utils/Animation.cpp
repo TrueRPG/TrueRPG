@@ -234,12 +234,7 @@ SpriteAnimator Animation::loadAnimatorFromFile(const char *filename)
                 std::vector<SpriteAnimationFrame> animationFrames;
                 for (auto f = frames.begin(); f != frames.end(); ++f)
                 {
-                    auto rect = (*f)["rect"];
-
-                    int left = rect["left"].as<int>();
-                    int bottom = rect["bottom"].as<int>();
-                    int width = rect["width"].as<int>();
-                    int height = rect["height"].as<int>();
+                    auto rect = (*f)["rect"].as<IntRect>();
 
                     auto duration = [&]() -> float
                     {
@@ -253,7 +248,7 @@ SpriteAnimator Animation::loadAnimatorFromFile(const char *filename)
                         return static_cast<float>(duration.as<int>()) * 1e-3f;
                     }();
 
-                    animationFrames.push_back({IntRect(left, bottom, width, height), duration});
+                    animationFrames.push_back({ rect, duration });
                 }
 
                 nodesByName.insert({name, builder.node(name, std::move(animationFrames))});
