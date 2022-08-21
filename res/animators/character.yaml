@@ -1,0 +1,281 @@
+parameters:
+  velocity:
+    type: vec2
+nodes:
+  idle_left:
+    frames:
+      - rect:
+          left: 32
+          bottom: 64
+          width: 32
+          height: 32
+    transitions:
+      - to: walk_left
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+      - to: walk_right
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+      - to: walk_down
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+      - to: walk_up
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+  idle_right:
+    frames:
+      - rect:
+          left: 32
+          bottom: 32
+          width: 32
+          height: 32
+    transitions:
+      - to: walk_right
+        condition:
+          gt:
+            l:
+              attr:
+                l: velocity
+                r: x
+            r: 0
+      - to: walk_left
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+      - to: walk_down
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+      - to: walk_up
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+  idle_up:
+    entry: true
+    frames:
+      - rect:
+          left: 32
+          bottom: 96
+          width: 32
+          height: 32
+    transitions:
+      - to: walk_up
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+      - to: walk_down
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+      - to: walk_left
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+      - to: walk_right
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+  idle_down:
+    frames:
+      - rect:
+          left: 32
+          bottom: 0
+          width: 32
+          height: 32
+    transitions:
+      - to: walk_down
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+      - to: walk_up
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+      - to: walk_left
+        condition:
+          lt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+      - to: walk_right
+        condition:
+          gt:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+  walk_left:
+    frames:
+      - rect:
+          left: 0
+          bottom: 64
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 32
+          bottom: 64
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 64
+          bottom: 64
+          width: 32
+          height: 32
+        duration: 100
+    transitions:
+      - to: idle_left
+        condition:
+          ge:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+  walk_right:
+    frames:
+      - rect:
+          left: 0
+          bottom: 32
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 32
+          bottom: 32
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 64
+          bottom: 32
+          width: 32
+          height: 32
+        duration: 100
+    transitions:
+      - to: idle_right
+        condition:
+          le:
+            l: 
+              attr:
+                l: velocity
+                r: x
+            r: 0
+  walk_up:
+    frames:
+      - rect:
+          left: 0
+          bottom: 96
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 32
+          bottom: 96
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 64
+          bottom: 96
+          width: 32
+          height: 32
+        duration: 100
+    transitions:
+      - to: idle_up
+        condition:
+          ge:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
+  walk_down:
+    frames:
+      - rect:
+          left: 0
+          bottom: 0
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 32
+          bottom: 0
+          width: 32
+          height: 32
+        duration: 100
+      - rect:
+          left: 64
+          bottom: 0
+          width: 32
+          height: 32
+        duration: 100
+    transitions:
+      - to: idle_up
+        condition:
+          le:
+            l: 
+              attr:
+                l: velocity
+                r: y
+            r: 0
