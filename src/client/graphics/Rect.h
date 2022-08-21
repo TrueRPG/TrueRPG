@@ -10,6 +10,7 @@ private:
     T m_height;
 public:
     Rect(T left, T bottom, T width, T height);
+    Rect() = default;
 
     inline T getLeft() const {
         return m_left;
