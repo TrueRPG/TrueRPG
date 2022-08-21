@@ -28,6 +28,11 @@ public:
         return m_height;
     }
 
+    inline void setLeft(const T &left) { m_left = left; }
+    inline void setBottom(const T &bottom) { m_bottom = bottom; }
+    inline void setWidth(const T &width) { m_width = width; }
+    inline void setHeight(const T &height) { m_height = height; }
+
     inline bool contains(glm::vec2 pos) const
     {
         return pos.x > m_left && pos.x < m_left + m_width &&
