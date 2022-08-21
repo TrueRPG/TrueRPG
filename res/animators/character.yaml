@@ -271,7 +271,7 @@ nodes:
           height: 32
         duration: 100
     transitions:
-      - to: idle_up
+      - to: idle_down
         condition:
           le:
             l: 
