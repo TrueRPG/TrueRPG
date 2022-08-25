@@ -118,7 +118,7 @@ Game::Game()
     debugInfoEntity.addComponent<NativeScriptComponent>().bind<DebugInfoScript>(m_cameraEntity, m_clockEntity);
 
     // Create animation
-    m_characterAnimator = Animation::loadAnimatorFromFile(TRUERPG_RES_DIR "/animators/character.yaml");
+    m_characterAnimator = Animation::loadAnimatorFromFile(TRUERPG_RES_DIR "/animators/character.yml");
 
     // Create the player
     m_playerEntity = m_scene.createEntity("player");
