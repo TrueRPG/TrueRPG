@@ -1,11 +1,11 @@
-#include "../../pch.h"
+#include "../../../pch.h"
 #include "Texture.h"
 
 #include <iostream>
-#include "Graphics.h"
-#include <stb_image.h>
+#include "../Graphics.h"
+#include "stb_image.h"
 
-#include "Bitmap.h"
+#include "../Bitmap.h"
 
 Texture::Texture() : m_id(0), m_path(""), m_width(0), m_height(0) { }
 

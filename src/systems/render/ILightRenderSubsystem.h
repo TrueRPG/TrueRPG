@@ -1,7 +1,7 @@
 #ifndef RPG_ILIGHTRENDERSUBSYSTEM_H
 #define RPG_ILIGHTRENDERSUBSYSTEM_H
 
-#include "../../client/graphics/SpriteBatch.h"
+#include "../../client/graphics/OpenGL/SpriteBatch.h"
 #include "IRenderSubsystem.h"
 
 /**

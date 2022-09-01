@@ -3,7 +3,7 @@
 
 #include "ILightRenderSubsystem.h"
 #include "entt.hpp"
-#include "../../client/graphics/Quad.h"
+#include "../../client/graphics/OpenGL/Quad.h"
 
 class GlobalLightRenderSystem : public ILightRenderSubsystem
 {

@@ -1,0 +1,3 @@
+api: 0 # 0 - OpenGL, 1 - Vulkan
+width: 1280
+height: 720

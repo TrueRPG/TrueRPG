@@ -2,7 +2,7 @@
 #define RPG_SPRITERENDERSYSTEM_H
 
 #include "entt.hpp"
-#include "../../client/graphics/SpriteBatch.h"
+#include "../../client/graphics/OpenGL/SpriteBatch.h"
 #include "IRenderSubsystem.h"
 
 class SpriteRenderSystem : public IRenderSubsystem

@@ -1,7 +1,7 @@
 #ifndef RPG_SPRITEBATCH_H
 #define RPG_SPRITEBATCH_H
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 #include <vector>
 #include <map>
 #include <set>
@@ -9,7 +9,7 @@
 #include "Buffer.h"
 #include "Texture.h"
 #include "Shader.h"
-#include "Sprite.h"
+#include "../Sprite.h"
 
 struct Vertex
 {

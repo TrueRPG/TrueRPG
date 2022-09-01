@@ -1,7 +1,7 @@
 #ifndef RPG_BUTTONRENDERSYSTEM_H
 #define RPG_BUTTONRENDERSYSTEM_H
 
-#include "../../../client/graphics/SpriteBatch.h"
+#include "../../../client/graphics/OpenGL/SpriteBatch.h"
 #include "entt.hpp"
 #include "IUIRenderSubsystem.h"
 

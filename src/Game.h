@@ -3,7 +3,7 @@
 
 #include "scene/Scene.h"
 #include "scene/Entity.h"
-#include "client/graphics/SpriteBatch.h"
+#include "client/graphics/OpenGL/SpriteBatch.h"
 #include "client/graphics/Font.h"
 #include "client/audio/StreamAudioClip.h"
 #include "client/audio/CachedAudioClip.h"

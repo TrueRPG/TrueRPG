@@ -13,7 +13,7 @@
 int main()
 {
     // Create a window
-    auto &window = Engine::getWindow(1280, 720, "TRUE RPG");
+    auto &window = Engine::getWindow("TRUE RPG");
 
     Game game;
 

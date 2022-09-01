@@ -1,7 +1,7 @@
-#include "../../pch.h"
+#include "../../../pch.h"
 #include "SpriteBatch.h"
 
-#include "Graphics.h"
+#include "../Graphics.h"
 #include <numeric>
 
 SpriteBatch::SpriteBatch(Shader shader, int maxSprites)

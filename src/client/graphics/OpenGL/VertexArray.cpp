@@ -1,7 +1,7 @@
-#include "../../pch.h"
+#include "../../../pch.h"
 #include "VertexArray.h"
 
-#include "Graphics.h"
+#include "../Graphics.h"
 
 VertexArray::VertexArray()
 {

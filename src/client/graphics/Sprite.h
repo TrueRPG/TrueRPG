@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "Rect.h"
-#include "Texture.h"
+#include "OpenGL/Texture.h"
 
 class Sprite
 {

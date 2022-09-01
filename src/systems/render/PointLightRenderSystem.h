@@ -5,7 +5,7 @@
 #include "entt.hpp"
 #include "ILightRenderSubsystem.h"
 
-#include "../../client/graphics/Quad.h"
+#include "../../client/graphics/OpenGL/Quad.h"
 
 class PointLightRenderSystem : public ILightRenderSubsystem
 {

@@ -3,7 +3,7 @@
 
 #include <entt.hpp>
 
-#include "../client/graphics/SpriteBatch.h"
+#include "../client/graphics/OpenGL/SpriteBatch.h"
 
 #include "../systems/script/ScriptSystem.h"
 #include "../systems/render/RenderSystem.h"

@@ -1,5 +1,7 @@
 #include "../../pch.h"
 #include "GlfwWindow.h"
+#include "../Engine.h"
+#include "../graphics/GraphicsConfig.h"
 
 #include <iostream>
 

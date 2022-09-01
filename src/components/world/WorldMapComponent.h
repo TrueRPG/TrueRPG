@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include "glm/vec2.hpp"
-#include "../../client/graphics/Texture.h"
+#include "../../client/graphics/OpenGL/Texture.h"
 #include "../../client/graphics/Rect.h"
 
 struct Tile

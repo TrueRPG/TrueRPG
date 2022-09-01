@@ -4,7 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <map>
-#include "SpriteBatch.h"
+#include "OpenGL/SpriteBatch.h"
 
 struct Character {
     glm::ivec2 size; // The size of the character

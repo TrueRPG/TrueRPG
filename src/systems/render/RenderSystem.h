@@ -2,7 +2,7 @@
 #define RPG_RENDERSYSTEM_H
 
 #include "entt.hpp"
-#include "../../client/graphics/SpriteBatch.h"
+#include "../../client/graphics/OpenGL/SpriteBatch.h"
 #include "../../components/basic/TransformComponent.h"
 #include "IRenderSubsystem.h"
 #include "../../scene/ISystem.h"

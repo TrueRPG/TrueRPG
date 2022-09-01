@@ -1,7 +1,7 @@
 #ifndef RPG_PLAYERCOMPONENT_H
 #define RPG_PLAYERCOMPONENT_H
 
-#include "../../client/graphics/Texture.h"
+#include "../../client/graphics/OpenGL/Texture.h"
 #include "../../scene/Entity.h"
 
 struct PlayerComponent

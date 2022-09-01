@@ -1,7 +1,7 @@
 #ifndef RPG_IRENDERSUBSYSTEM_H
 #define RPG_IRENDERSUBSYSTEM_H
 
-#include "../../client/graphics/SpriteBatch.h"
+#include "../../client/graphics/OpenGL/SpriteBatch.h"
 
 /**
  * Subsystem of the rendering system.

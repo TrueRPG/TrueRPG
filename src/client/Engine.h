@@ -6,10 +6,13 @@
 #include <string>
 #include "window/IWindow.h"
 
+class GraphicsConfig;
+
 class Engine
 {
 public:
-    static IWindow &getWindow(int width = 0, int height = 0, const std::string& title = "");
+    static IWindow &getWindow(const std::string& title = "");
+    static GraphicsConfig &getGraphicsConfig();
 };
 
 #endif // RPG_ENGINE_H

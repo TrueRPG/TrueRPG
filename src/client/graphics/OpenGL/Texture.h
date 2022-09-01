@@ -2,7 +2,7 @@
 #define RPG_TEXTURE_H
 
 #include <string>
-#include "Graphics.h"
+#include "../Graphics.h"
 
 class Bitmap;
 

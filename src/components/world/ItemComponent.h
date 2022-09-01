@@ -1,7 +1,7 @@
 #ifndef RPG_ITEMCOMPONENT_H
 #define RPG_ITEMCOMPONENT_H
 
-#include "../../client/graphics/Texture.h"
+#include "../../client/graphics/OpenGL/Texture.h"
 #include "../../client/graphics/Rect.h"
 
 struct ItemComponent

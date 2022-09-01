@@ -1,7 +1,7 @@
 #ifndef RPG_UIRENDERSYSTEM_H
 #define RPG_UIRENDERSYSTEM_H
 
-#include "../../../client/graphics/SpriteBatch.h"
+#include "../../../client/graphics/OpenGL/SpriteBatch.h"
 #include "../IRenderSubsystem.h"
 #include "IUIRenderSubsystem.h"
 #include "entt.hpp"

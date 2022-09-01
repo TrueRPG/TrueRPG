@@ -2,7 +2,7 @@
 #define RPG_SPRITERENDERERCOMPONENT_H
 
 #include "glm/glm.hpp"
-#include "../../client/graphics/Texture.h"
+#include "../../client/graphics/OpenGL/Texture.h"
 #include "../../client/graphics/Rect.h"
 
 struct SpriteRendererComponent

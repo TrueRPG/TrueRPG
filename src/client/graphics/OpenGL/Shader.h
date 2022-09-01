@@ -1,10 +1,10 @@
 #ifndef RPG_SHADER_H
 #define RPG_SHADER_H
 
-#include "Graphics.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../Graphics.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include <string>
 #include <iostream>

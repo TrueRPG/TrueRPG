@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <vector>
-#include "Graphics.h"
+#include "../Graphics.h"
 
 class Buffer
 {
