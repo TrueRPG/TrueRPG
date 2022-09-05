@@ -2,10 +2,10 @@
 
 out vec4 FragColor;
 
-in vec2 texCoords;
+layout (location = 0) in vec2 texCoords;
 
-uniform sampler2D gPosition;
-uniform sampler2D gAlbedoSpec;
+layout (binding = 0) uniform sampler2D gPosition;
+layout (binding = 1) uniform sampler2D gAlbedoSpec;
 
 struct Light {
     vec2 pos;

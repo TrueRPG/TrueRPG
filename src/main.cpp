@@ -14,6 +14,8 @@ int main()
 {
     // Create a window
     auto &window = Engine::getWindow("TRUE RPG");
+    auto &graphicsContext = Engine::getGraphicsContext();
+    graphicsContext.init();
 
     Game game;
 
@@ -22,7 +24,7 @@ int main()
     while (window.isOpen())
     {
         game.update(time.getDeltaTime());
-        window.swapBuffers();
+        graphicsContext.swapBuffers();
         window.pollEvents();
     }
     

@@ -17,6 +17,8 @@ unsigned int Shader::getId() const noexcept
 
 void Shader::destroy()
 {
+    m_mvpBuffer.destroy();
+    m_lightBuffer.destroy();
     glDeleteProgram(m_id);
     m_id = 0;
 }

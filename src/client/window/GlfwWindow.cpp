@@ -1,7 +1,6 @@
 #include "../../pch.h"
 #include "GlfwWindow.h"
 #include "../Engine.h"
-#include "../graphics/GraphicsConfig.h"
 
 #include <iostream>
 
@@ -18,9 +17,19 @@ GlfwWindow::GlfwWindow(int width, int height, const std::string &title) : m_keys
     };
     glfwSetErrorCallback(errorCallback);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    switch (Engine::getGraphicsConfig().getApi())
+    {
+    case GraphicsAPI::Undefined:
+        throw;
+    case GraphicsAPI::OpenGL:
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        break;
+    case GraphicsAPI::Vulkan:
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        break;
+    }
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
@@ -31,15 +40,25 @@ GlfwWindow::GlfwWindow(int width, int height, const std::string &title) : m_keys
         exit(EXIT_FAILURE);
     }
 
-    glfwMakeContextCurrent(m_window);
-    gladLoadGL(glfwGetProcAddress);
-    glfwSwapInterval(0); // It's useful to see max fps, so I turned off vsync
     glfwSetWindowUserPointer(m_window, this);
     glfwSetKeyCallback(m_window, glfwKeyCallback);
     glfwSetMouseButtonCallback(m_window, glfwMouseButtonCallback);
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
+}
 
+void GlfwWindow::makeContextCurrent() const
+{
     glfwMakeContextCurrent(m_window);
+}
+
+void GlfwWindow::loadGL() const
+{
+    gladLoadGL(glfwGetProcAddress);
+}
+
+void GlfwWindow::swapInterval(int interval) const
+{
+    glfwSwapInterval(interval);
 }
 
 bool GlfwWindow::isOpen() const

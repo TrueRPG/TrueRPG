@@ -5,14 +5,15 @@
 
 #include <string>
 #include "window/IWindow.h"
-
-class GraphicsConfig;
+#include "graphics/GraphicsConfig.h"
+#include "graphics/IGraphicsContext.h"
 
 class Engine
 {
 public:
     static IWindow &getWindow(const std::string& title = "");
-    static GraphicsConfig &getGraphicsConfig();
+    static const GraphicsConfig &getGraphicsConfig();
+    static IGraphicsContext &getGraphicsContext();
 };
 
 #endif // RPG_ENGINE_H

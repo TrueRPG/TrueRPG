@@ -13,6 +13,12 @@ public:
 
     virtual ~IWindow() = default;
 
+    virtual void makeContextCurrent() const = 0;
+
+    virtual void loadGL() const = 0;
+
+    virtual void swapInterval(int interval) const = 0;
+
     virtual bool isOpen() const = 0;
 
     virtual void close() const = 0;

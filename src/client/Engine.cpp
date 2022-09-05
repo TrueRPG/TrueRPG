@@ -2,7 +2,7 @@
 #include "Engine.h"
 
 #include "window/GlfwWindow.h"
-#include "graphics/GraphicsConfig.h"
+#include "graphics/OpenGL/GLContext.h"
 
 IWindow &Engine::getWindow(const std::string &title)
 {
@@ -10,8 +10,20 @@ IWindow &Engine::getWindow(const std::string &title)
     return window;
 }
 
-GraphicsConfig &Engine::getGraphicsConfig()
+const GraphicsConfig &Engine::getGraphicsConfig()
 {
     static GraphicsConfig config(TRUERPG_RES_DIR "/configs/graphics.yml");
     return config;
+}
+
+IGraphicsContext &Engine::getGraphicsContext()
+{
+    static GraphicsAPI api = getGraphicsConfig().getApi();
+    switch (api)
+    {
+    case GraphicsAPI::OpenGL:
+        return GLContext::getInstance();
+    default:
+        throw;
+    }
 }

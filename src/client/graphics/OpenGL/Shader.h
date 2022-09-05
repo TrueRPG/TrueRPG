@@ -5,10 +5,13 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "../IShader.h"
+#include "UniformBuffer.h"
 
 #include <string>
 #include <iostream>
 #include <functional>
+#include <any>
 
 #define UNIFORMTAG(ph_1, ph_2) glUniform ## ph_1 ## ph_2
 
@@ -52,16 +55,19 @@ template<std::size_t N, typename... Args>
 using get_ = typename get_Nth_type<N, Args...>::type;
 
 
-class Shader
+class Shader : public IShader
 {
 private:
     unsigned int m_id{};
+    MVPUniformBuffer m_mvpBuffer;
+    LightUniformBuffer m_lightBuffer;
+    std::unordered_map<std::string, std::any> m_uniformVals;
 public:
     Shader() = default;
     explicit Shader(unsigned int id);
 
     template <typename ... Params>
-    void setUniform(const std::string &val_name, Params... params)
+    void setHotUniform(const std::string &val_name, Params... params)
     {
         if constexpr (std::is_floating_point_v<get_<0, Params...>>)
         {
@@ -95,8 +101,50 @@ public:
         }
     }
 
+    void setUniform(const std::string &val_name, glm::mat4 mat) override
+    {
+        setHotUniform(val_name, mat);
+        m_uniformVals[val_name] = mat;
+    }
+
+    void setUniform(const std::string &val_name, glm::vec2 vec) override
+    {
+        setHotUniform(val_name, vec);
+        m_uniformVals[val_name] = vec;
+    }
+
+    void setUniform(const std::string &val_name, glm::vec3 vec) override
+    {
+        setHotUniform(val_name, vec);
+        m_uniformVals[val_name] = vec;
+    }
+
+    void setUniform(const std::string &val_name, glm::vec4 vec) override
+    {
+        setHotUniform(val_name, vec);
+        m_uniformVals[val_name] = vec;
+    }
+
+    void setUniform(const std::string &val_name, float val) override
+    {
+        setHotUniform(val_name, val);
+        m_uniformVals[val_name] = val;
+    }
+
+    void setUniform(const std::string &val_name, int val) override
+    {
+        setHotUniform(val_name, val);
+        m_uniformVals[val_name] = val;
+    }
+
+    void setUniform(const std::string &val_name, size_t size, int *arr) override
+    {
+        setHotUniform(val_name, size, arr);
+        m_uniformVals[val_name] = std::vector<int>(arr, arr + size);
+    }
+
     // Activate the shader
-    void use() const;
+    void use() const override;
 
     unsigned int getId() const noexcept;
 

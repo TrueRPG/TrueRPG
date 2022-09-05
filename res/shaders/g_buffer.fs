@@ -4,11 +4,11 @@
 layout (location = 0) out vec4 gPosition;
 layout (location = 1) out vec4 gAlbedoSpec;
 
-in vec4 Color;
-in vec2 TexCoord;
-in float TexIndex;
+layout (location = 0) in vec4 Color;
+layout (location = 1) in vec2 TexCoord;
+layout (location = 2) in float TexIndex;
 
-in vec4 fragPos;
+layout (location = 3) in vec4 fragPos;
 
 // Texture samplers
 uniform sampler2D textures[16];

@@ -26,6 +26,12 @@ private:
 public:
     GlfwWindow(int width, int height, const std::string &title);
 
+    void makeContextCurrent() const override;
+
+    void loadGL() const override;
+
+    void swapInterval(int interval) const override;
+    
     bool isOpen() const override;
 
     void close() const override;
