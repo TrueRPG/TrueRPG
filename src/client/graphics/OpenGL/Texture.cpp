@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "../Graphics.h"
-#include "stb_image.h"
+#include <stb_image.h>
 
 #include "../Bitmap.h"
 

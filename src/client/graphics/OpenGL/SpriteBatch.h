@@ -1,7 +1,7 @@
 #ifndef RPG_SPRITEBATCH_H
 #define RPG_SPRITEBATCH_H
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include <vector>
 #include <map>
 #include <set>
