@@ -84,7 +84,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
         panel.setScale(glm::vec2(menuSize));
         panel.setPosition(cameraTransform.position - menuSize / 2.f);
         panel.setColor(panelColor);
-        batch.draw(panel, 100);
+        batch.draw(panel, 10);
 
         m_selectedEntity = Entity();
 
@@ -99,7 +99,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 cell.setScale(glm::vec2(cellSize, cellSize));
                 cell.setPosition(cellPos);
                 cell.setColor(cellColor);
-                batch.draw(cell, 100);
+                batch.draw(cell, 10);
 
                 // place the dragged item
                 if (m_draggedEntity && !window.getMouseButton(GLFW_MOUSE_BUTTON_LEFT))
@@ -152,11 +152,11 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                     if (itemEntity == m_draggedEntity)
                     {
                         item.setPosition(cursor - m_itemDelta);
-                        batch.draw(item, 120);
+                        batch.draw(item, 12);
                     }
                     else
                     {
-                        batch.draw(item, 110);
+                        batch.draw(item, 11);
                     }
                 }
             }
@@ -176,9 +176,9 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
             descriptionPanel.setPosition(glm::vec2(textBounds.getLeft(), textBounds.getBottom()) - 10.f);
             descriptionPanel.setScale(glm::vec2(textBounds.getWidth(), textBounds.getHeight()) + 20.f);
             descriptionPanel.setColor(glm::vec4(0.5f, 0.5f, 0.5f, 1.f));
-            batch.draw(descriptionPanel, 130);
+            batch.draw(descriptionPanel, 13);
 
-            text.draw(batch, 130);
+            text.draw(batch, 13);
         }
 
         if (prevCursor != cursor)
