@@ -21,19 +21,19 @@ SpriteBatch::SpriteBatch(Shader shader, int maxSprites)
     m_vbo.setData(nullptr, sizeof(Vertex) * vertexCount, GL_DYNAMIC_DRAW);
 
     // Coords
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
     glEnableVertexAttribArray(0);
 
     // Color
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // Texture coords
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(7 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     // Texture index
-    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(9 * sizeof(float)));
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(8 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
     // Pattern:
@@ -85,10 +85,25 @@ void SpriteBatch::end()
     {
         for (const auto &quad : layer)
         {
-            vertices[currentVertex] = quad.vertices[0];
-            vertices[currentVertex + 1] = quad.vertices[1];
-            vertices[currentVertex + 2] = quad.vertices[2];
-            vertices[currentVertex + 3] = quad.vertices[3];
+            vertices[currentVertex].position = quad.vertices[0].position;
+            vertices[currentVertex].texCoord = quad.vertices[0].texCoords;
+            vertices[currentVertex].color = quad.color;
+            vertices[currentVertex].texId = quad.texId;
+
+            vertices[currentVertex + 1].position = quad.vertices[1].position;
+            vertices[currentVertex + 1].texCoord = quad.vertices[1].texCoords;
+            vertices[currentVertex + 1].color = quad.color;
+            vertices[currentVertex + 1].texId = quad.texId;
+
+            vertices[currentVertex + 2].position = quad.vertices[2].position;
+            vertices[currentVertex + 2].texCoord = quad.vertices[2].texCoords;
+            vertices[currentVertex + 2].color = quad.color;
+            vertices[currentVertex + 2].texId = quad.texId;
+
+            vertices[currentVertex + 3].position = quad.vertices[3].position;
+            vertices[currentVertex + 3].texCoord = quad.vertices[3].texCoords;
+            vertices[currentVertex + 3].color = quad.color;
+            vertices[currentVertex + 3].texId = quad.texId;
             currentVertex += 4;
         }
     }
@@ -195,15 +210,15 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
 
     FloatRect r = prepareRect(rect);
 
-    set.insert({{{glm::vec3(quadPos, 0.f), // bottom left
-                     sprite.getColor(), toTexCoords(texture, r.getLeft(), r.getBottom()), texId},
-                    {glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // bottom right
-                        sprite.getColor(), toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom()), texId},
-                    {glm::vec3(quadPos + glm::vec2(w, h), 0.f), // top right
-                        sprite.getColor(), toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom() + r.getHeight()), texId},
-                    {glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // top left
-                        sprite.getColor(), toTexCoords(texture, r.getLeft(), r.getBottom() + r.getHeight()), texId}},
-        order});
+    set.insert({{{quadPos, // bottom left
+                     toTexCoords(texture, r.getLeft(), r.getBottom())},
+                    {quadPos + glm::vec2(w, 0.f), // bottom right
+                        toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom())},
+                    {quadPos + glm::vec2(w, h), // top right
+                        toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom() + r.getHeight())},
+                    {quadPos + glm::vec2(0.f, h), // top left
+                        toTexCoords(texture, r.getLeft(), r.getBottom() + r.getHeight())}},
+        sprite.getColor(), texId, order});
 }
 
 void SpriteBatch::setShader(Shader shader)

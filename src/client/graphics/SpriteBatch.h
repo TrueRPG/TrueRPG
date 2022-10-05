@@ -13,15 +13,23 @@
 
 struct Vertex
 {
-    glm::vec3 position;
+    glm::vec2 position;
     glm::vec4 color;
     glm::vec2 texCoord;
     float texId;
 };
 
+struct ShortVertex
+{
+    glm::vec2 position;
+    glm::vec2 texCoords;
+};
+
 struct QuadWrapper
 {
-    Vertex vertices[4];
+    ShortVertex vertices[4];
+    glm::vec4 color;
+    float texId;
     int order{0};
 };
 
