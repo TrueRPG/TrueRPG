@@ -13,37 +13,49 @@
 
 struct Vertex
 {
-    glm::vec3 position;
+    glm::vec2 position;
     glm::vec4 color;
     glm::vec2 texCoord;
     float texId;
 };
 
-struct VertexWrapper
+struct ShortVertex
 {
-    Vertex vertex{};
+    glm::vec2 position;
+    glm::vec2 texCoords;
+};
+
+struct QuadWrapper
+{
+    ShortVertex vertices[4];
+    glm::vec4 color;
+    float texId;
     int order{0};
 };
 
 static const size_t MaxTextures = 16;
+static const size_t MaxLayers = 16;
 
 class SpriteBatch
 {
     IShader *m_shader;
 
-    int m_maxSprites;
+    int m_maxSprites{0};
     VertexArray m_vao;
     Buffer m_vbo;
 
     Buffer m_ibo;
 
-    inline static bool compareVertices(const VertexWrapper &a, const VertexWrapper &b)
+    struct QuadComparator
     {
-        return a.order < b.order;
-    }
+        bool operator()(const QuadWrapper &a, const QuadWrapper &b) const
+        {
+            return a.order < b.order;
+        }
+    };
 
-    // layer -> vertices
-    std::map<int, std::multiset<VertexWrapper, decltype(&compareVertices)>> m_vertices;
+    std::multiset<QuadWrapper, QuadComparator> m_layers[MaxLayers];
+
     int m_spritesSize{0};
 
     Texture m_textures[MaxTextures];

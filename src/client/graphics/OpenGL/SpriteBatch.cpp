@@ -5,8 +5,10 @@
 #include <numeric>
 
 SpriteBatch::SpriteBatch(IShader *shader, int maxSprites)
-        : m_shader(shader), m_maxSprites(maxSprites),
-          m_vbo(GL_ARRAY_BUFFER), m_ibo(GL_ELEMENT_ARRAY_BUFFER)
+    : m_shader(shader),
+      m_maxSprites(maxSprites),
+      m_vbo(GL_ARRAY_BUFFER),
+      m_ibo(GL_ELEMENT_ARRAY_BUFFER)
 {
     const int vertexCount = maxSprites * 4;
     const int indexCount = maxSprites * 6;
@@ -19,19 +21,19 @@ SpriteBatch::SpriteBatch(IShader *shader, int maxSprites)
     m_vbo.setData(nullptr, sizeof(Vertex) * vertexCount, GL_DYNAMIC_DRAW);
 
     // Coords
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
     glEnableVertexAttribArray(0);
 
     // Color
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (3 * sizeof(float)));
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // Texture coords
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (7 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(6 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
     // Texture index
-    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) (9 * sizeof(float)));
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(8 * sizeof(float)));
     glEnableVertexAttribArray(3);
 
     // Pattern:
@@ -62,7 +64,10 @@ SpriteBatch::SpriteBatch(IShader *shader, int maxSprites)
 
 void SpriteBatch::begin()
 {
-    m_vertices.clear();
+    for (auto &m_layer : m_layers)
+    {
+        m_layer.clear();
+    }
     m_spritesSize = 0;
     m_texturesSize = 0;
     m_shader->use();
@@ -74,18 +79,38 @@ void SpriteBatch::end()
     m_vbo.bind();
 
     // Insert everything into one vector
-    std::vector<Vertex> vertices;
+    auto *vertices = new Vertex[m_spritesSize * 4];
+    int currentVertex = 0;
 
-    for (const auto &layer : m_vertices)
+    for (const auto &layer : m_layers)
     {
-        for (const auto &vertex : layer.second)
+        for (const auto &quad : layer)
         {
-            vertices.push_back(vertex.vertex);
+            vertices[currentVertex].position = quad.vertices[0].position;
+            vertices[currentVertex].texCoord = quad.vertices[0].texCoords;
+            vertices[currentVertex].color = quad.color;
+            vertices[currentVertex].texId = quad.texId;
+
+            vertices[currentVertex + 1].position = quad.vertices[1].position;
+            vertices[currentVertex + 1].texCoord = quad.vertices[1].texCoords;
+            vertices[currentVertex + 1].color = quad.color;
+            vertices[currentVertex + 1].texId = quad.texId;
+
+            vertices[currentVertex + 2].position = quad.vertices[2].position;
+            vertices[currentVertex + 2].texCoord = quad.vertices[2].texCoords;
+            vertices[currentVertex + 2].color = quad.color;
+            vertices[currentVertex + 2].texId = quad.texId;
+
+            vertices[currentVertex + 3].position = quad.vertices[3].position;
+            vertices[currentVertex + 3].texCoord = quad.vertices[3].texCoords;
+            vertices[currentVertex + 3].color = quad.color;
+            vertices[currentVertex + 3].texId = quad.texId;
+            currentVertex += 4;
         }
     }
 
     // Put our vertices into the allocated memory
-    m_vbo.setSubData(vertices, 0);
+    m_vbo.setSubData(vertices, 0, currentVertex * sizeof(Vertex));
 
     m_shader->use();
 
@@ -105,6 +130,7 @@ void SpriteBatch::end()
     m_vao.bind();
     glDrawElements(GL_TRIANGLES, m_spritesSize * 6, GL_UNSIGNED_INT, nullptr);
 
+    delete[] vertices;
     delete[] ids;
 }
 
@@ -114,10 +140,10 @@ static FloatRect prepareRect(IntRect rect)
 {
     float offset = 0.5f;
 
-    auto left = (float) rect.getLeft();
-    auto bottom = (float) rect.getBottom();
-    auto width = (float) rect.getWidth();
-    auto height = (float) rect.getHeight();
+    auto left = (float)rect.getLeft();
+    auto bottom = (float)rect.getBottom();
+    auto width = (float)rect.getWidth();
+    auto height = (float)rect.getHeight();
 
     left += glm::sign(width) * offset;
     bottom += glm::sign(height) * offset;
@@ -128,13 +154,19 @@ static FloatRect prepareRect(IntRect rect)
     return {left, bottom, width, height};
 }
 
-static glm::vec2 toTexCoords(Texture& texture, float x, float y)
+static glm::vec2 toTexCoords(Texture &texture, float x, float y)
 {
-    return {(float) x / texture.getWidth(), (float) y / texture.getHeight()};
+    return {(float)x / texture.getWidth(), (float)y / texture.getHeight()};
 }
 
 void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
 {
+    if (layer >= MaxLayers)
+    {
+        std::cerr << "Cannot draw a sprite! The maximum number of layers is " << MaxLayers << std::endl;
+        return;
+    }
+
     // Actually we draw nothing here. In this method we just collect the sprites to draw them later
     if (m_spritesSize >= m_maxSprites)
     {
@@ -159,8 +191,8 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
 
     if (i >= MaxTextures)
     {
-        std::cerr << "Cannot draw a sprite with texture " << texture.getPath()
-                  << "! Maximum number of m_texturesSize reached!" << std::endl;
+        std::cerr << "Cannot draw a sprite with texture " << texture.getPath() << "! Maximum number of m_texturesSize reached!"
+                  << std::endl;
         return;
     }
 
@@ -173,55 +205,23 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
 
     auto texId = static_cast<float>(i);
 
-    float w = (float) std::abs(rect.getWidth()) * sprite.getScale().x;
-    float h = (float) std::abs(rect.getHeight()) * sprite.getScale().y;
+    float w = (float)std::abs(rect.getWidth()) * sprite.getScale().x;
+    float h = (float)std::abs(rect.getHeight()) * sprite.getScale().y;
 
     // Create a layer if absent
-    auto resultSet = m_vertices.find(layer);
-    if (resultSet == m_vertices.end())
-    {
-        std::multiset<VertexWrapper, decltype(&compareVertices)> set(compareVertices);
-        resultSet = m_vertices.insert({layer, set}).first;
-    }
-    auto &set = resultSet->second;
+    auto &set = m_layers[layer];
 
     FloatRect r = prepareRect(rect);
 
-    set.insert(
-            {
-                    {
-                            glm::vec3(quadPos, 0.f), // bottom left
-                            sprite.getColor(),
-                            toTexCoords(texture, r.getLeft(), r.getBottom()), texId
-                    }, order
-            });
-    set.insert(
-            {
-                    {
-                            glm::vec3(quadPos + glm::vec2(w, 0.f), 0.f), // bottom right
-                            sprite.getColor(),
-                            toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom()),
-                            texId
-                    }, order
-            });
-    set.insert(
-            {
-                    {
-                            glm::vec3(quadPos + glm::vec2(w, h), 0.f), // top right
-                            sprite.getColor(),
-                            toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom() + r.getHeight()),
-                            texId
-                    }, order
-            });
-    set.insert(
-            {
-                    {
-                            glm::vec3(quadPos + glm::vec2(0.f, h), 0.f), // top left
-                            sprite.getColor(),
-                            toTexCoords(texture, r.getLeft(), r.getBottom() + r.getHeight()),
-                            texId
-                    }, order
-            });
+    set.insert({{{quadPos, // bottom left
+                     toTexCoords(texture, r.getLeft(), r.getBottom())},
+                    {quadPos + glm::vec2(w, 0.f), // bottom right
+                        toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom())},
+                    {quadPos + glm::vec2(w, h), // top right
+                        toTexCoords(texture, r.getLeft() + r.getWidth(), r.getBottom() + r.getHeight())},
+                    {quadPos + glm::vec2(0.f, h), // top left
+                        toTexCoords(texture, r.getLeft(), r.getBottom() + r.getHeight())}},
+        sprite.getColor(), texId, order});
 }
 
 void SpriteBatch::setShader(IShader *shader)

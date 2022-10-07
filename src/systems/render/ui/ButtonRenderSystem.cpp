@@ -55,12 +55,12 @@ void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
             buttonComponent.onHover(hovered = false);
         }
 
-        batch.draw(sprite, 100);
+        batch.draw(sprite, 10);
 
         Text text(*buttonComponent.font, buttonComponent.text);
         auto textBounds = text.getLocalBounds();
         text.setPosition(
             transformComponent.position + buttonComponent.size / 2.f - glm::vec2(textBounds.getWidth(), textBounds.getHeight()) / 2.f);
-        text.draw(batch, 100);
+        text.draw(batch, 10);
     }
 }
