@@ -6,7 +6,7 @@
 
 GlobalLightRenderSystem::GlobalLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
-      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/global_light.vs", TRUERPG_RES_DIR "/shaders/global_light.fs")),
+      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/global_light.vs", TRUERPG_RES_DIR "/shaders/global_light.fs", {false, false, true})),
       m_quad()
 {
 }
@@ -24,6 +24,7 @@ void GlobalLightRenderSystem::draw()
     float brightness = DayNightCycle::computeSunBrightness(seconds);
 
     m_shader.setUniform("brightness", brightness);
+    m_shader.updateUbo();
     m_quad.draw();
 }
 

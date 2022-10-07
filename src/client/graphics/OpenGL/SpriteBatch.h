@@ -29,7 +29,7 @@ static const size_t MaxTextures = 16;
 
 class SpriteBatch
 {
-    Shader m_shader;
+    IShader *m_shader;
 
     int m_maxSprites;
     VertexArray m_vao;
@@ -57,7 +57,7 @@ class SpriteBatch
 public:
     SpriteBatch() = default;
 
-    SpriteBatch(Shader shader, int spriteCount = 2000);
+    SpriteBatch(IShader *shader, int spriteCount = 2000);
 
     void begin();
 
@@ -65,7 +65,7 @@ public:
 
     void draw(const Sprite &sprite, int layer = 0, int order = 0);
 
-    void setShader(Shader shader);
+    void setShader(IShader *shader);
 
     glm::mat4 getProjectionMatrix();
 

@@ -20,3 +20,9 @@ void GLContext::swapBuffers()
 {
     Engine::getWindow().swapBuffers();
 }
+
+IShader &GLContext::createShader(const std::string& vertexPath, const std::string& fragmentPath, ShaderEnabledUniform enabled)
+{
+    m_shaders.emplace_back(new Shader(Shader::createShader(vertexPath, fragmentPath, enabled)));
+    return *m_shaders.back();
+}

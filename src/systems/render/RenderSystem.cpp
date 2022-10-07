@@ -10,9 +10,9 @@
 
 RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
-          m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/g_buffer.vs", TRUERPG_RES_DIR "/shaders/g_buffer.fs")),
-          m_uiShader(Shader::createShader(TRUERPG_RES_DIR "/shaders/ui.vs", TRUERPG_RES_DIR "/shaders/ui.fs")),
-          m_batch(m_shader, 30000)
+          m_shader(Engine::getGraphicsContext().createShader(TRUERPG_RES_DIR "/shaders/g_buffer.vs", TRUERPG_RES_DIR "/shaders/g_buffer.fs", {true})),
+          m_uiShader(Engine::getGraphicsContext().createShader(TRUERPG_RES_DIR "/shaders/ui.vs", TRUERPG_RES_DIR "/shaders/ui.fs", {true})),
+          m_batch(&m_shader, 30000)
 {
     auto& window = Engine::getWindow();
     window.getOnResize() += createEventHandler(*this, &RenderSystem::resize);
@@ -52,9 +52,9 @@ void RenderSystem::draw()
     glClear(GL_COLOR_BUFFER_BIT);
 
     glm::mat4 viewMatrix = glm::translate(glm::mat4(1), glm::vec3(-cameraTransform.position, 0));
+    m_batch.setShader(&m_shader);
     m_batch.setViewMatrix(viewMatrix);
     m_batch.setProjectionMatrix(cameraComponent.getProjectionMatrix());
-    m_batch.setShader(m_shader);
     m_batch.begin();
 
     for (auto &system : m_subsystems)
@@ -86,9 +86,9 @@ void RenderSystem::draw()
     }
 
     // UI pass
+    m_batch.setShader(&m_uiShader);
     m_batch.setViewMatrix(viewMatrix);
     m_batch.setProjectionMatrix(cameraComponent.getProjectionMatrix());
-    m_batch.setShader(m_uiShader);
     m_batch.begin();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

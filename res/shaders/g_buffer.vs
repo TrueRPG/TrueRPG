@@ -11,9 +11,16 @@ layout (location = 2) out float TexIndex;
 
 layout (location = 3) out vec4 fragPos;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+// uniform mat4 model;
+// uniform mat4 view;
+// uniform mat4 projection;
+
+layout (binding = 0) uniform MVP
+{
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+};
 
 void main()
 {

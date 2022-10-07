@@ -7,7 +7,7 @@ layout (location = 0) in vec2 texCoords;
 layout (binding = 0) uniform sampler2D gPosition;
 layout (binding = 1) uniform sampler2D gAlbedoSpec;
 
-struct Light {
+struct PointLight {
     vec2 pos;
     vec3 color;
 
@@ -15,7 +15,10 @@ struct Light {
     float intensity;
 };
 
-uniform Light light;
+layout (binding = 2) uniform Light
+{
+    PointLight light;
+};
 
 void main() {
     // Retrieve data from g-buffer

@@ -10,13 +10,18 @@ struct alignas(16) MVPUniform
     glm::mat4 proj;
 };
 
-struct alignas(16) LightUniform
+struct LightUniform
 {
-    glm::vec2 pos;
-    glm::vec3 color;
+    alignas(16) glm::vec2 pos;
+    alignas(16) glm::vec3 color;
 
     float radius;
     float intensity;
+};
+
+struct alignas(16) GlobalLightUniform
+{
+    float brightness;
 };
 
 #endif // RPG_SRC_CLIENT_GRAPHICS_UNIFORMS_H

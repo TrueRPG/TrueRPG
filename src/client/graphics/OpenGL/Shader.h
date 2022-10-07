@@ -6,12 +6,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../IShader.h"
+#include "../ShaderInfo.h"
 #include "UniformBuffer.h"
 
 #include <string>
 #include <iostream>
 #include <functional>
 #include <any>
+#include <unordered_map>
 
 #define UNIFORMTAG(ph_1, ph_2) glUniform ## ph_1 ## ph_2
 
@@ -59,8 +61,13 @@ class Shader : public IShader
 {
 private:
     unsigned int m_id{};
+    unsigned int m_mvpUniformIndex;
+    unsigned int m_lightUniformIndex;
     MVPUniformBuffer m_mvpBuffer;
     LightUniformBuffer m_lightBuffer;
+    ShaderEnabledUniform m_enabledUniform;
+
+    std::unordered_map<std::string, IUniformBuffer *> m_uniforms;
     std::unordered_map<std::string, std::any> m_uniformVals;
 public:
     Shader() = default;
@@ -103,7 +110,7 @@ public:
 
     void setUniform(const std::string &val_name, glm::mat4 mat) override
     {
-        setHotUniform(val_name, mat);
+        // setHotUniform(val_name, mat);
         m_uniformVals[val_name] = mat;
     }
 
@@ -146,11 +153,47 @@ public:
     // Activate the shader
     void use() const override;
 
+    void updateUbo() override
+    {
+        if (m_enabledUniform.useMVP)
+        {
+            auto &ubo = *m_uniforms["MVP"];
+            MVPUniform mvp{};
+            mvp.model = std::any_cast<glm::mat4>(m_uniformVals["model"]);
+            mvp.view = std::any_cast<glm::mat4>(m_uniformVals["view"]);
+            mvp.proj = std::any_cast<glm::mat4>(m_uniformVals["projection"]);
+
+            ubo.setSubData(&mvp);
+            ubo.bindBase();
+        }
+        if (m_enabledUniform.useGlobalLight)
+        {
+            auto &ubo = *m_uniforms["GlobalLight"];
+            GlobalLightUniform globalLight{};
+            globalLight.brightness = std::any_cast<float>(m_uniformVals["brightness"]);
+
+            ubo.setSubData(&globalLight);
+            ubo.bindBase(2);
+        }
+        if (m_enabledUniform.useLight)
+        {
+            auto &ubo = *m_uniforms["Light"];
+            LightUniform light{};
+            light.pos = std::any_cast<glm::vec2>(m_uniformVals["light.pos"]);
+            light.color = std::any_cast<glm::vec3>(m_uniformVals["light.color"]);
+            light.radius = std::any_cast<float>(m_uniformVals["light.radius"]);
+            light.intensity = std::any_cast<float>(m_uniformVals["light.intensity"]);
+            
+            ubo.setSubData(&light);
+            ubo.bindBase(2);
+        }
+    }
+
     unsigned int getId() const noexcept;
 
-    void destroy();
+    void destroy() override;
 
-    static Shader createShader(const std::string& vertexPath, const std::string& fragmentPath);
+    static Shader createShader(const std::string& vertexPath, const std::string& fragmentPath, ShaderEnabledUniform enabled = {});
 
 private:
     // Some useful functions to check shader compilation/binding errors

@@ -8,7 +8,7 @@
 
 PointLightRenderSystem::PointLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
-      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/point_light.vs", TRUERPG_RES_DIR "/shaders/point_light.fs")),
+      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/point_light.vs", TRUERPG_RES_DIR "/shaders/point_light.fs", {false, true})),
       m_quad()
 { }
 
@@ -44,6 +44,7 @@ void PointLightRenderSystem::draw()
         m_shader.setUniform("light.color", pointLightComponent.color);
         m_shader.setUniform("light.radius", pointLightComponent.radius);
         m_shader.setUniform("light.intensity", intensity);
+        m_shader.updateUbo();
 
         m_quad.draw();
     }

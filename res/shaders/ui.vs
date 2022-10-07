@@ -9,9 +9,16 @@ layout (location = 0) out vec4 Color;
 layout (location = 1) out vec2 TexCoord;
 layout (location = 2) out float TexIndex;
 
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
+// uniform mat4 model;
+// uniform mat4 view;
+// uniform mat4 projection;
+
+layout (binding = 0) uniform MVP
+{
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+};
 
 void main()
 {

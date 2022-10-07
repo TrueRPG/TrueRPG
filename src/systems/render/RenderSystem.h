@@ -20,8 +20,8 @@ struct GBuffer
 class RenderSystem : public ISystem
 {
     entt::registry &m_registry;
-    Shader m_shader;
-    Shader m_uiShader;
+    IShader &m_shader;
+    IShader &m_uiShader;
     SpriteBatch m_batch;
 
     GBuffer m_gBuffer;

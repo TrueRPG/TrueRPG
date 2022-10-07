@@ -4,10 +4,13 @@ out vec4 FragColor;
 
 layout (location = 0) in vec2 texCoords;
 
-uniform sampler2D gPosition;
-uniform sampler2D gAlbedoSpec;
+layout (binding = 0) uniform sampler2D gPosition;
+layout (binding = 1) uniform sampler2D gAlbedoSpec;
 
-uniform float brightness;
+layout (binding = 2) uniform GlobalLight
+{
+    float brightness;
+};
 
 void main() {
     // Retrieve data from g-buffer

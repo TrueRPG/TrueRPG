@@ -3,7 +3,10 @@
 #include <fstream>
 #include <sstream>
 
-Shader::Shader(unsigned int m_id) : m_id(m_id) { }
+Shader::Shader(unsigned int m_id) : m_id(m_id)
+{
+    m_mvpUniformIndex = glGetUniformBlockIndex(m_id, "MVP");
+}
 
 void Shader::use() const
 {
@@ -17,8 +20,11 @@ unsigned int Shader::getId() const noexcept
 
 void Shader::destroy()
 {
-    m_mvpBuffer.destroy();
-    m_lightBuffer.destroy();
+    for (auto [_, ubo] : m_uniforms)
+    {
+        ubo->destroy();
+        delete ubo;
+    }
     glDeleteProgram(m_id);
     m_id = 0;
 }
@@ -40,7 +46,7 @@ void checkCompileErrors(unsigned int glHandel, unsigned int status,
     }
 }
 
-Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath)
+Shader Shader::createShader(const std::string& vertexPath, const std::string& fragmentPath, ShaderEnabledUniform enabled)
 {
     unsigned int shaderProgram = 0;
 
@@ -58,7 +64,44 @@ Shader Shader::createShader(const std::string& vertexPath, const std::string& fr
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    return Shader(shaderProgram);
+    Shader res(shaderProgram);
+    res.m_enabledUniform = enabled;
+
+    // for (const auto &uniformInfo : uniformInfos)
+    // {
+        // u32 uniformIndex = glGetUniformBlockIndex(shaderProgram, uniformInfo.name.c_str());
+        // glUniformBlockBinding(shaderProgram, uniformIndex, uniformInfo.binding);
+        // 
+        // res.m_uniforms[uniformInfo.name] = UB(uniformInfo.size);
+        // res.m_uniforms[uniformInfo.name].init();
+    // }
+
+    if (enabled.useMVP)
+    {
+        u32 uniformIndex = glGetUniformBlockIndex(shaderProgram, "MVP");
+        glUniformBlockBinding(shaderProgram, uniformIndex, 0);
+
+        res.m_uniforms["MVP"] = new MVPUniformBuffer();
+        res.m_uniforms["MVP"]->init();
+    }
+    if (enabled.useGlobalLight)
+    {
+        u32 uniformIndex = glGetUniformBlockIndex(shaderProgram, "GlobalLight");
+        glUniformBlockBinding(shaderProgram, uniformIndex, 2);
+
+        res.m_uniforms["GlobalLight"] = new GlobalLightBuffer();
+        res.m_uniforms["GlobalLight"]->init();
+    }
+    if (enabled.useLight)
+    {
+        u32 uniformIndex = glGetUniformBlockIndex(shaderProgram, "Light");
+        glUniformBlockBinding(shaderProgram, uniformIndex, 2);
+
+        res.m_uniforms["Light"] = new LightUniformBuffer();
+        res.m_uniforms["Light"]->init();
+    }
+
+    return res;
 }
 
 unsigned int Shader::compileShader(const std::string& path, unsigned int type)

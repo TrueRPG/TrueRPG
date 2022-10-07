@@ -4,7 +4,7 @@
 #include "../Graphics.h"
 #include <numeric>
 
-SpriteBatch::SpriteBatch(Shader shader, int maxSprites)
+SpriteBatch::SpriteBatch(IShader *shader, int maxSprites)
         : m_shader(shader), m_maxSprites(maxSprites),
           m_vbo(GL_ARRAY_BUFFER), m_ibo(GL_ELEMENT_ARRAY_BUFFER)
 {
@@ -65,7 +65,7 @@ void SpriteBatch::begin()
     m_vertices.clear();
     m_spritesSize = 0;
     m_texturesSize = 0;
-    m_shader.use();
+    m_shader->use();
 }
 
 void SpriteBatch::end()
@@ -87,13 +87,15 @@ void SpriteBatch::end()
     // Put our vertices into the allocated memory
     m_vbo.setSubData(vertices, 0);
 
-    m_shader.use();
+    m_shader->use();
 
     int *ids = new int[m_texturesSize];
     std::iota(ids, ids + m_texturesSize, 0);
-    m_shader.setUniform("textures", m_texturesSize, ids);
+    m_shader->setUniform("textures", m_texturesSize, ids);
 
-    m_shader.setUniform("model", glm::mat4(1));
+    m_shader->setUniform("model", glm::mat4(1));
+
+    m_shader->updateUbo();
 
     for (int i = 0; i < m_texturesSize; i++)
     {
@@ -222,7 +224,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
             });
 }
 
-void SpriteBatch::setShader(Shader shader)
+void SpriteBatch::setShader(IShader *shader)
 {
     m_shader = shader;
 }
@@ -235,8 +237,8 @@ glm::mat4 SpriteBatch::getProjectionMatrix()
 void SpriteBatch::setProjectionMatrix(glm::mat4 projMat)
 {
     m_projMat = projMat;
-    m_shader.use();
-    m_shader.setUniform("projection", projMat);
+    m_shader->use();
+    m_shader->setUniform("projection", projMat);
 }
 
 glm::mat4 SpriteBatch::getViewMatrix()
@@ -247,8 +249,8 @@ glm::mat4 SpriteBatch::getViewMatrix()
 void SpriteBatch::setViewMatrix(glm::mat4 viewMat)
 {
     m_viewMat = viewMat;
-    m_shader.use();
-    m_shader.setUniform("view", viewMat);
+    m_shader->use();
+    m_shader->setUniform("view", viewMat);
 }
 void SpriteBatch::destroy()
 {
