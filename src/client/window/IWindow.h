@@ -19,6 +19,8 @@ public:
 
     virtual void swapInterval(int interval) const = 0;
 
+    virtual std::vector<const char*> getRequiredExtensions() const = 0;
+
     virtual bool isOpen() const = 0;
 
     virtual void close() const = 0;

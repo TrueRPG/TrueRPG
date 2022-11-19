@@ -2,6 +2,7 @@
 #include "utils/GameTimer.h"
 #include "client/Engine.h"
 #include "Game.h"
+#include "client/graphics/Vulkan/VulkanContext.h"
 
 // Nobody is forgotten, nothing is forgotten
 
@@ -14,6 +15,10 @@ int main()
 {
     // Create a window
     auto &window = Engine::getWindow("TRUE RPG");
+
+//    VulkanContext context;
+//    context.init();
+
     auto &graphicsContext = Engine::getGraphicsContext();
     graphicsContext.init();
 

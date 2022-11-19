@@ -61,6 +61,15 @@ void GlfwWindow::swapInterval(int interval) const
     glfwSwapInterval(interval);
 }
 
+std::vector<const char *> GlfwWindow::getRequiredExtensions() const
+{
+    u32 extCount = 0;
+
+    const char **extensions = glfwGetRequiredInstanceExtensions(&extCount);
+
+    return {extensions, extensions + extCount};
+}
+
 bool GlfwWindow::isOpen() const
 {
     return !glfwWindowShouldClose(m_window);

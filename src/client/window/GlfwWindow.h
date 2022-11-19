@@ -31,6 +31,8 @@ public:
     void loadGL() const override;
 
     void swapInterval(int interval) const override;
+
+    std::vector<const char *> getRequiredExtensions() const override;
     
     bool isOpen() const override;
 

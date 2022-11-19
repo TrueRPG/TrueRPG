@@ -38,6 +38,7 @@ else()
 endif()
 
 find_package(OpenGL REQUIRED)
+find_package(Vulkan REQUIRED)
 add_subdirectory(libs/stb_image)
 
 if(NOT TRUERPG_USE_SYSTEM_GLM)
@@ -65,7 +66,7 @@ else()
 	find_package(yaml-cpp REQUIRED)
 endif()
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp Vulkan::Vulkan)
 if(NOT TRUERPG_USE_SYSTEM_GLM)
   set(PROJECT_LIBS ${PROJECT_LIBS} glm)
 endif()
