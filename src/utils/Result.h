@@ -2,7 +2,6 @@
 #define RPG_RESULT_H
 
 #include "Types.h"
-#include "../pch.h"
 
 template <class T = void>
 struct Error
