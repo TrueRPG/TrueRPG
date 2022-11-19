@@ -5,7 +5,6 @@
 #ifndef RPG_DEVICE_H
 #define RPG_DEVICE_H
 
-#include "../../../pch.h"
 #include <vulkan/vulkan.h>
 
 namespace vk
@@ -17,6 +16,8 @@ private:
     VkDevice m_device = VK_NULL_HANDLE;
     VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 public:
+
+    Device(VkDevice device, VkPhysicalDevice physicalDevice);
 };
 
 } // namespace vk

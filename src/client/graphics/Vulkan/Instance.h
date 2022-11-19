@@ -1,7 +1,6 @@
 #ifndef RPG_INSTANCE_H
 #define RPG_INSTANCE_H
 
-#include "../../../pch.h"
 #include <vulkan/vulkan.h>
 #include "VulkanUtils.h"
 #include "Device.h"
