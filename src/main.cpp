@@ -18,6 +18,7 @@ int main()
 
     VulkanContext context;
     context.init();
+    context.destroy();
 
     auto &graphicsContext = Engine::getGraphicsContext();
     graphicsContext.init();
@@ -32,8 +33,9 @@ int main()
         graphicsContext.swapBuffers();
         window.pollEvents();
     }
-    
+
     game.destroy();
+    graphicsContext.destroy();
     window.destroy();
 
     return 0;

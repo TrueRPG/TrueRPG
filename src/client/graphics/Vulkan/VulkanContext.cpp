@@ -36,3 +36,8 @@ void VulkanContext::initInstance()
                      .build()
                      .except();
 }
+
+void VulkanContext::destroy()
+{
+    m_instance.destroy();
+}

@@ -12,4 +12,15 @@ Instance::Instance(VkInstance value, VkPhysicalDevice physicalDevice, VkDebugUti
 #endif
 {}
 
+void Instance::destroy()
+{
+    destroyDebugUtilsMessengerEXT(m_instance, m_messanger, nullptr);
+    vkDestroyInstance(m_instance, nullptr);
+}
+
+Instance::operator VkInstance() const
+{
+    return m_instance;
+}
+
 } // namespace vk

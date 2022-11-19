@@ -17,6 +17,8 @@ public:
     void swapBuffers() override;
 
     IShader &createShader(const std::string& vertexPath, const std::string& fragmentPath, ShaderEnabledUniform enabled = {}) override;
+
+    void destroy() override { }
 private:
     GLContext() = default;
 };

@@ -20,6 +20,8 @@ public:
     {
         
     }
+
+    void destroy() override;
 private:
     void initInstance();
 };

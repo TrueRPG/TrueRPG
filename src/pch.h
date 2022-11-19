@@ -23,4 +23,8 @@
 #include <miniaudio.h>
 #include <yaml-cpp/yaml.h>
 
+// project
+#include "utils/Logger.h"
+#include "utils/Types.h"
+
 #endif // RPG_PCH_H

@@ -16,7 +16,8 @@ namespace vk
             LAYER_NOT_PRESENT,
             EXTENSION_NOT_PRESENT,
             INCOMPATIBLE_DRIVER,
-            FAILED_PICK_DEVICE
+            FAILED_PICK_DEVICE,
+            FAILED_CREATE_DEBUG_MESSENGER
         };
 
         std::string toString(InstanceError error)
@@ -37,6 +38,8 @@ namespace vk
                 return "incompatible driver";
             case InstanceError::FAILED_PICK_DEVICE:
                 return "failed pick physical device";
+            case InstanceError::FAILED_CREATE_DEBUG_MESSENGER:
+                return "failed create debug messenger";
             }
 
             return "undefined error";
@@ -78,7 +81,7 @@ namespace vk
         }
     }
 
-    VkResult createDebugUtilsMessengerEXT(VkInstance instance,
+    static inline VkResult createDebugUtilsMessengerEXT(VkInstance instance,
         const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
         const VkAllocationCallbacks* pAllocator,
         VkDebugUtilsMessengerEXT* pDebugMessenger)
@@ -88,15 +91,6 @@ namespace vk
             return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
 
         return VK_ERROR_EXTENSION_NOT_PRESENT;
-    }
-
-    void destroyDebugUtilsMessengerEXT(VkInstance instance,
-        VkDebugUtilsMessengerEXT debugMessenger,
-        const VkAllocationCallbacks* pAllocator)
-    {
-        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-        if (func != nullptr)
-            func(instance, debugMessenger, pAllocator);
     }
 
     InstanceBuilder &InstanceBuilder::setAppName(const char *name)
@@ -201,6 +195,9 @@ namespace vk
         if constexpr (DEBUG_ENABLED)
         {
             res = createDebugUtilsMessengerEXT(instance, &debugInfo, nullptr, &debugUtilsMessenger);
+
+            if (res != VK_SUCCESS)
+                return Result<Instance>(errors::makeError(errors::InstanceError::FAILED_CREATE_DEBUG_MESSENGER, res));
         }
 
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);

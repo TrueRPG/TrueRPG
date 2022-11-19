@@ -11,6 +11,15 @@ constexpr bool DEBUG_ENABLED = true;
 constexpr bool DEBUG_ENABLED = false;
 #endif
 
+inline void destroyDebugUtilsMessengerEXT(VkInstance instance,
+    VkDebugUtilsMessengerEXT debugMessenger,
+    const VkAllocationCallbacks* pAllocator)
+{
+    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+    if (func != nullptr)
+        func(instance, debugMessenger, pAllocator);
+}
+
 }
 
 #endif // RPG_VULKANUTILS_H

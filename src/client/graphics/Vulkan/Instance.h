@@ -19,6 +19,10 @@ private:
 public:
     Instance() = default;
     Instance(VkInstance value, VkPhysicalDevice physicalDevice, VkDebugUtilsMessengerEXT messengerExt);
+
+    void destroy();
+
+    operator VkInstance() const;
 private:
 };
 
