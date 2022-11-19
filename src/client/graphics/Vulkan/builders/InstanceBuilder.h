@@ -1,11 +1,10 @@
 #ifndef RPG_INSTANCEBUILDER_H
 #define RPG_INSTANCEBUILDER_H
 
+#include "../../../../pch.h"
 #include <vulkan/vulkan.h>
 #include <vector>
 #include "../Instance.h"
-#include "../../../../utils/Types.h"
-#include "../../../../utils/Result.h"
 
 namespace vk
 {

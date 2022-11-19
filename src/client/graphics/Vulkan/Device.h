@@ -5,6 +5,7 @@
 #ifndef RPG_DEVICE_H
 #define RPG_DEVICE_H
 
+#include "../../../pch.h"
 #include <vulkan/vulkan.h>
 
 namespace vk
