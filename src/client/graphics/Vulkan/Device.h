@@ -14,6 +14,7 @@ class Device
 {
 private:
     VkDevice m_device = VK_NULL_HANDLE;
+    VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 public:
 };
 

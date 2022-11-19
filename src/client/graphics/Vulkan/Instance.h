@@ -18,8 +18,7 @@ private:
     friend class InstanceBuilder;
 public:
     Instance() = default;
-    explicit Instance(VkInstance value);
-    Instance(VkInstance value, VkPhysicalDevice physicalDevice);
+    Instance(VkInstance value, VkPhysicalDevice physicalDevice, VkDebugUtilsMessengerEXT messengerExt);
 private:
 };
 

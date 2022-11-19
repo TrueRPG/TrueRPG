@@ -2,6 +2,7 @@
 #define RPG_RESULT_H
 
 #include "Types.h"
+#include "Logger.h"
 
 template <class T = void>
 struct Error
@@ -68,7 +69,7 @@ public:
     {
         if (m_isInit) return m_value;
 
-        std::cerr << m_error.code.message() << std::endl;
+        logger::error(m_error.code.message());
         throw;
     }
 

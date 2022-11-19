@@ -1,6 +1,7 @@
-    #include "InstanceBuilder.h"
+#include "InstanceBuilder.h"
+#include "../../../../utils/Logger.h"
 #include <algorithm>
-    #include <iterator>
+#include <iterator>
 
 namespace vk
 {
@@ -77,6 +78,27 @@ namespace vk
         }
     }
 
+    VkResult createDebugUtilsMessengerEXT(VkInstance instance,
+        const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+        const VkAllocationCallbacks* pAllocator,
+        VkDebugUtilsMessengerEXT* pDebugMessenger)
+    {
+        auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+        if (func != nullptr)
+            return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+
+        return VK_ERROR_EXTENSION_NOT_PRESENT;
+    }
+
+    void destroyDebugUtilsMessengerEXT(VkInstance instance,
+        VkDebugUtilsMessengerEXT debugMessenger,
+        const VkAllocationCallbacks* pAllocator)
+    {
+        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+        if (func != nullptr)
+            func(instance, debugMessenger, pAllocator);
+    }
+
     InstanceBuilder &InstanceBuilder::setAppName(const char *name)
     {
         m_info.appName = name;
@@ -144,6 +166,8 @@ namespace vk
         appInfo.engineVersion = m_info.engineVersion;
         appInfo.apiVersion = m_info.apiVersion;
 
+        VkDebugUtilsMessengerCreateInfoEXT debugInfo{};
+
         VkInstanceCreateInfo info{};
         info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         info.pApplicationInfo = &appInfo;
@@ -152,11 +176,32 @@ namespace vk
         info.enabledExtensionCount = m_info.extensions.size();
         info.enabledLayerCount = m_info.layers.size();
 
+        if constexpr (DEBUG_ENABLED)
+        {
+            debugInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+            debugInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+                                        VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+            debugInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                                    VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+            debugInfo.pfnUserCallback = m_info.debugCallback;
+            debugInfo.pUserData = nullptr;
+            info.pNext = &debugInfo;
+        }
+
         VkInstance instance = VK_NULL_HANDLE;
         VkResult res = vkCreateInstance(&info, nullptr, &instance);
 
         if (res != VK_SUCCESS)
             return Result<Instance>(errors::makeError(errors::resultToError(res), res));
+
+        logger::debug("Successful create vk instance");
+
+        VkDebugUtilsMessengerEXT debugUtilsMessenger = VK_NULL_HANDLE;
+
+        if constexpr (DEBUG_ENABLED)
+        {
+            res = createDebugUtilsMessengerEXT(instance, &debugInfo, nullptr, &debugUtilsMessenger);
+        }
 
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
         if (deviceCount <= 0)
@@ -169,7 +214,9 @@ namespace vk
         if (device == VK_NULL_HANDLE)
             return Result<Instance>(errors::makeError(errors::InstanceError::FAILED_PICK_DEVICE, res));
 
-        Instance result{instance, device};
+        logger::debug("Successful pick physical device");
+
+        Instance result{instance, device, debugUtilsMessenger};
 
         return Result<Instance>(result);
     }
