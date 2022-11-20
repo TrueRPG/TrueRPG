@@ -9,9 +9,6 @@
 namespace vk
 {
 
-template <typename T>
-using Result = ::Result<T, Error<VkResult>>;
-
 class InstanceBuilder
 {
 private:

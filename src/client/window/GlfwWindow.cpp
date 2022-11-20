@@ -1,6 +1,8 @@
 #include "../../pch.h"
 #include "GlfwWindow.h"
 #include "../Engine.h"
+#include "../graphics/Vulkan/Instance.h"
+#include "../graphics/Vulkan/Surface.h"
 
 #include <iostream>
 
@@ -68,6 +70,14 @@ std::vector<const char *> GlfwWindow::getRequiredExtensions() const
     const char **extensions = glfwGetRequiredInstanceExtensions(&extCount);
 
     return {extensions, extensions + extCount};
+}
+
+bool GlfwWindow::createSurface(const vk::Instance &instance, vk::Surface &surfaceKhr)
+{
+    if (glfwCreateWindowSurface(instance, m_window, nullptr, &surfaceKhr.surface) != VK_SUCCESS)
+        return false;
+
+    return true;
 }
 
 bool GlfwWindow::isOpen() const

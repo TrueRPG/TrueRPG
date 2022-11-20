@@ -36,9 +36,17 @@ void VulkanContext::initInstance()
                      .setDesiredDeviceType(VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
                      .build()
                      .except();
+
+    m_surface = m_instance.createSurface().except();
 }
 
 void VulkanContext::destroy()
 {
+    vkDestroySurfaceKHR(m_instance, m_surface.surface, nullptr);
     m_instance.destroy();
+}
+VulkanContext &VulkanContext::getInstance()
+{
+    static VulkanContext instance;
+    return instance;
 }

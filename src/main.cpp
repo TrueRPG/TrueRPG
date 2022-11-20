@@ -16,10 +16,6 @@ int main()
     // Create a window
     auto &window = Engine::getWindow("TRUE RPG");
 
-    VulkanContext context;
-    context.init();
-    context.destroy();
-
     auto &graphicsContext = Engine::getGraphicsContext();
     graphicsContext.init();
 

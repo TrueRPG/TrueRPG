@@ -5,6 +5,8 @@
 #include "../../utils/Event.hpp"
 #include "../input/Key.h"
 
+namespace vk{ class Instance; struct Surface; }
+
 class IWindow
 {
 public:
@@ -20,6 +22,8 @@ public:
     virtual void swapInterval(int interval) const = 0;
 
     virtual std::vector<const char*> getRequiredExtensions() const = 0;
+
+    virtual bool createSurface(const vk::Instance &instance, vk::Surface &surfaceKhr) = 0;
 
     virtual bool isOpen() const = 0;
 

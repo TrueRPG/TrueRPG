@@ -15,6 +15,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 
 // 3rd party
 #include <glm/glm.hpp>

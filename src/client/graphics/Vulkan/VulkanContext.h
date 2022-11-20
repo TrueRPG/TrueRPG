@@ -4,11 +4,14 @@
 #include "../IGraphicsContext.h"
 #include "Instance.h"
 
-class VulkanContext : IGraphicsContext
+class VulkanContext : public IGraphicsContext
 {
 private:
     vk::Instance m_instance;
+    vk::Surface m_surface;
 public:
+    static VulkanContext &getInstance();
+
     void init() override;
 
     void swapBuffers() override

@@ -213,9 +213,7 @@ namespace vk
 
         logger::debug("Successful pick physical device");
 
-        Instance result{instance, device, debugUtilsMessenger};
-
-        return Result<Instance>(result);
+        return Result<Instance>(instance, device, debugUtilsMessenger);
     }
 
     VkPhysicalDevice InstanceBuilder::selectSuitablePhysicalDevice(const std::vector<VkPhysicalDevice> &devices) const

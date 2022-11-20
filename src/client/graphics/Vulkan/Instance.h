@@ -4,6 +4,8 @@
 #include <vulkan/vulkan.h>
 #include "VulkanUtils.h"
 #include "Device.h"
+#include "../../../utils/Result.h"
+#include "Surface.h"
 
 namespace vk
 {
@@ -19,6 +21,10 @@ private:
 public:
     Instance() = default;
     Instance(VkInstance value, VkPhysicalDevice physicalDevice, VkDebugUtilsMessengerEXT messengerExt);
+
+    [[nodiscard]] VkPhysicalDevice getPhysicalDevice() const;
+
+    ::Result<Surface> createSurface() const;
 
     void destroy();
 

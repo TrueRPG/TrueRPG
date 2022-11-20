@@ -3,6 +3,7 @@
 
 #include "window/GlfwWindow.h"
 #include "graphics/OpenGL/GLContext.h"
+#include "graphics/Vulkan/VulkanContext.h"
 
 IWindow &Engine::getWindow(const std::string &title)
 {
@@ -23,6 +24,8 @@ IGraphicsContext &Engine::getGraphicsContext()
     {
     case GraphicsAPI::OpenGL:
         return GLContext::getInstance();
+    case GraphicsAPI::Vulkan:
+        return VulkanContext::getInstance();
     default:
         throw;
     }

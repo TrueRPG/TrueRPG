@@ -33,7 +33,9 @@ public:
     void swapInterval(int interval) const override;
 
     std::vector<const char *> getRequiredExtensions() const override;
-    
+
+    bool createSurface(const vk::Instance &instance, vk::Surface &surfaceKhr) override;
+
     bool isOpen() const override;
 
     void close() const override;

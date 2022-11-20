@@ -1,6 +1,7 @@
 #ifndef RPG_VULKANUTILS_H
 #define RPG_VULKANUTILS_H
 
+#include "../../../utils/Result.h"
 
 namespace vk
 {
@@ -8,7 +9,7 @@ namespace vk
 #define VK_DEBUG
 constexpr bool DEBUG_ENABLED = true;
 #else
-constexpr bool DEBUG_ENABLED = false;
+constexpr bool LOG_DEBUG_ENABLED = false;
 #endif
 
 inline void destroyDebugUtilsMessengerEXT(VkInstance instance,
@@ -19,6 +20,9 @@ inline void destroyDebugUtilsMessengerEXT(VkInstance instance,
     if (func != nullptr)
         func(instance, debugMessenger, pAllocator);
 }
+
+template <typename T>
+using Result = ::Result<T, Error<VkResult>>;
 
 }
 
