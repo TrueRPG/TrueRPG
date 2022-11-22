@@ -17,7 +17,12 @@ private:
     VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 public:
 
+    Device() = default;
     Device(VkDevice device, VkPhysicalDevice physicalDevice);
+
+    operator VkDevice() const;
+
+    void destroy();
 };
 
 } // namespace vk

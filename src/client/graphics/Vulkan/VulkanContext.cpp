@@ -1,11 +1,13 @@
 #include "../../../pch.h"
 #include "VulkanContext.h"
 #include "builders/InstanceBuilder.h"
+#include "builders/DeviceBuilder.h"
 #include "../../Engine.h"
 
 void VulkanContext::init()
 {
     initInstance();
+    initDevice();
 }
 
 void VulkanContext::initInstance()
@@ -14,7 +16,7 @@ void VulkanContext::initInstance()
     std::vector<const char *> extensions = wnd.getRequiredExtensions();
     std::vector<const char *> layers;
 
-    if constexpr (vk::DEBUG_ENABLED)
+    if constexpr (DEBUG_ENABLED)
     {
         extensions.emplace_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
         layers.emplace_back("VK_LAYER_KHRONOS_validation");
@@ -40,11 +42,27 @@ void VulkanContext::initInstance()
     m_surface = m_instance.createSurface().except();
 }
 
+void VulkanContext::initDevice()
+{
+    std::vector<const char *> layers;
+    if constexpr (DEBUG_ENABLED)
+    {
+        layers.emplace_back("VK_LAYER_KHRONOS_validation");
+    }
+
+    m_device = vk::DeviceBuilder(m_instance, m_surface)
+                   .setLayers(layers)
+                   .build()
+                   .except();
+}
+
 void VulkanContext::destroy()
 {
+    m_device.destroy();
     vkDestroySurfaceKHR(m_instance, m_surface.surface, nullptr);
     m_instance.destroy();
 }
+
 VulkanContext &VulkanContext::getInstance()
 {
     static VulkanContext instance;

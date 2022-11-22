@@ -14,7 +14,7 @@ struct Surface
     inline explicit Surface(VkSurfaceKHR _surface) : surface(_surface)
     {}
 
-    inline explicit operator VkSurfaceKHR() const { return surface; }
+    inline operator VkSurfaceKHR() const { return surface; }
 };
 
 } // namespace vk

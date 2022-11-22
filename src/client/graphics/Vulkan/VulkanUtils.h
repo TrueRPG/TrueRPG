@@ -5,12 +5,6 @@
 
 namespace vk
 {
-#ifndef NDEBUG
-#define VK_DEBUG
-constexpr bool DEBUG_ENABLED = true;
-#else
-constexpr bool LOG_DEBUG_ENABLED = false;
-#endif
 
 inline void destroyDebugUtilsMessengerEXT(VkInstance instance,
     VkDebugUtilsMessengerEXT debugMessenger,

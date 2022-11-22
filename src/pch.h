@@ -27,5 +27,6 @@
 // project
 #include "utils/Logger.h"
 #include "utils/Types.h"
+#include "utils/Macros.h"
 
 #endif // RPG_PCH_H

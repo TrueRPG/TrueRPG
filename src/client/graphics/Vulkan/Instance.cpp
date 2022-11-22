@@ -5,10 +5,26 @@
 namespace vk
 {
 
+    namespace error
+    {
+        struct SurfaceErrorCategory : std::error_category
+        {
+            [[nodiscard]] const char *name() const noexcept override { return "vk_surface"; }
+            [[nodiscard]] std::string message(int err) const override { return "vk_surface: failed initialization"; }
+        };
+
+        static const SurfaceErrorCategory surfaceErrorCategory;
+
+        Error<> makeError()
+        {
+            return {{1, surfaceErrorCategory}};
+        }
+    }
+
 Instance::Instance(VkInstance value, VkPhysicalDevice physicalDevice, VkDebugUtilsMessengerEXT messengerExt)
     : m_instance(value),
       m_physicalDevice(physicalDevice)
-#ifdef VK_DEBUG
+#ifdef DEBUG
       ,
       m_messanger(messengerExt)
 #endif
@@ -23,7 +39,7 @@ VkPhysicalDevice Instance::getPhysicalDevice() const
 {
     Surface surfaceKhr;
     if  (!Engine::getWindow().createSurface(*this, surfaceKhr))
-        return {};
+        return ::Result<Surface>(error::makeError());
 
     return ::Result<Surface>(surfaceKhr);
 }

@@ -10,7 +10,7 @@ namespace vk
     {
         enum class InstanceError
         {
-            OUT_OF_HOST_MEMORY,
+            OUT_OF_HOST_MEMORY = 1,
             OUT_OF_DEVICE_MEMORY,
             INITIALIZATION_FAILED,
             LAYER_NOT_PRESENT,
@@ -25,21 +25,21 @@ namespace vk
             switch (error)
             {
             case InstanceError::OUT_OF_HOST_MEMORY:
-                return "out of host memory";
+                return "vk_instance: out of host memory";
             case InstanceError::OUT_OF_DEVICE_MEMORY:
-                return "out of device memory";
+                return "vk_instance: out of device memory";
             case InstanceError::INITIALIZATION_FAILED:
-                return "initialization failed";
+                return "vk_instance: initialization failed";
             case InstanceError::LAYER_NOT_PRESENT:
-                return "layer not present";
+                return "vk_instance: layer not present";
             case InstanceError::EXTENSION_NOT_PRESENT:
-                return "extension not present";
+                return "vk_instance: extension not present";
             case InstanceError::INCOMPATIBLE_DRIVER:
-                return "incompatible driver";
+                return "vk_instance: incompatible driver";
             case InstanceError::FAILED_PICK_DEVICE:
-                return "failed pick physical device";
+                return "vk_instance: failed pick physical device";
             case InstanceError::FAILED_CREATE_DEBUG_MESSENGER:
-                return "failed create debug messenger";
+                return "vk_instance: failed create debug messenger";
             }
 
             return "undefined error";

@@ -9,6 +9,7 @@ class VulkanContext : public IGraphicsContext
 private:
     vk::Instance m_instance;
     vk::Surface m_surface;
+    vk::Device m_device;
 public:
     static VulkanContext &getInstance();
 
@@ -26,7 +27,10 @@ public:
 
     void destroy() override;
 private:
+    VulkanContext() = default;
+
     void initInstance();
+    void initDevice();
 };
 
 #endif

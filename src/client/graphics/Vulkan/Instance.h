@@ -13,7 +13,7 @@ class Instance
 {
 private:
     VkInstance m_instance = VK_NULL_HANDLE;
-#ifdef VK_DEBUG
+#ifdef DEBUG
     VkDebugUtilsMessengerEXT m_messanger = VK_NULL_HANDLE;
 #endif
     VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
