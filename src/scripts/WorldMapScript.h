@@ -11,7 +11,7 @@ class WorldMapGenerator : public IWorldMapGenerator
 {
     OpenSimplexNoise m_simplexNoise;
 
-    Texture &m_texture;
+    ITexture &m_texture;
 
     Tile sandTile{&m_texture, IntRect(192, 4224, 32, 32)};
     Tile grassTile{&m_texture, IntRect(96, 4224, 32, 32)};
@@ -24,7 +24,7 @@ class WorldMapGenerator : public IWorldMapGenerator
     Entity m_player;
 
 public:
-    WorldMapGenerator(Texture &texture, Entity player);
+    WorldMapGenerator(ITexture &texture, Entity player);
 
     std::vector<Tile> generateTiles(int x, int y) override;
     std::vector<Object> generateObjects(int x, int y, std::vector<Tile> tiles) override;
@@ -38,7 +38,7 @@ private:
     WorldMapGenerator m_worldMapGenerator;
 
 public:
-    WorldMapScript(Texture &texture, Entity player);
+    WorldMapScript(ITexture &texture, Entity player);
 
     void onCreate() override;
     void onUpdate(float deltaTime) override;

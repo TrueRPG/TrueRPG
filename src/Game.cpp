@@ -47,11 +47,12 @@
 #include "systems/world/ClockSystem.h"
 #include "components/world/EnvironmentComponent.h"
 #include "systems/world/EnvironmentSystem.h"
+#include "client/Engine.h"
 
 Game::Game()
     : m_font(TRUERPG_RES_DIR "/fonts/vt323.ttf", 32),
-      m_heroTexture(Texture::create(TRUERPG_RES_DIR "/textures/hero.png")),
-      m_baseTexture(Texture::create(TRUERPG_RES_DIR "/textures/base.png")),
+      m_heroTexture(Engine::getGraphicsContext().createTexture(TRUERPG_RES_DIR "/textures/hero.png")),
+      m_baseTexture(Engine::getGraphicsContext().createTexture(TRUERPG_RES_DIR "/textures/base.png")),
       m_steps(TRUERPG_RES_DIR "/audio/steps.mp3"),
       m_music(TRUERPG_RES_DIR "/audio/music.mp3"),
       m_night(TRUERPG_RES_DIR "/audio/night.mp3")
@@ -126,7 +127,7 @@ Game::Game()
     m_playerEntity.addComponent<AudioListenerComponent>();
 
     Entity spriteEntity = m_scene.createEntity("sprite");
-    auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(m_heroTexture);
+    auto &heroRenderer = spriteEntity.addComponent<SpriteRendererComponent>(&m_heroTexture);
     heroRenderer.layer = 1;
     spriteEntity.addComponent<AutoOrderComponent>();
 
@@ -179,14 +180,14 @@ Game::Game()
     auto&axeComponent = axeItem.addComponent<ItemComponent>();
     axeComponent.name = "Axe";
     axeComponent.description = "It's a very useful thing when you need to cut down trees or cut off some monster heads.";
-    axeComponent.icon = m_baseTexture;
+    axeComponent.icon = &m_baseTexture;
     axeComponent.iconRect = IntRect(163, 41, 24, 24);
 
     Entity keyItem = m_scene.createEntity("keyItem");
     auto& keyComponent = keyItem.addComponent<ItemComponent>();
     keyComponent.name = "Secret Key";
     keyComponent.description = "Looks like a very old key. What does it open?";
-    keyComponent.icon = m_baseTexture;
+    keyComponent.icon = &m_baseTexture;
     keyComponent.iconRect = IntRect(227, 41, 24, 24);
 
     // Inventory
@@ -207,7 +208,7 @@ Game::Game()
 
     // Musical pumpkin
     Entity pumpkinEntity = m_scene.createEntity("pumpkin");
-    auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(m_baseTexture);
+    auto &pumpkinRenderer = pumpkinEntity.addComponent<SpriteRendererComponent>(&m_baseTexture);
     pumpkinRenderer.textureRect = IntRect(192, 3584, 32, 32);
     pumpkinRenderer.layer = 0;
 
@@ -243,7 +244,7 @@ Game::Game()
     for (int i = 0; i < 3; i++)
     {
         barrels[i] = m_scene.createEntity("barrel" + std::to_string(i));
-        auto &barrelRenderer = barrels[i].addComponent<SpriteRendererComponent>(m_baseTexture);
+        auto &barrelRenderer = barrels[i].addComponent<SpriteRendererComponent>(&m_baseTexture);
         barrelRenderer.textureRect = IntRect(96, 736, 32, 32);
         barrelRenderer.layer = 1;
 
@@ -260,7 +261,7 @@ Game::Game()
     botEntity.getComponent<TransformComponent>().position = glm::vec2(0.f, 5 * 64.f);
 
     Entity botSprite = m_scene.createEntity("sprite");
-    auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(m_heroTexture);
+    auto &botRenderer = botSprite.addComponent<SpriteRendererComponent>(&m_heroTexture);
     botRenderer.layer = 1;
     botSprite.addComponent<AutoOrderComponent>();
 

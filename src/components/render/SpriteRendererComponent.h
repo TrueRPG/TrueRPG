@@ -7,14 +7,14 @@
 
 struct SpriteRendererComponent
 {
-    Texture texture;
+    ITexture *texture;
     IntRect textureRect{0, 0, 0, 0};
     glm::vec4 color{1.f};
 
     int layer{0};
     int order{0};
 
-    SpriteRendererComponent(Texture texture);
+    SpriteRendererComponent(ITexture *texture);
 };
 
 #endif //RPG_SPRITERENDERERCOMPONENT_H

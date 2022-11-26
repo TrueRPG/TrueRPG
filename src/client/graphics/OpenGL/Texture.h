@@ -3,10 +3,11 @@
 
 #include <string>
 #include "../Graphics.h"
+#include "../ITexture.h"
 
 class Bitmap;
 
-class Texture
+class Texture : public ITexture
 {
 private:
     unsigned int m_id{};
@@ -18,19 +19,19 @@ public:
     Texture();
     explicit Texture(unsigned int id, const std::string& path, int width, int height);
 
-    void bind(unsigned int slot = 0) const;
+    void bind(unsigned int slot = 0) const override;
 
-    void unbind() const;
+    void unbind() const override;
 
-    unsigned int getId() const noexcept;
+    unsigned int getId() const noexcept override;
 
-    void destroy();
+    void destroy() override;
 
-    std::string getPath() const;
+    std::string getPath() const override;
 
-    int getWidth() const;
+    int getWidth() const override;
 
-    int getHeight() const;
+    int getHeight() const override;
 
     static Texture create(const std::string &path, unsigned int type = GL_TEXTURE_2D);
 

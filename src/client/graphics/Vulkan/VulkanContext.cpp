@@ -45,12 +45,14 @@ void VulkanContext::initInstance()
 void VulkanContext::initDevice()
 {
     std::vector<const char *> layers;
+    std::vector<const char *> extensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
     if constexpr (DEBUG_ENABLED)
     {
         layers.emplace_back("VK_LAYER_KHRONOS_validation");
     }
 
     m_device = vk::DeviceBuilder(m_instance, m_surface)
+                   .setExtensions(extensions)
                    .setLayers(layers)
                    .build()
                    .except();

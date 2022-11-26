@@ -88,7 +88,7 @@ FloatRect Text::getGlobalBounds() const
 void Text::initSprites()
 {
     m_sprites.clear();
-    Sprite sprite(m_font.getTexture());
+    Sprite sprite(*m_font.getTexture());
 
     // Find out the size of the text
     float maxWidth = 0;

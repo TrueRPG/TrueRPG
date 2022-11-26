@@ -79,7 +79,7 @@ Font::Font(const std::string &path, int size)
         x += glyph->bitmap.width;
     }
 
-    m_texture = Texture(textureId, path, width, height);
+    m_texture = &Engine::getGraphicsContext().createTexture(textureId, path, width, height);
 
     // Destroy all this rubbish
     FT_Done_Face(face);
@@ -101,14 +101,14 @@ int Font::getSize() const
     return m_size;
 }
 
-Texture &Font::getTexture()
+ITexture *Font::getTexture()
 {
     return m_texture;
 }
 
 void Font::destroy()
 {
-    m_texture.destroy();
+    m_texture->destroy();
 }
 
 // Looks scary, but I found the similar thing in SFML code.

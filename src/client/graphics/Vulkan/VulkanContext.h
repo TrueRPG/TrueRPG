@@ -3,6 +3,7 @@
 
 #include "../IGraphicsContext.h"
 #include "Instance.h"
+#include "../ITexture.h"
 
 class VulkanContext : public IGraphicsContext
 {
@@ -23,6 +24,21 @@ public:
     IShader &createShader(const std::string &vertexPath, const std::string &fragmentPath, ShaderEnabledUniform enabled = {}) override
     {
         
+    }
+
+    ITexture &createTexture(const std::string &path) override
+    {
+
+    }
+
+    ITexture &createTexture(unsigned int id, const std::string &path, int width, int height) override
+    {
+
+    }
+
+    ITexture &createEmptyTexture() override
+    {
+
     }
 
     void destroy() override;

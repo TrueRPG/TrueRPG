@@ -124,7 +124,7 @@ void SpriteBatch::end()
 
     for (int i = 0; i < m_texturesSize; i++)
     {
-        m_textures[i].bind(i);
+        m_textures[i]->bind(i);
     }
 
     m_vao.bind();
@@ -154,7 +154,7 @@ static FloatRect prepareRect(IntRect rect)
     return {left, bottom, width, height};
 }
 
-static glm::vec2 toTexCoords(Texture &texture, float x, float y)
+static glm::vec2 toTexCoords(ITexture &texture, float x, float y)
 {
     return {(float)x / texture.getWidth(), (float)y / texture.getHeight()};
 }
@@ -178,12 +178,12 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
     glm::vec2 quadPos = sprite.getPosition() - sprite.getOrigin() * sprite.getScale();
     IntRect rect = sprite.getTextureRect();
 
-    Texture texture = sprite.getTexture();
+    ITexture &texture = sprite.getTexture();
 
     int i;
     for (i = 0; i < m_texturesSize; i++)
     {
-        if (m_textures[i].getId() == texture.getId())
+        if (m_textures[i]->getId() == texture.getId())
         {
             break;
         }
@@ -199,7 +199,7 @@ void SpriteBatch::draw(const Sprite &sprite, int layer, int order)
     // If we get to the end, add a new texture
     if (i == m_texturesSize)
     {
-        m_textures[i] = texture;
+        m_textures[i] = &texture;
         m_texturesSize++;
     }
 

@@ -6,7 +6,6 @@
 #include "../../../components/world/InventoryComponent.h"
 #include "../../../components/world/ItemComponent.h"
 #include "../../../client/graphics/Text.h"
-#include "../../../client/Engine.h"
 #include "GLFW/glfw3.h"
 
 InventoryRenderSystem::InventoryRenderSystem(entt::registry& registry)
@@ -119,7 +118,7 @@ void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
                 if (itemEntity)
                 {
                     auto &itemComponent = itemEntity.getComponent<ItemComponent>();
-                    Sprite item(itemComponent.icon);
+                    Sprite item(*itemComponent.icon);
                     item.setTextureRect(itemComponent.iconRect);
 
                     // we need to fill the whole cell with the sprite

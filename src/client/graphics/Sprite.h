@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 #include "Rect.h"
-#include "OpenGL/Texture.h"
+#include "../Engine.h"
 
 class Sprite
 {
@@ -12,11 +12,11 @@ class Sprite
     glm::vec2 m_scale{1.f};
     glm::vec4 m_color{1.f};
     IntRect m_textureRect{0, 0, 0, 0};
-    Texture m_texture{Texture::createEmpty()};
+    ITexture &m_texture{Engine::getGraphicsContext().createEmptyTexture()};
 
 public:
     Sprite();
-    Sprite(Texture& texture);
+    Sprite(ITexture &texture);
 
     glm::vec2 getPosition() const;
     void setPosition(glm::vec2 position);
@@ -30,7 +30,7 @@ public:
     glm::vec4 getColor() const;
     void setColor(glm::vec4 color);
 
-    Texture getTexture() const;
+    ITexture &getTexture() const;
 
     IntRect getTextureRect() const;
     void setTextureRect(const IntRect &rect);

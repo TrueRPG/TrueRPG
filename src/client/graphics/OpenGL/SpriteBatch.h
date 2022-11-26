@@ -58,7 +58,7 @@ class SpriteBatch
 
     int m_spritesSize{0};
 
-    Texture m_textures[MaxTextures];
+    ITexture *m_textures[MaxTextures];
     int m_texturesSize{0};
 
     // It's not necessary to have these fields here,

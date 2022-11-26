@@ -9,7 +9,7 @@ struct ItemComponent
     std::string name{};
     std::string description{};
 
-    Texture icon;
+    ITexture *icon;
     IntRect iconRect{0, 0, 0, 0};
 };
 

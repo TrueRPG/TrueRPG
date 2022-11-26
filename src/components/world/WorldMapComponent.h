@@ -4,18 +4,17 @@
 #include <unordered_map>
 #include <vector>
 #include "glm/vec2.hpp"
-#include "../../client/graphics/OpenGL/Texture.h"
 #include "../../client/graphics/Rect.h"
 
 struct Tile
 {
-    Texture *texture{};
+    ITexture *texture{};
     IntRect textureRect{0, 0, 0, 0};
 };
 
 struct Object
 {
-    Texture *texture{};
+    ITexture *texture{};
     IntRect textureRect{0, 0, 0, 0};
 
     glm::vec2 origin{};

@@ -16,7 +16,7 @@ void SpriteRenderSystem::draw(SpriteBatch &batch)
     for (auto entity : view)
     {
         auto &spriteComponent = view.get<SpriteRendererComponent>(entity);
-        Sprite sprite(spriteComponent.texture);
+        Sprite sprite(*spriteComponent.texture);
         sprite.setTextureRect(spriteComponent.textureRect);
         sprite.setColor(spriteComponent.color);
 

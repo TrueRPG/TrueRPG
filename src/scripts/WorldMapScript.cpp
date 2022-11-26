@@ -5,7 +5,7 @@
 #include "../client/Engine.h"
 #include <vector>
 
-WorldMapGenerator::WorldMapGenerator(Texture &texture, Entity player)
+WorldMapGenerator::WorldMapGenerator(ITexture &texture, Entity player)
     : m_simplexNoise(DEBUG_SEED),
       m_texture(texture),
       m_player(player)
@@ -51,7 +51,7 @@ std::vector<Object> WorldMapGenerator::generateObjects(int x, int y, std::vector
     return {};
 }
 
-WorldMapScript::WorldMapScript(Texture &texture, Entity player)
+WorldMapScript::WorldMapScript(ITexture &texture, Entity player)
     : m_worldMapGenerator(texture, player)
 {
 }

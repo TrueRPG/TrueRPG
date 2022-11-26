@@ -16,7 +16,7 @@ class Font
 {
     std::string m_path;
     int m_size; // The size of the font
-    Texture m_texture;
+    ITexture *m_texture;
 
     // Character map
     std::map<char, Character> m_characters;
@@ -34,7 +34,7 @@ public:
     void destroy();
 
 private:
-    Texture& getTexture();
+    ITexture *getTexture();
 
     Character getCharacter(char c);
 

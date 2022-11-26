@@ -12,8 +12,8 @@
 class Game
 {
     Font m_font;
-    Texture m_heroTexture;
-    Texture m_baseTexture;
+    ITexture &m_heroTexture;
+    ITexture &m_baseTexture;
     SpriteAnimator m_characterAnimator;
 
     StreamAudioClip m_steps;

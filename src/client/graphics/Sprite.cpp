@@ -3,11 +3,11 @@
 
 Sprite::Sprite()
     : m_textureRect(0, 0, 1, 1),
-      m_texture(Texture::createEmpty())
+      m_texture(Engine::getGraphicsContext().createEmptyTexture())
 {
 }
 
-Sprite::Sprite(Texture &texture)
+Sprite::Sprite(ITexture &texture)
     : m_textureRect(0, 0, texture.getWidth(), texture.getHeight()),
       m_texture(texture)
 {
@@ -53,7 +53,7 @@ void Sprite::setColor(glm::vec4 color)
     m_color = color;
 }
 
-Texture Sprite::getTexture() const
+ITexture &Sprite::getTexture() const
 {
     return m_texture;
 }
