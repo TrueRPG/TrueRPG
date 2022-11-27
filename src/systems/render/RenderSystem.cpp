@@ -12,7 +12,7 @@ RenderSystem::RenderSystem(entt::registry &registry)
         : m_registry(registry),
           m_shader(Engine::getGraphicsContext().createShader(TRUERPG_RES_DIR "/shaders/g_buffer.vs", TRUERPG_RES_DIR "/shaders/g_buffer.fs", {true})),
           m_uiShader(Engine::getGraphicsContext().createShader(TRUERPG_RES_DIR "/shaders/ui.vs", TRUERPG_RES_DIR "/shaders/ui.fs", {true})),
-          m_batch(&m_shader, 30000)
+          m_batch(Engine::getGraphicsContext().getSpriteBatch(&m_shader, 30000))
 {
     auto& window = Engine::getWindow();
     window.getOnResize() += createEventHandler(*this, &RenderSystem::resize);

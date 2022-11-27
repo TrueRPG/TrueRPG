@@ -1,6 +1,7 @@
 #include "../../../pch.h"
 #include "ButtonRenderSystem.h"
 
+#include "../../../client/graphics/ISpriteBatch.h"
 #include "../../../components/render/ui/ButtonComponent.h"
 #include "../../../utils/Hierarchy.h"
 #include "../../../client/graphics/Text.h"
@@ -12,7 +13,7 @@ ButtonRenderSystem::ButtonRenderSystem(entt::registry& registry)
 {
 }
 
-void ButtonRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
+void ButtonRenderSystem::draw(ISpriteBatch &batch, glm::vec2 cursor)
 {
     glm::vec4 color{0.6f, 0.6f, 0.6f, 1.f};
     glm::vec4 highlightedColor{0.7f, 0.7f, 0.7f, 1.f};

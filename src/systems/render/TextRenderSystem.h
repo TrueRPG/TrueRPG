@@ -2,8 +2,9 @@
 #define RPG_TEXTRENDERSYSTEM_H
 
 #include "entt.hpp"
-#include "../../client/graphics/OpenGL/SpriteBatch.h"
 #include "IRenderSubsystem.h"
+
+class ISpriteBatch;
 
 class TextRenderSystem : public IRenderSubsystem
 {
@@ -12,7 +13,7 @@ class TextRenderSystem : public IRenderSubsystem
 public:
     TextRenderSystem(entt::registry& registry);
 
-    void draw(SpriteBatch& batch) override;
+    void draw(ISpriteBatch& batch) override;
 };
 
 #endif // RPG_TEXTRENDERSYSTEM_H

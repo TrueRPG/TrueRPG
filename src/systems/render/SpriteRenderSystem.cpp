@@ -10,7 +10,7 @@ SpriteRenderSystem::SpriteRenderSystem(entt::registry &registry)
 {
 }
 
-void SpriteRenderSystem::draw(SpriteBatch &batch)
+void SpriteRenderSystem::draw(ISpriteBatch &batch)
 {
     auto view = m_registry.view<SpriteRendererComponent>();
     for (auto entity : view)

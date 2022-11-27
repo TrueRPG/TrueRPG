@@ -2,6 +2,7 @@
 #include "TextRenderSystem.h"
 
 #include "../../components/render/TextRendererComponent.h"
+#include "../../client/graphics/ISpriteBatch.h"
 #include "../../client/graphics/Text.h"
 #include "../../utils/Hierarchy.h"
 
@@ -10,7 +11,7 @@ TextRenderSystem::TextRenderSystem(entt::registry &registry)
 {
 }
 
-void TextRenderSystem::draw(SpriteBatch &batch)
+void TextRenderSystem::draw(ISpriteBatch &batch)
 {
     auto view = m_registry.view<TextRendererComponent>();
     for (auto entity : view)

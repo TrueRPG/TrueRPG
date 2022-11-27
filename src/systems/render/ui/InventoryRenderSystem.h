@@ -8,6 +8,8 @@
 
 #define DESCRIPTION_TIMER 0.4f
 
+class ISpriteBatch;
+
 class InventoryRenderSystem : public IUIRenderSubsystem
 {
     entt::registry& m_registry;
@@ -26,7 +28,7 @@ class InventoryRenderSystem : public IUIRenderSubsystem
 public:
     InventoryRenderSystem(entt::registry& registry);
 
-    void draw(SpriteBatch& batch, glm::vec2 cursor) override;
+    void draw(ISpriteBatch& batch, glm::vec2 cursor) override;
 
     void update(float deltaTime) override;
 };

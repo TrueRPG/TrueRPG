@@ -16,7 +16,7 @@ public:
      *
      * @param batch the batch
      */
-    virtual void draw(SpriteBatch& batch) = 0;
+    virtual void draw(ISpriteBatch& batch) = 0;
 
     virtual void update(float deltaTime) {};
 

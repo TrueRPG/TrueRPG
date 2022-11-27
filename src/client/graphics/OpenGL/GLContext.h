@@ -4,6 +4,7 @@
 #include "../IGraphicsContext.h"
 #include "Shader.h"
 #include "../ITexture.h"
+#include "SpriteBatch.h"
 
 class GLContext : public IGraphicsContext
 {
@@ -17,8 +18,9 @@ public:
     void init() override;
     void swapBuffers() override;
 
+    ISpriteBatch &getSpriteBatch() override;
+    ISpriteBatch & getSpriteBatch(IShader *shader, int spriteCount = 2000) override;
     IShader &createShader(const std::string& vertexPath, const std::string& fragmentPath, ShaderEnabledUniform enabled = {}) override;
-
     ITexture &createTexture(const std::string &path) override;
     ITexture &createTexture(unsigned int id, const std::string &path, int width, int height) override;
     ITexture &createEmptyTexture() override;
@@ -26,6 +28,13 @@ public:
     void destroy() override { }
 private:
     GLContext() = default;
+
+    template <typename ...Args>
+    SpriteBatch &getOrCreateSpriteBatch(Args &&...args)
+    {
+        static SpriteBatch spriteBatch{args...};
+        return spriteBatch;
+    }
 };
 
 #endif // RPG_SRC_CLIENT_GRAPHICS_OPENGL_GLCONTEXT_H

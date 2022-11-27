@@ -24,7 +24,7 @@ public:
         return (T &)*m_subsystems.back();
     }
 
-    void draw(SpriteBatch& batch) override;
+    void draw(ISpriteBatch& batch) override;
 
     void update(float deltaTime) override;
 };

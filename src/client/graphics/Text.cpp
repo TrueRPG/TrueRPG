@@ -8,7 +8,7 @@ Text::Text(Font &font, std::string text)
     initSprites();
 }
 
-void Text::draw(SpriteBatch &batch, int layer, int order)
+void Text::draw(ISpriteBatch &batch, int layer, int order)
 {
     for (auto sprite : m_sprites)
     {

@@ -17,7 +17,7 @@ UIRenderSystem::~UIRenderSystem()
     }
 }
 
-void UIRenderSystem::draw(SpriteBatch &batch)
+void UIRenderSystem::draw(ISpriteBatch &batch)
 {
     // UI rendering
     IWindow &window = Engine::getWindow();

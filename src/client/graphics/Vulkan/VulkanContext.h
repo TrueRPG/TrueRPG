@@ -24,6 +24,16 @@ public:
 
     }
 
+    ISpriteBatch & getSpriteBatch() override
+    {
+
+    }
+
+    ISpriteBatch & getSpriteBatch(IShader *shader, int spriteCount = 2000) override
+    {
+        
+    }
+
     IShader &createShader(const std::string &vertexPath, const std::string &fragmentPath, ShaderEnabledUniform enabled = {}) override
     {
         

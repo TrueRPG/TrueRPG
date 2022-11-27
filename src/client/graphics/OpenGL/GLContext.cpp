@@ -43,3 +43,12 @@ ITexture &GLContext::createTexture(unsigned int id, const std::string &path, int
     m_textures.emplace_back(new Texture(id, path, width, height));
     return *m_textures.back();
 }
+
+ISpriteBatch &GLContext::getSpriteBatch()
+{
+    return getOrCreateSpriteBatch();
+}
+ISpriteBatch &GLContext::getSpriteBatch(IShader *shader, int spriteCount)
+{
+    return getOrCreateSpriteBatch(shader, spriteCount);
+}

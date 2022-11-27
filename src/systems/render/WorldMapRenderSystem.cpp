@@ -10,7 +10,7 @@ WorldMapRenderSystem::WorldMapRenderSystem(entt::registry &registry)
 {
 }
 
-void WorldMapRenderSystem::draw(SpriteBatch &batch)
+void WorldMapRenderSystem::draw(ISpriteBatch &batch)
 {
     auto cameraView = m_registry.view<CameraComponent>();
     auto cameraTransform = Hierarchy::computeTransform({cameraView[0], &m_registry});

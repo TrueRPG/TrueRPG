@@ -1,6 +1,7 @@
 #include "../../../pch.h"
 #include "InventoryRenderSystem.h"
 
+#include "../../../client/graphics/ISpriteBatch.h"
 #include "../../../components/render/CameraComponent.h"
 #include "../../../utils/Hierarchy.h"
 #include "../../../components/world/InventoryComponent.h"
@@ -47,7 +48,7 @@ static std::string normalizeText(const std::string& text, size_t lineLength)
 }
 
 // TODO: this method is too big
-void InventoryRenderSystem::draw(SpriteBatch &batch, glm::vec2 cursor)
+void InventoryRenderSystem::draw(ISpriteBatch &batch, glm::vec2 cursor)
 {
     glm::vec4 cellColor{0.6f, 0.6f, 0.6f, 1.f};
     glm::vec4 panelColor{0.7f, 0.7f, 0.7f, 1.f};

@@ -10,6 +10,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "../Sprite.h"
+#include "../ISpriteBatch.h"
 
 struct Vertex
 {
@@ -36,7 +37,7 @@ struct QuadWrapper
 static const size_t MaxTextures = 16;
 static const size_t MaxLayers = 16;
 
-class SpriteBatch
+class SpriteBatch : public ISpriteBatch
 {
     IShader *m_shader;
 
@@ -71,23 +72,23 @@ public:
 
     SpriteBatch(IShader *shader, int spriteCount = 2000);
 
-    void begin();
+    void begin() override;
 
-    void end();
+    void end() override;
 
-    void draw(const Sprite &sprite, int layer = 0, int order = 0);
+    void draw(const Sprite &sprite, int layer = 0, int order = 0) override;
 
-    void setShader(IShader *shader);
+    void setShader(IShader *shader) override;
 
-    glm::mat4 getProjectionMatrix();
+    glm::mat4 getProjectionMatrix() override;
 
-    void setProjectionMatrix(glm::mat4 projMat);
+    void setProjectionMatrix(glm::mat4 projMat) override;
 
-    glm::mat4 getViewMatrix();
+    glm::mat4 getViewMatrix() override;
 
-    void setViewMatrix(glm::mat4 viewMat);
+    void setViewMatrix(glm::mat4 viewMat) override;
 
-    void destroy();
+    void destroy() override;
 
 };
 
