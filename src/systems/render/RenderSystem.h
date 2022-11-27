@@ -2,12 +2,13 @@
 #define RPG_RENDERSYSTEM_H
 
 #include "entt.hpp"
-#include "../../client/graphics/OpenGL/SpriteBatch.h"
 #include "../../components/basic/TransformComponent.h"
 #include "IRenderSubsystem.h"
 #include "../../scene/ISystem.h"
 #include "../../utils/Types.h"
 #include "ILightRenderSubsystem.h"
+
+class ISpriteBatch;
 
 struct GBuffer
 {

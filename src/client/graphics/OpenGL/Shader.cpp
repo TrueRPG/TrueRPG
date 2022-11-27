@@ -74,6 +74,7 @@ Shader Shader::createShader(const std::string& vertexPath, const std::string& fr
         // res.m_uniforms[uniformInfo.name].init();
     // }
 
+    u32 blockBinding = 0;
     if (enabled.useMVP)
     {
         u32 uniformIndex = glGetUniformBlockIndex(shaderProgram, "MVP");

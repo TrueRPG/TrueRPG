@@ -1,6 +1,7 @@
 #include "../../pch.h"
 #include "RenderSystem.h"
 
+#include "../../client/graphics/ISpriteBatch.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "../../components/render/CameraComponent.h"
 #include "../../components/basic/HierarchyComponent.h"
@@ -72,7 +73,7 @@ void RenderSystem::draw()
 
     for (auto &system : m_lightSubsystems)
     {
-        Shader lightShader = system->getShader();
+        IShader &lightShader = system->getShader();
         lightShader.use();
         lightShader.setUniform("gPosition", 0);
         lightShader.setUniform("gAlbedoSpec", 1);

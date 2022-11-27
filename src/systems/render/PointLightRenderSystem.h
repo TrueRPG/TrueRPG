@@ -10,14 +10,14 @@
 class PointLightRenderSystem : public ILightRenderSubsystem
 {
     entt::registry& m_registry;
-    Shader m_shader;
+    IShader &m_shader;
     Quad m_quad;
 public:
     explicit PointLightRenderSystem(entt::registry& registry);
 
     void draw() override;
 
-    Shader& getShader() override;
+    IShader& getShader() override;
 
     void destroy() override;
 };

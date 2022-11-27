@@ -8,7 +8,7 @@
 
 PointLightRenderSystem::PointLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
-      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/point_light.vs", TRUERPG_RES_DIR "/shaders/point_light.fs", {false, true})),
+      m_shader(Engine::getGraphicsContext().createShader(TRUERPG_RES_DIR "/shaders/point_light.vs", TRUERPG_RES_DIR "/shaders/point_light.fs", {false, true})),
       m_quad()
 { }
 
@@ -50,7 +50,7 @@ void PointLightRenderSystem::draw()
     }
 }
 
-Shader& PointLightRenderSystem::getShader()
+IShader& PointLightRenderSystem::getShader()
 {
     return m_shader;
 }

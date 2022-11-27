@@ -112,38 +112,37 @@ public:
 
     void setUniform(const std::string &val_name, glm::vec2 vec) override
     {
-        setHotUniform(val_name, vec);
+//        setHotUniform(val_name, vec);
         m_uniformVals[val_name] = vec;
     }
 
     void setUniform(const std::string &val_name, glm::vec3 vec) override
     {
-        setHotUniform(val_name, vec);
+//        setHotUniform(val_name, vec);
         m_uniformVals[val_name] = vec;
     }
 
     void setUniform(const std::string &val_name, glm::vec4 vec) override
     {
-        setHotUniform(val_name, vec);
+//        setHotUniform(val_name, vec);
         m_uniformVals[val_name] = vec;
     }
 
     void setUniform(const std::string &val_name, float val) override
     {
-        setHotUniform(val_name, val);
+//        setHotUniform(val_name, val);
         m_uniformVals[val_name] = val;
     }
 
     void setUniform(const std::string &val_name, int val) override
     {
         setHotUniform(val_name, val);
-        m_uniformVals[val_name] = val;
     }
 
     void setUniform(const std::string &val_name, size_t size, int *arr) override
     {
         setHotUniform(val_name, size, arr);
-        m_uniformVals[val_name] = std::vector<int>(arr, arr + size);
+//        m_uniformVals[val_name] = std::vector<int>(arr, arr + size);
     }
 
     // Activate the shader

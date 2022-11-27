@@ -1,8 +1,9 @@
 #ifndef RPG_ILIGHTRENDERSUBSYSTEM_H
 #define RPG_ILIGHTRENDERSUBSYSTEM_H
 
-#include "../../client/graphics/OpenGL/SpriteBatch.h"
 #include "IRenderSubsystem.h"
+
+class IShader;
 
 /**
  * Subsystem of the light rendering system.
@@ -16,7 +17,7 @@ public:
 
     virtual void update(float deltaTime) {};
 
-    virtual Shader& getShader() = 0;
+    virtual IShader& getShader() = 0;
 
     virtual void destroy() {};
 };

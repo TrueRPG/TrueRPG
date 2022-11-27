@@ -6,7 +6,7 @@
 
 GlobalLightRenderSystem::GlobalLightRenderSystem(entt::registry &registry)
     : m_registry(registry),
-      m_shader(Shader::createShader(TRUERPG_RES_DIR "/shaders/global_light.vs", TRUERPG_RES_DIR "/shaders/global_light.fs", {false, false, true})),
+      m_shader(Engine::getGraphicsContext().createShader(TRUERPG_RES_DIR "/shaders/global_light.vs", TRUERPG_RES_DIR "/shaders/global_light.fs", {false, false, true})),
       m_quad()
 {
 }
@@ -28,7 +28,7 @@ void GlobalLightRenderSystem::draw()
     m_quad.draw();
 }
 
-Shader &GlobalLightRenderSystem::getShader()
+IShader &GlobalLightRenderSystem::getShader()
 {
     return m_shader;
 }
