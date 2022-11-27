@@ -4,10 +4,11 @@
 #include <iostream>
 #include <chrono>
 #include <iomanip>
+#include "Macros.h"
 
 namespace logger
 {
-#if defined(NDEBUG) && !defined(USE_DEBUGLOG)
+#if !defined(DEBUG) && !defined(USE_DEBUGLOG)
 constexpr bool LOG_DEBUG_ENABLED = false;
 #else
 constexpr bool LOG_DEBUG_ENABLED = true;

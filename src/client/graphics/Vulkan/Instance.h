@@ -24,7 +24,7 @@ public:
 
     [[nodiscard]] VkPhysicalDevice getPhysicalDevice() const;
 
-    ::Result<Surface> createSurface() const;
+    [[nodiscard]] Result<Surface> createSurface() const;
 
     void destroy();
 

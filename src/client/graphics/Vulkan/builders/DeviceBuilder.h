@@ -27,7 +27,7 @@ public:
     DeviceBuilder &setExtensions(const std::vector<const char *> &extensions);
     DeviceBuilder &setLayers(const std::vector<const char *> &layers);
 
-    [[nodiscard]] Result<Device> build() const;
+    [[nodiscard]] ObjResult<Device> build() const;
 
 };
 

@@ -2,85 +2,10 @@
 #include "InstanceBuilder.h"
 #include <algorithm>
 #include <iterator>
+#include "Error.h"
 
 namespace vk
 {
-
-    namespace errors
-    {
-        enum class InstanceError
-        {
-            OUT_OF_HOST_MEMORY = 1,
-            OUT_OF_DEVICE_MEMORY,
-            INITIALIZATION_FAILED,
-            LAYER_NOT_PRESENT,
-            EXTENSION_NOT_PRESENT,
-            INCOMPATIBLE_DRIVER,
-            FAILED_PICK_DEVICE,
-            FAILED_CREATE_DEBUG_MESSENGER
-        };
-
-        std::string toString(InstanceError error)
-        {
-            switch (error)
-            {
-            case InstanceError::OUT_OF_HOST_MEMORY:
-                return "vk_instance: out of host memory";
-            case InstanceError::OUT_OF_DEVICE_MEMORY:
-                return "vk_instance: out of device memory";
-            case InstanceError::INITIALIZATION_FAILED:
-                return "vk_instance: initialization failed";
-            case InstanceError::LAYER_NOT_PRESENT:
-                return "vk_instance: layer not present";
-            case InstanceError::EXTENSION_NOT_PRESENT:
-                return "vk_instance: extension not present";
-            case InstanceError::INCOMPATIBLE_DRIVER:
-                return "vk_instance: incompatible driver";
-            case InstanceError::FAILED_PICK_DEVICE:
-                return "vk_instance: failed pick physical device";
-            case InstanceError::FAILED_CREATE_DEBUG_MESSENGER:
-                return "vk_instance: failed create debug messenger";
-            }
-
-            return "undefined error";
-        }
-
-        struct InstanceErrorCategory : std::error_category
-        {
-            [[nodiscard]] const char *name() const noexcept override { return "vk_instance"; }
-            [[nodiscard]] std::string message(int err) const override { return toString(static_cast<InstanceError>(err)); }
-        };
-        const static InstanceErrorCategory instanceErrorCategory;
-
-        Error<VkResult> makeError(InstanceError error, VkResult result)
-        {
-            return {{static_cast<int>(error), instanceErrorCategory}, result};
-        }
-
-        InstanceError resultToError(VkResult result)
-        {
-            switch (result)
-            {
-            case VK_ERROR_OUT_OF_HOST_MEMORY:
-                return InstanceError::OUT_OF_HOST_MEMORY;
-            case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-                return InstanceError::OUT_OF_DEVICE_MEMORY;
-            case VK_ERROR_INITIALIZATION_FAILED:
-                return InstanceError::INITIALIZATION_FAILED;
-            case VK_ERROR_LAYER_NOT_PRESENT:
-                return InstanceError::LAYER_NOT_PRESENT;
-            case VK_ERROR_EXTENSION_NOT_PRESENT:
-                return InstanceError::EXTENSION_NOT_PRESENT;
-            case VK_ERROR_INCOMPATIBLE_DRIVER:
-                return InstanceError::INCOMPATIBLE_DRIVER;
-            default:
-                break;
-            }
-
-            return InstanceError::INITIALIZATION_FAILED;
-        }
-    }
-
     static inline VkResult createDebugUtilsMessengerEXT(VkInstance instance,
         const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
         const VkAllocationCallbacks* pAllocator,
@@ -147,7 +72,7 @@ namespace vk
         return *this;
     }
 
-    Result<Instance> InstanceBuilder::build() const
+    ObjResult<Instance> InstanceBuilder::build() const
     {
         u32 deviceCount = 0;
         std::vector<VkPhysicalDevice> physicalDevices;
@@ -186,7 +111,7 @@ namespace vk
         VkResult res = vkCreateInstance(&info, nullptr, &instance);
 
         if (res != VK_SUCCESS)
-            return Result<Instance>(errors::makeError(errors::resultToError(res), res));
+            return ObjResult<Instance>(error::makeError(error::resultToError<error::InstanceError>(res), res));
 
         logger::debug("Successful create vk instance");
 
@@ -197,23 +122,23 @@ namespace vk
             res = createDebugUtilsMessengerEXT(instance, &debugInfo, nullptr, &debugUtilsMessenger);
 
             if (res != VK_SUCCESS)
-                return Result<Instance>(errors::makeError(errors::InstanceError::FAILED_CREATE_DEBUG_MESSENGER, res));
+                return ObjResult<Instance>(error::makeError(error::InstanceError::FAILED_CREATE_DEBUG_MESSENGER, res));
         }
 
         vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
         if (deviceCount <= 0)
-            return Result<Instance>(errors::makeError(errors::InstanceError::FAILED_PICK_DEVICE, res));
+            return ObjResult<Instance>(error::makeError(error::InstanceError::FAILED_PICK_DEVICE, res));
         physicalDevices.resize(deviceCount);
         vkEnumeratePhysicalDevices(instance, &deviceCount, physicalDevices.data());
 
         VkPhysicalDevice device = selectSuitablePhysicalDevice(physicalDevices);
 
         if (device == VK_NULL_HANDLE)
-            return Result<Instance>(errors::makeError(errors::InstanceError::FAILED_PICK_DEVICE, res));
+            return ObjResult<Instance>(error::makeError(error::InstanceError::FAILED_PICK_DEVICE, res));
 
         logger::debug("Successful pick physical device");
 
-        return Result<Instance>(instance, device, debugUtilsMessenger);
+        return ObjResult<Instance>(instance, device, debugUtilsMessenger);
     }
 
     VkPhysicalDevice InstanceBuilder::selectSuitablePhysicalDevice(const std::vector<VkPhysicalDevice> &devices) const

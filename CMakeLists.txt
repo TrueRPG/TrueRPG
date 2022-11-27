@@ -30,6 +30,7 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
 #endif()
 
 add_subdirectory(libs/glad)
+add_subdirectory(libs/vma)
 
 if(NOT TRUERPG_USE_SYSTEM_GLFW)
   add_subdirectory(libs/glfw)
@@ -66,7 +67,7 @@ else()
 	find_package(yaml-cpp REQUIRED)
 endif()
 
-set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp Vulkan::Vulkan)
+set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp Vulkan::Vulkan vma)
 if(NOT TRUERPG_USE_SYSTEM_GLM)
   set(PROJECT_LIBS ${PROJECT_LIBS} glm)
 endif()

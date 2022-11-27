@@ -10,7 +10,6 @@ class GLContext : public IGraphicsContext
 private:
     std::vector<std::shared_ptr<IShader>> m_shaders;
     std::vector<std::shared_ptr<ITexture>> m_textures;
-    i32 m_shaderIndex = 0;
 public:
 
     static GLContext &getInstance();

@@ -8,6 +8,11 @@ struct Queue
 {
     std::optional<u32> familyIndex;
     VkQueue queue = VK_NULL_HANDLE;
+
+    inline bool hasIndex() const noexcept
+    {
+        return familyIndex.has_value();
+    }
 };
 
 #endif // RPG_QUEUE_H

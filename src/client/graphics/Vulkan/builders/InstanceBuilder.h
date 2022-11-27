@@ -42,7 +42,7 @@ public:
     template <u32 version>
     [[maybe_unused]] InstanceBuilder &setApiVersion();
 
-    [[nodiscard]] Result<Instance> build() const;
+    [[nodiscard]] ObjResult<Instance> build() const;
 private:
     VkPhysicalDevice selectSuitablePhysicalDevice(const std::vector<VkPhysicalDevice> &devices) const;
     i32 ratePhysicalDevice(VkPhysicalDevice device) const;

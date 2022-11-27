@@ -3,6 +3,7 @@
 
 #include "../IGraphicsContext.h"
 #include "Instance.h"
+#include "Allocator.h"
 #include "../ITexture.h"
 
 class VulkanContext : public IGraphicsContext
@@ -11,6 +12,8 @@ private:
     vk::Instance m_instance;
     vk::Surface m_surface;
     vk::Device m_device;
+    vk::Allocator m_allocator;
+    vk::Swapchain m_swapchain;
 public:
     static VulkanContext &getInstance();
 
@@ -47,6 +50,10 @@ private:
 
     void initInstance();
     void initDevice();
+    void initSwapchain();
+
+
+    void initAllocator();
 };
 
 #endif

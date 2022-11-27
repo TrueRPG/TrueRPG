@@ -4,9 +4,7 @@
 #include <sstream>
 
 Shader::Shader(unsigned int m_id) : m_id(m_id)
-{
-    m_mvpUniformIndex = glGetUniformBlockIndex(m_id, "MVP");
-}
+{}
 
 void Shader::use() const
 {

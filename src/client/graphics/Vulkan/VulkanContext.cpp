@@ -3,11 +3,16 @@
 #include "builders/InstanceBuilder.h"
 #include "builders/DeviceBuilder.h"
 #include "../../Engine.h"
+#include "builders/AllocatorBuilder.h"
 
 void VulkanContext::init()
 {
     initInstance();
     initDevice();
+    initSwapchain();
+
+
+    initAllocator();
 }
 
 void VulkanContext::initInstance()
@@ -58,8 +63,29 @@ void VulkanContext::initDevice()
                    .except();
 }
 
+void VulkanContext::initSwapchain()
+{
+    m_swapchain = m_device.createSwapchain(m_surface).except();
+}
+
+void VulkanContext::initAllocator()
+{
+    m_allocator = vk::AllocatorBuilder()
+                      .setApiVersion(VK_API_VERSION_1_2)
+                      .setDevice(m_device)
+                      .setInstance(m_instance)
+                      .build()
+                      .except();
+
+}
+
+
 void VulkanContext::destroy()
 {
+    m_allocator.destroy();
+
+
+    m_swapchain.destroy();
     m_device.destroy();
     vkDestroySurfaceKHR(m_instance, m_surface.surface, nullptr);
     m_instance.destroy();
@@ -70,3 +96,5 @@ VulkanContext &VulkanContext::getInstance()
     static VulkanContext instance;
     return instance;
 }
+
+

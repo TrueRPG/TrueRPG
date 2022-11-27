@@ -41,7 +41,7 @@ VkPhysicalDevice Instance::getPhysicalDevice() const
     if  (!Engine::getWindow().createSurface(*this, surfaceKhr))
         return ::Result<Surface>(error::makeError());
 
-    return ::Result<Surface>(surfaceKhr);
+    return ::Result<Surface>(surfaceKhr, m_physicalDevice);
 }
 
 void Instance::destroy()

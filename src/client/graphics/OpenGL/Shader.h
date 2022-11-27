@@ -61,10 +61,6 @@ class Shader : public IShader
 {
 private:
     unsigned int m_id{};
-    unsigned int m_mvpUniformIndex;
-    unsigned int m_lightUniformIndex;
-    MVPUniformBuffer m_mvpBuffer;
-    LightUniformBuffer m_lightBuffer;
     ShaderEnabledUniform m_enabledUniform;
 
     std::unordered_map<std::string, IUniformBuffer *> m_uniforms;

@@ -16,7 +16,7 @@ inline void destroyDebugUtilsMessengerEXT(VkInstance instance,
 }
 
 template <typename T>
-using Result = ::Result<T, Error<VkResult>>;
+using ObjResult = ::Result<T, Error<VkResult>>;
 
 }
 
