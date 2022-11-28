@@ -1,6 +1,8 @@
 #include "../../../pch.h"
 #include "GLContext.h"
 #include "../../Engine.h"
+#include "SpriteBatch.h"
+#include "Shader.h"
 #include "Texture.h"
 
 GLContext &GLContext::getInstance()
@@ -44,11 +46,8 @@ ITexture &GLContext::createTexture(unsigned int id, const std::string &path, int
     return *m_textures.back();
 }
 
-ISpriteBatch &GLContext::getSpriteBatch()
+ISpriteBatch &GLContext::createSpriteBatch(IShader *shader, int spriteCount)
 {
-    return getOrCreateSpriteBatch();
-}
-ISpriteBatch &GLContext::getSpriteBatch(IShader *shader, int spriteCount)
-{
-    return getOrCreateSpriteBatch(shader, spriteCount);
+    m_batches.emplace_back(new SpriteBatch(shader, spriteCount));
+    return *m_batches.back();
 }

@@ -24,12 +24,7 @@ public:
 
     }
 
-    ISpriteBatch & getSpriteBatch() override
-    {
-
-    }
-
-    ISpriteBatch & getSpriteBatch(IShader *shader, int spriteCount = 2000) override
+    ISpriteBatch &createSpriteBatch(IShader *shader, int spriteCount = 2000) override
     {
         
     }

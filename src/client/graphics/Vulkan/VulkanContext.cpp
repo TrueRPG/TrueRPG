@@ -74,9 +74,7 @@ void VulkanContext::initAllocator()
                       .setApiVersion(VK_API_VERSION_1_2)
                       .setDevice(m_device)
                       .setInstance(m_instance)
-                      .build()
-                      .except();
-
+                      .build();
 }
 
 
