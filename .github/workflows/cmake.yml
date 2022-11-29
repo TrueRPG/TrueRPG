@@ -24,6 +24,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install xorg-dev libglu1-mesa-dev
 
+      - name: Prepare Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.2.0
+        with:
+          vulkan-query-version: latest
+          vulkan-components: Vulkan-Headers, Vulkan-Loader, Glslang
+          vulkan-use-cache: true
+
       - name: Configure ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
@@ -50,6 +57,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+
+      - name: Prepare Vulkan SDK
+        uses: humbletim/setup-vulkan-sdk@v1.2.0
+        with:
+          vulkan-query-version: latest
+          vulkan-components: Vulkan-Headers, Vulkan-Loader, Glslang
+          vulkan-use-cache: true
         
       - name: Configure CMake
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
