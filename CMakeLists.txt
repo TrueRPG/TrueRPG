@@ -30,7 +30,6 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
 #endif()
 
 add_subdirectory(libs/glad)
-add_subdirectory(libs/vma)
 
 if(NOT TRUERPG_USE_SYSTEM_GLFW)
   add_subdirectory(libs/glfw)
@@ -40,6 +39,7 @@ endif()
 
 find_package(OpenGL REQUIRED)
 find_package(Vulkan REQUIRED)
+add_subdirectory(libs/vma)
 add_subdirectory(libs/stb_image)
 
 if(NOT TRUERPG_USE_SYSTEM_GLM)
