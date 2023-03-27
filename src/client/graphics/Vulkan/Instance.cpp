@@ -24,8 +24,8 @@ namespace vk
 Instance::Instance(VkInstance value, VkPhysicalDevice physicalDevice, VkDebugUtilsMessengerEXT messengerExt)
     : m_instance(value),
       m_physicalDevice(physicalDevice)
-#ifdef DEBUG
-      ,
+#ifdef RPG_DEBUG
+          ,
       m_messanger(messengerExt)
 #endif
 {}
@@ -35,7 +35,7 @@ VkPhysicalDevice Instance::getPhysicalDevice() const
     return m_physicalDevice;
 }
 
-::Result<Surface> Instance::createSurface() const
+Result<Surface> Instance::createSurface() const
 {
     Surface surfaceKhr;
     if  (!Engine::getWindow().createSurface(*this, surfaceKhr))
@@ -46,7 +46,9 @@ VkPhysicalDevice Instance::getPhysicalDevice() const
 
 void Instance::destroy()
 {
+#ifdef RPG_DEBUG
     destroyDebugUtilsMessengerEXT(m_instance, m_messanger, nullptr);
+#endif
     vkDestroyInstance(m_instance, nullptr);
 }
 

@@ -1,0 +1,13 @@
+#ifndef RPG_PRIMITIVETYPE_H
+#define RPG_PRIMITIVETYPE_H
+
+enum class PrimitiveType
+{
+    POINT_LIST,
+    LINE_LIST,
+    LINE_STRIP,
+    TRIANGEL_LIST,
+    TRIANGEL_STRIP
+};
+
+#endif // RPG_PRIMITIVETYPE_H

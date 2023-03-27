@@ -138,6 +138,10 @@ ObjResult<Swapchain> Device::createSwapchain(const Surface &surface) const
         swapchainInfo.imagesViews.emplace_back(imageView);
     }
 
+    swapchainInfo.surfaceFormat = choosenFormat;
+    swapchainInfo.presentMode = choosenPresentMode;
+    swapchainInfo.extent = choosenExtent;
+    
     return ObjResult<Swapchain>(swapchainInfo);
 }
 

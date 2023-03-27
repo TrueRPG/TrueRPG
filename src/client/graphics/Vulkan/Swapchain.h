@@ -14,19 +14,28 @@ struct SwapchainInfo
     VkSwapchainKHR swapchain = VK_NULL_HANDLE;
     std::vector<VkImage> images;
     std::vector<VkImageView> imagesViews;
+    VkSurfaceFormatKHR surfaceFormat;
+    VkPresentModeKHR presentMode;
+    VkExtent2D extent;
 };
 
 class Swapchain
 {
 private:
     VkSwapchainKHR m_swapchain = VK_NULL_HANDLE;
-    const Device *m_device;
+    const Device *m_device = nullptr;
+
+    VkSurfaceFormatKHR m_surfaceFormat{};
+    VkPresentModeKHR m_presentMode{};
+    VkExtent2D m_extent{};
 
     std::vector<VkImage> m_images;
     std::vector<VkImageView> m_imagesViews;
 public:
     Swapchain() = default;
-    Swapchain(const SwapchainInfo &info);
+    explicit Swapchain(const SwapchainInfo &info);
+
+    [[nodiscard]] VkFormat getFormat() const;
 
     void destroy();
 

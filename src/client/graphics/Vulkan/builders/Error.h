@@ -32,11 +32,22 @@ enum class DeviceError
     DONT_SUPPORT_PRESENTATION
 };
 
+enum class PipelineError
+{
+    OUT_OF_HOST_MEMORY = 1,
+    OUT_OF_DEVICE_MEMORY,
+    INVALID_SHADER_NV,
+    FAILED_COMPILE_SHADER,
+    INITIALIZATION_FAILED
+};
+
 std::string toString(InstanceError error);
 std::string toString(DeviceError error);
+std::string toString(PipelineError error);
 
 Error<VkResult> makeError(InstanceError error, VkResult result);
 Error<VkResult> makeError(DeviceError error, VkResult result);
+Error<VkResult> makeError(PipelineError error, VkResult result);
 
 template <typename T>
 inline T resultToError(VkResult)
@@ -92,6 +103,24 @@ inline DeviceError resultToError<DeviceError>(VkResult result)
     }
 
     return DeviceError::INITIALIZATION_FAILED;
+}
+
+template<>
+inline PipelineError resultToError<PipelineError>(VkResult result)
+{
+    switch (result)
+    {
+    case VK_ERROR_OUT_OF_HOST_MEMORY:
+        return PipelineError::OUT_OF_HOST_MEMORY;
+    case VK_ERROR_OUT_OF_DEVICE_MEMORY:
+        return PipelineError::OUT_OF_DEVICE_MEMORY;
+    case VK_ERROR_INVALID_SHADER_NV:
+        return PipelineError::INVALID_SHADER_NV;
+    default:
+        break;
+    }
+
+    return PipelineError::INITIALIZATION_FAILED;
 }
 
 } // namespace vk

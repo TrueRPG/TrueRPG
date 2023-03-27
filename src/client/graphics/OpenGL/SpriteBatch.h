@@ -5,20 +5,13 @@
 #include <vector>
 #include <map>
 #include <set>
+#include "../Vertex.h"
 #include "VertexArray.h"
 #include "Buffer.h"
 #include "Texture.h"
 #include "Shader.h"
 #include "../Sprite.h"
 #include "../ISpriteBatch.h"
-
-struct Vertex
-{
-    glm::vec2 position;
-    glm::vec4 color;
-    glm::vec2 texCoord;
-    float texId;
-};
 
 struct ShortVertex
 {

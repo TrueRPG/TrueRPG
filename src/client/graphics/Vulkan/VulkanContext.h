@@ -14,6 +14,9 @@ private:
     vk::Device m_device;
     vk::Allocator m_allocator;
     vk::Swapchain m_swapchain;
+    VkDescriptorSetLayout m_descriptorSetLayout;
+    VkPipelineLayout m_pipelineLayout;
+    VkRenderPass m_renderPass;
 public:
     static VulkanContext &getInstance();
 
@@ -56,7 +59,8 @@ private:
     void initInstance();
     void initDevice();
     void initSwapchain();
-
+    void initPipelineLayout();
+    void initRenderPass();
 
     void initAllocator();
 };

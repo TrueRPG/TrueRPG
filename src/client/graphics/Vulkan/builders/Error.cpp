@@ -26,7 +26,7 @@ std::string toString(InstanceError error)
         return "vk_instance: failed create debug messenger";
     }
 
-    return "undefined error";
+    return "vk_instance: undefined error";
 }
 
 std::string toString(DeviceError error)
@@ -53,7 +53,26 @@ std::string toString(DeviceError error)
         return "vk_device: dont support presentation";
     }
 
-    return "initialization failed";
+    return "vk_device: initialization failed";
+}
+
+std::string toString(PipelineError error)
+{
+    switch (error)
+    {
+    case PipelineError::OUT_OF_HOST_MEMORY:
+        return "vk_pipeline: out of host memory";
+    case PipelineError::OUT_OF_DEVICE_MEMORY:
+        return "vk_pipeline: out of device memory";
+    case PipelineError::INVALID_SHADER_NV:
+        return "vk_pipeline: invalid shader nv";
+    case PipelineError::FAILED_COMPILE_SHADER:
+        return "vk_pipeline: failed compile shader";
+    case PipelineError::INITIALIZATION_FAILED:
+        return "vk_pipeline: initialization failed";
+    }
+
+    return "vk_pipeline: initialization failed";
 }
 
 struct InstanceErrorCategory : std::error_category
@@ -70,6 +89,13 @@ struct DeviceErrorCategory : std::error_category
 };
 const static DeviceErrorCategory deviceErrorCategory;
 
+struct PipelineErrorCategory : std::error_category
+{
+    [[nodiscard]] const char *name() const noexcept override { return "vk_pipeline"; }
+    [[nodiscard]] std::string message(int err) const override { return toString(static_cast<PipelineError>(err)); }
+};
+const static PipelineErrorCategory pipelineErrorCategory;
+
 Error<VkResult> makeError(InstanceError error, VkResult result)
 {
     return {{static_cast<int>(error), instanceErrorCategory}, result};
@@ -78,6 +104,11 @@ Error<VkResult> makeError(InstanceError error, VkResult result)
 Error<VkResult> makeError(DeviceError error, VkResult result)
 {
     return {{static_cast<int>(error), deviceErrorCategory}, result};
+}
+
+Error<VkResult> makeError(PipelineError error, VkResult result)
+{
+    return {{static_cast<int>(error), pipelineErrorCategory}, result};
 }
 
 } // namespace vk

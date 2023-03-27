@@ -24,7 +24,7 @@ AllocatorBuilder &AllocatorBuilder::setInstance(VkInstance instance)
     return *this;
 }
 
-ObjResult<Allocator> AllocatorBuilder::build() const
+Allocator AllocatorBuilder::build() const
 {
     VmaAllocator allocator = VK_NULL_HANDLE;
     VmaVulkanFunctions vulkanFunctions{};
@@ -40,9 +40,14 @@ ObjResult<Allocator> AllocatorBuilder::build() const
 
     VkResult result = vmaCreateAllocator(&info, &allocator);
     if (result != VK_SUCCESS)
+    {
+        logger::error("vulkan allocator creation error");
         throw;
+    }
 
-    return vk::ObjResult<Allocator>(allocator);
+    logger::debug("vulkan allocator has been created");
+
+    return Allocator(allocator);
 }
 
 }

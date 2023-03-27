@@ -8,7 +8,7 @@
 
 namespace logger
 {
-#if !defined(DEBUG) && !defined(USE_DEBUGLOG)
+#if !defined(RPG_DEBUG) && !defined(USE_DEBUGLOG)
 constexpr bool LOG_DEBUG_ENABLED = false;
 #else
 constexpr bool LOG_DEBUG_ENABLED = true;

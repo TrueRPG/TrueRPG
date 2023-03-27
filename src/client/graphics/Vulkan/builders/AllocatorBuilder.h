@@ -24,7 +24,7 @@ public:
     AllocatorBuilder &setDevice(const Device &device);
     AllocatorBuilder &setInstance(VkInstance instance);
 
-    ObjResult<Allocator> build() const;
+    [[nodiscard]] Allocator build() const;
 };
 
 }

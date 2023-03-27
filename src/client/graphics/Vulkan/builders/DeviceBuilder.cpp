@@ -3,7 +3,6 @@
 #include "DeviceBuilder.h"
 #include "Error.h"
 #include "../Instance.h"
-#include "../Surface.h"
 
 namespace vk
 {

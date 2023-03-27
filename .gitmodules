@@ -10,3 +10,6 @@
 [submodule "libs/yaml-cpp"]
 	path = libs/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
+[submodule "libs/glslang"]
+	path = libs/glslang
+	url = https://github.com/KhronosGroup/glslang.git

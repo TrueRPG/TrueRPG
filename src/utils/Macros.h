@@ -2,7 +2,7 @@
 #define RPG_MACROS_H
 
 #ifndef NDEBUG
-#define DEBUG
+#define RPG_DEBUG
 constexpr bool DEBUG_ENABLED = true;
 #else
 constexpr bool DEBUG_ENABLED = false;
