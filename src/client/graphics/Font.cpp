@@ -46,15 +46,14 @@ Font::Font(const std::string &path, int size)
     glBindTexture(GL_TEXTURE_2D, textureId);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glTextureParameteri(textureId, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(textureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTextureParameteri(textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureStorage2D(textureId, 1, GL_RGBA8, width, height);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-    // Загружаем глифы в текстуру
     // Load glyphs into the created texture
     int x = 0;
     for (int i = 32; i < 128; i++)
@@ -69,7 +68,7 @@ Font::Font(const std::string &path, int size)
         fillPixelBuffer(glyph->bitmap.buffer, glyph->bitmap.width, glyph->bitmap.rows);
 
         // we need уOffset to place the symbols on the one line
-        glTextureSubImage2D(textureId, 0, x, 0, glyph->bitmap.width, glyph->bitmap.rows,
+        glTexSubImage2D(GL_TEXTURE_2D, 0, x, 0, glyph->bitmap.width, glyph->bitmap.rows,
                             GL_RGBA, GL_UNSIGNED_BYTE, &m_pixelBuffer[0]);
 
         int baseline = height - glyph->bitmap_top;
