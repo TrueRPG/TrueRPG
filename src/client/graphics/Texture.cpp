@@ -17,12 +17,13 @@ Texture::Texture(unsigned int id, const std::string& path, int width, int height
 
 void Texture::bind(unsigned int slot) const
 {
-    glBindTextureUnit(slot, m_id);
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
 void Texture::unbind() const
 {
-    glBindTextureUnit(0, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 unsigned int Texture::getId() const noexcept
@@ -60,14 +61,15 @@ Texture Texture::create(const std::string& path, unsigned int type)
     int height;
     unsigned char* data;
 
-    glCreateTextures(type, 1, &texture);
+    glGenTextures(1, &texture);
+    glBindTexture(type, texture);
 
     // Set up the texture params
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     stbi_set_flip_vertically_on_load(1);
 
@@ -78,9 +80,8 @@ Texture Texture::create(const std::string& path, unsigned int type)
          return Texture(0, "", 0, 0);
     }
 
-    glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
-    glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateTextureMipmap(texture);
+    glTexImage2D(type, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(type);
     
     stbi_image_free(data);
 
@@ -93,19 +94,19 @@ Texture Texture::createEmpty()
 
     if (texture == -1)
     {
-        glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
 
         // Set up the texture params
-        glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-        glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         unsigned char pixel[]{255, 255, 255, 255};
-        glTextureStorage2D(texture, 1, GL_RGBA8, 1, 1);
-        glTextureSubImage2D(texture, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
-        glGenerateTextureMipmap(texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
     return Texture(texture, "no_path", 1, 1);
 }
@@ -114,19 +115,18 @@ Texture Texture::create(const Bitmap &bitmap, unsigned int type)
 {
     unsigned int texture;
 
-    glCreateTextures(type, 1, &texture);
+    glGenTextures(1, &texture);
+    glBindTexture(type, texture);
 
     // Set up the texture params
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(type, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    glTextureStorage2D(texture, 1, GL_RGBA8, bitmap.getWidth(), bitmap.getHeight());
-    glTextureSubImage2D(texture, 0, 0, 0, bitmap.getWidth(), bitmap.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, bitmap.getRawPixels().data());
-    glGenerateTextureMipmap(texture);
+    glTexImage2D(type, 0, GL_RGBA8, bitmap.getWidth(), bitmap.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap.getRawPixels().data());
+    glGenerateMipmap(type);
 
     return Texture(texture, "no_path", bitmap.getWidth(), bitmap.getHeight());
 }
-
