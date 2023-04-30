@@ -13,6 +13,8 @@ option(TRUERPG_USE_SYSTEM_GLM "Use system GLM installation" OFF)
 option(TRUERPG_USE_SYSTEM_FREETYPE "Use system freetype installation" OFF)
 option(TRUERPG_USE_SYSTEM_YAMLCPP "Use system yaml-cpp installation" OFF)
 
+option(TRUERPG_WAYLAND "Build with Wayland support" OFF)
+
 if(NOT TRUERPG_RES_DIR_PREFIX)
 	set(TRUERPG_RES_DIR_PREFIX "..")
 endif()
@@ -32,6 +34,7 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE src/pch.h)
 add_subdirectory(libs/glad)
 
 if(NOT TRUERPG_USE_SYSTEM_GLFW)
+  set(GLFW_USE_WAYLAND ${TRUERPG_WAYLAND})
   add_subdirectory(libs/glfw)
 else()
   find_package(glfw3 REQUIRED)
