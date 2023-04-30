@@ -16,7 +16,7 @@ option(TRUERPG_USE_SYSTEM_YAMLCPP "Use system yaml-cpp installation" OFF)
 option(TRUERPG_WAYLAND "Build with Wayland support" OFF)
 
 if(NOT TRUERPG_RES_DIR_PREFIX)
-	set(TRUERPG_RES_DIR_PREFIX "..")
+  set(TRUERPG_RES_DIR_PREFIX "..")
 endif()
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
@@ -60,12 +60,12 @@ add_subdirectory(libs/miniaudio)
 add_subdirectory(libs/entt)
 
 if(NOT TRUERPG_USE_SYSTEM_YAMLCPP)
-	add_definitions(-DYAML_CPP_STATIC_DEFINE)
-	option(YAML_CPP_BUILD_TOOLS OFF)
-	option(YAML_CPP_BUILD_TESTS OFF)
-	add_subdirectory(libs/yaml-cpp)
+  add_definitions(-DYAML_CPP_STATIC_DEFINE)
+  option(YAML_CPP_BUILD_TOOLS OFF)
+  option(YAML_CPP_BUILD_TESTS OFF)
+  add_subdirectory(libs/yaml-cpp)
 else()
-	find_package(yaml-cpp REQUIRED)
+  find_package(yaml-cpp REQUIRED)
 endif()
 
 set(PROJECT_LIBS glad glfw OpenGL::GL stb_image freetype miniaudio entt yaml-cpp)
@@ -78,8 +78,8 @@ install(TARGETS ${PROJECT_NAME})
 
 # Install the resources into TRUERPG_RES_DIR_PREFIX if it is customized
 if(NOT TRUERPG_RES_DIR_PREFIX STREQUAL "..")
-	install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${TRUERPG_RES_DIR_PREFIX})
+  install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${TRUERPG_RES_DIR_PREFIX})
 endif()
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-	-DTRUERPG_RES_DIR="${TRUERPG_RES_DIR_PREFIX}/res")
+  -DTRUERPG_RES_DIR="${TRUERPG_RES_DIR_PREFIX}/res")
