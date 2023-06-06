@@ -16,9 +16,14 @@ GlfwWindow::GlfwWindow(int width, int height, const std::string &title) : m_keys
     };
     glfwSetErrorCallback(errorCallback);
 
+    // Don't raise the version. MacOS only supports OpenGL 4.1
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+#endif
 
     m_window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
@@ -36,8 +41,6 @@ GlfwWindow::GlfwWindow(int width, int height, const std::string &title) : m_keys
     glfwSetKeyCallback(m_window, glfwKeyCallback);
     glfwSetMouseButtonCallback(m_window, glfwMouseButtonCallback);
     glfwSetFramebufferSizeCallback(m_window, glfwFramebufferSizeCallback);
-
-    glfwMakeContextCurrent(m_window);
 }
 
 bool GlfwWindow::isOpen() const
@@ -69,14 +72,14 @@ void GlfwWindow::pollEvents() const
 int GlfwWindow::getWidth() const
 {
     int width;
-    glfwGetWindowSize(m_window, &width, nullptr);
+    glfwGetFramebufferSize(m_window, &width, nullptr);
     return width;
 }
 
 int GlfwWindow::getHeight() const
 {
     int height;
-    glfwGetWindowSize(m_window, nullptr, &height);
+    glfwGetFramebufferSize(m_window, nullptr, &height);
     return height;
 }
 
@@ -88,9 +91,13 @@ bool GlfwWindow::getKey(Key key)
 
 glm::vec2 GlfwWindow::getCursorPosition()
 {
+    int winWidth, winHeight;
+    int bufferWidth, bufferHeight;
     double x, y;
+    glfwGetWindowSize(m_window, &winWidth, &winHeight);
+    glfwGetFramebufferSize(m_window, &bufferWidth, &bufferHeight);
     glfwGetCursorPos(m_window, &x, &y);
-    return {x, y};
+    return {x * bufferWidth / (float) winWidth, y * bufferHeight / (float) winHeight};
 }
 
 bool GlfwWindow::getMouseButton(int mouseButton)

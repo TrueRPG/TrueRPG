@@ -25,12 +25,12 @@ void Buffer::destroy()
 
 void Buffer::setData(const void* data, size_t size, unsigned int usage) const
 {
-    glNamedBufferData(m_id, static_cast<GLsizeiptr>(size), data, usage);
+    glBufferData(m_target, static_cast<GLsizeiptr>(size), data, usage);
 }
 
 void Buffer::setSubData(const void* data, GLintptr offset, size_t size) const
 {
-    glNamedBufferSubData(m_id, offset, size, data);
+    glBufferSubData(m_target, offset, static_cast<GLsizeiptr>(size), data);
 }
 
 
