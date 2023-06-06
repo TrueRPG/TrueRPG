@@ -5,7 +5,7 @@
 </p>
 
 If you're looking for a decent RPG game, I'm ready to congratulate you, because it's here!<br>
-This is a fork of the RPG game that was originally developed by [Screamlark](https://www.twitch.tv/screamlark).
+This is a fork of the RPG game that was originally developed by [Yuriorkis_Scream](https://www.twitch.tv/yuriorkis_scream).
 The founder abandon this project, so the community decided to continue development on their own.
 We'll get the job done, no matter what!
 
